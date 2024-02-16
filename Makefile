@@ -6,7 +6,7 @@
 #    By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 14:02:42 by tmina-ni          #+#    #+#              #
-#    Updated: 2024/02/16 14:02:46 by tmina-ni         ###   ########.fr        #
+#    Updated: 2024/02/16 17:42:53 by tmina-ni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ MAKE_NO_PRINT = $(MAKE) --no-print-directory
 #================================PATHS=========================================#
 
 LIB_PATH = ./libft/
+SRC_PATH = ./src
 HEADER_PATH = ./include
 
 #================================FILES=========================================#
@@ -37,7 +38,7 @@ libft:
 	$(MAKE_NO_PRINT) -C $(LIB_PATH)
 
 $(NAME): $(OBJ) $(HEADER)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT_FLAG)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT_FLAG) -lreadline
 
 $(SRC_PATH)/%.o: $(SRC_PATH)/%.c $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@

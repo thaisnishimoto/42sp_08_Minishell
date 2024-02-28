@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/02/27 23:50:18 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/02/28 16:28:08 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	print_tree(t_node *node)
 	{
 		t_redir	*redir_node = (t_redir *)node;
 		printf("node type: %d\n", redir_node->type);
-		printf("node type: %d\n", redir_node->fd);
+		printf("fd redir: %d\n", redir_node->fd);
 		printf("redir file: %s\n", redir_node->filename);
-		print_tree((t_node *)redir_node->next_redir);
+		print_tree((t_node *)redir_node->next);
 	}
 	else if (node->type == CMD)
 	{
@@ -44,10 +44,26 @@ void	print_tree(t_node *node)
 //	new_root->next_node = tree_ptr;
 //}
 
+char	*get_following_str(char *tokens[], int *i, int j)
+{
+	int		len;
+	char	*str;
+
+	if (tokens[*i][j] == '\0')
+	{
+		(*i)++;
+		j = 0;
+	}
+	len = ft_strlen(&tokens[*i][j]) + 1;
+	str = malloc((len + 1) * sizeof(char));
+	ft_strlcpy(str, &tokens[*i][j], len + 1);
+	return (str);
+}
+
 void	parse_redir(t_redir **redirs_ptr, char *tokens[], int *i)
 {
 	t_redir	*new_redir;
-	t_redir	*temp;
+//	t_redir	*temp;
 	int	j;
 
 	j = 0;
@@ -55,9 +71,16 @@ void	parse_redir(t_redir **redirs_ptr, char *tokens[], int *i)
 	new_redir->type = REDIR;
 	if (tokens[*i][j] == '<')
 	{
+		j++;
+		if (tokens[*i][j] == '<')
+		{
+			new_redir->type = HEREDOC;
+			new_redir->mode = O_WRONLY|O_APPEND|O_CREAT;
+			j++;
+		}
+		else
 		new_redir->fd = 0;
 		new_redir->mode = O_RDONLY;
-		j++;
 	}
 	else if (tokens[*i][j] == '>')
 	{
@@ -71,24 +94,20 @@ void	parse_redir(t_redir **redirs_ptr, char *tokens[], int *i)
 		else
 			new_redir->mode = O_WRONLY|O_TRUNC|O_CREAT;
 	}
-	if (tokens[*i][j] == '\0')
-	{
-		(*i)++;
-		j = 0;
-	}
-	new_redir->filename = malloc(ft_strlen(&tokens[*i][j]) + 1 * sizeof(char));
-	ft_strlcpy(new_redir->filename, &tokens[*i][j], ft_strlen(&tokens[*i][j]));
-	if (*redirs_ptr == NULL)
-		*redirs_ptr = new_redir;
-	else
-	{
-		temp = *redirs_ptr;
-		while (temp->next_redir != NULL)
-			temp = temp->next_redir;
-		temp->next_redir = new_redir;
-	}
+	new_redir->next = NULL;
+	new_redir->filename = get_following_str(tokens, i, j);
 	(*i)++;
-	new_redir->next_redir = NULL;
+//	ft_lstadd_back((t_list **)redirs_ptr, (t_list *)new_redir);
+	ft_lstadd_back(redirs_ptr, new_redir);
+//	if (*redirs_ptr == NULL)
+//		*redirs_ptr = new_redir;
+//	else
+//	{
+//		temp = *redirs_ptr;
+//		while (temp->next_redir != NULL)
+//			temp = temp->next_redir;
+//		temp->next_redir = new_redir;
+//	}
 }
 
 t_node	*parser(char *tokens[])
@@ -111,116 +130,29 @@ t_node	*parser(char *tokens[])
 	return ((t_node *)redirs_ptr);
 }
 
-size_t	preserve_quoted_substr(char *str)
-{
-	size_t	len;
-
-	len = 0;
-	if (str[len] == '\'')
-	{
-		len++;
-		while (str[len] != '\'')
-			len++;
-		len++;
-	}
- 	else if (str[len] == '\"')
-	{
-		len++;
-		while (str[len] != '\"')
-			len++;
-		len++;
-	}
-	return (len);
-}
-
-int	ft_count_tokens(char *str, char delim)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		while (str[i] == delim)
-			i++;
-		if (str[i] != '\0')
-			count++;
-		if (str[i] == '\'' || str[i] == '\"')
-			i += preserve_quoted_substr(&str[i]);
-		while (str[i] && str[i] != delim)
-			i++;
-	}
-	return (count);
-}
-
-char	**ft_strtok(char *input, char delim)
-{
-	int	tok_count;
-	int	i;
-	int	j;
-	char	**tokens;
-
-	tok_count = ft_count_tokens(input, delim);
-	i = 0;
-	j = 0;
-	tokens = malloc((tok_count + 1) * sizeof(char *));
-//	if (tokens == NULL)
-//		exit(EXIT_FAILURE);
-	tokens[tok_count] = NULL;
-	while (j < tok_count)
-	{
-		while (input[i] == delim)
-			i++;
-		tokens[j] = &input[i];
-		j++;
-		if (input[i] == '\'' || input[i] == '\"')
-			i += preserve_quoted_substr(&input[i]);
-		while (input[i] && input[i] != delim)
-			i++;
-	}
-	j = 0;
-	while (j < tok_count)
-	{
-		i = 0;
-		if (tokens[j][i] == '\'' || tokens[j][i] == '\"')
-			i += preserve_quoted_substr(tokens[j]);
-		while (tokens[j][i] != delim)
-			i++;
-		tokens[j][i] = '\0';
-		printf("token[%d]: %s\n", j, tokens[j]);
-		j++;
-	}
-	return (tokens);
-}
-
 //int	main(int argc, char *argv[], char *envp[])
 int	main(void)
 {
 	char	*input; 
 	char	**tokens;
-//	int	i;
 	t_node	*ast;
 
 	tokens = NULL;
 	ast = NULL; 
 	while (1)
 	{
-//		i = 0;
 		input = readline("$ ");
 		if (input && *input)
 		{
 			add_history(input);
 			tokens = ft_strtok(input, ' ');
-			printf("tok done\n");
+			if (tokens == NULL)
+			{
+				free(input);
+				return (1);
+			}
 			ast = parser(tokens);
-			printf("parsing done\n");
 			print_tree(ast);
-		//	while (tokens[i])
-		//	{
-		//		printf("tokens: %s\n", tokens[i]);
-		//		i++;
-		//	}
 			free(input);
 			input = NULL;
 		}

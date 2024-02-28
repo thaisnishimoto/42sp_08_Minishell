@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/02/27 17:06:06 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/02/28 16:06:17 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ typedef struct	s_redir
 	char	*filename;
 	int	mode;
 	int	fd;
-	struct s_redir	*next_redir;
+	char	*delim;
+	struct s_redir	*next;
 }	t_redir;
 
 typedef struct	s_cmd
@@ -51,5 +52,10 @@ typedef struct	s_cmd
 	t_redir	*redirs;
 }	t_cmd;
 
+//tokenizer functions
+char	**ft_strtok(char *input, char delim);
+int	ft_count_tokens(char *str, char delim);
+size_t	preserve_quoted_substr(char *str);
+void	nulterminate_tok(char **tokens, char delim, int tok_count);
 
 #endif

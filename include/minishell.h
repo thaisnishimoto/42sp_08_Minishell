@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/02/26 16:40:53 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/02/27 17:06:06 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,15 @@ typedef struct	s_node
 	int	type;
 }	t_node;
 
+typedef struct	s_redir
+{
+	int	type;
+	char	*filename;
+	int	mode;
+	int	fd;
+	struct s_redir	*next_redir;
+}	t_redir;
+
 typedef struct	s_cmd
 {
 	int	type;
@@ -42,13 +51,5 @@ typedef struct	s_cmd
 	t_redir	*redirs;
 }	t_cmd;
 
-typedef struct	s_redir
-{
-	int	type;
-	char	*filename;
-	int	mode;
-	int	fd;
-	t_redir	*next_redir;
-}	t_redir;
 
 #endif

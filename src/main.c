@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/02/26 17:25:40 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/02/27 23:50:18 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,31 +18,36 @@ void	print_tree(t_node *node)
 		return ;
 	if (node->type == REDIR)
 	{
-		printf("node type: %d\n", (t_redir)node->type);
-		printf("redir file: %s\n", (t_redir)node->filename);
-		print_tree(node->next_node);
+		t_redir	*redir_node = (t_redir *)node;
+		printf("node type: %d\n", redir_node->type);
+		printf("node type: %d\n", redir_node->fd);
+		printf("redir file: %s\n", redir_node->filename);
+		print_tree((t_node *)redir_node->next_redir);
 	}
 	else if (node->type == CMD)
 	{
-		printf("node type: %d\n", (t_cmd)node->type);
-		printf("cmd pathname: %s\n", (t_cmd)node->pathname);
+		t_cmd	*cmd_node = (t_cmd *)node;
+		printf("node type: %d\n", cmd_node->type);
+		printf("cmd pathname: %s\n", cmd_node->pathname);
+		print_tree((t_node *)cmd_node->redirs);
 	}
 }
 
-t_node	*parse_cmd(t_node **tree_ptr, char *tokens[], int *i)
-{
-	t_cmd	*new_node;
-	char	*operators = "<|>";
-
-	node = malloc(sizeof(t_cmd));
-	new_root->filename = malloc(ft_strlen(&tokens[*i][j]) + 1 * sizeof(char));
-	ft_strlcpy(new_root->filename, &tokens[*i][j], ft_strlen(&tokens[*i][j]));
-	new_root->next_node = tree_ptr;
-}
+//t_node	*parse_cmd(t_node **tree_ptr, char *tokens[], int *i)
+//{
+//	t_cmd	*new_node;
+//	char	*operators = "<|>";
+//
+//	node = malloc(sizeof(t_cmd));
+//	new_root->filename = malloc(ft_strlen(&tokens[*i][j]) + 1 * sizeof(char));
+//	ft_strlcpy(new_root->filename, &tokens[*i][j], ft_strlen(&tokens[*i][j]));
+//	new_root->next_node = tree_ptr;
+//}
 
 void	parse_redir(t_redir **redirs_ptr, char *tokens[], int *i)
 {
 	t_redir	*new_redir;
+	t_redir	*temp;
 	int	j;
 
 	j = 0;
@@ -67,44 +72,43 @@ void	parse_redir(t_redir **redirs_ptr, char *tokens[], int *i)
 			new_redir->mode = O_WRONLY|O_TRUNC|O_CREAT;
 	}
 	if (tokens[*i][j] == '\0')
+	{
 		(*i)++;
+		j = 0;
+	}
 	new_redir->filename = malloc(ft_strlen(&tokens[*i][j]) + 1 * sizeof(char));
 	ft_strlcpy(new_redir->filename, &tokens[*i][j], ft_strlen(&tokens[*i][j]));
-	if (redirs_ptr == NULL)
-		redirs_ptr = new_redir;
+	if (*redirs_ptr == NULL)
+		*redirs_ptr = new_redir;
 	else
 	{
-		while (redirs_ptr)
-		{
-			if (redirs_ptr->next_node == NULL)
-			{
-				redirs_ptr->next_node = new_redir;
-				break ;
-			}
-			redirs_ptr = redirs_ptr->next_node;
-		}
+		temp = *redirs_ptr;
+		while (temp->next_redir != NULL)
+			temp = temp->next_redir;
+		temp->next_redir = new_redir;
 	}
-	new_redir->next_node = NULL;
+	(*i)++;
+	new_redir->next_redir = NULL;
 }
 
 t_node	*parser(char *tokens[])
 {
 	int	i;
-	t_node	*tree_ptr;
+//	t_node	*tree_ptr;
 	t_redir	*redirs_ptr;
-	char	*operators = "<|>";
+//	char	*operators = "<|>";
 
 	i = 0;
 	redirs_ptr = NULL;
-	tree_ptr = NULL;
+//	tree_ptr = NULL;
 	while (tokens[i])
 	{
-		if (ft_strchr(operators, tokens[i][0]))
-			tree_ptr = parse_cmd(&redirs_ptr, tokens, &i);
+//		if (ft_strchr(operators, tokens[i][0]))
+//			tree_ptr = parse_cmd(&redirs_ptr, tokens, &i);
 		if (tokens[i][0] == '<' || tokens[i][0] == '>')
 			parse_redir(&redirs_ptr, tokens, &i);
 	}
-	return (tree_ptr);
+	return ((t_node *)redirs_ptr);
 }
 
 size_t	preserve_quoted_substr(char *str)
@@ -195,20 +199,22 @@ int	main(void)
 {
 	char	*input; 
 	char	**tokens;
-	int	i;
+//	int	i;
 	t_node	*ast;
 
 	tokens = NULL;
 	ast = NULL; 
 	while (1)
 	{
-		i = 0;
+//		i = 0;
 		input = readline("$ ");
 		if (input && *input)
 		{
 			add_history(input);
 			tokens = ft_strtok(input, ' ');
+			printf("tok done\n");
 			ast = parser(tokens);
+			printf("parsing done\n");
 			print_tree(ast);
 		//	while (tokens[i])
 		//	{

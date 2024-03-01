@@ -6,7 +6,7 @@
 #    By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 10:48:14 by tmina-ni          #+#    #+#              #
-#    Updated: 2023/10/18 00:40:09 by tmina-ni         ###   ########.fr        #
+#    Updated: 2024/02/29 15:53:15 by tmina-ni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,14 +35,14 @@ CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	ar rc $(NAME) $(OBJS)
+$(NAME): $(OBJS) $(B_OBJS)
+	ar rc $(NAME) $(OBJS) $(B_OBJS)
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
-bonus: $(B_OBJS)
-	ar rc $(NAME) $(B_OBJS)
+#bonus: $(B_OBJS)
+#	ar rc $(NAME) $(B_OBJS)
 	
 clean:
 	rm -f *.o

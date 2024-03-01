@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/02/28 16:28:08 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:00:05 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ void	print_tree(t_node *node)
 		printf("node type: %d\n", redir_node->type);
 		printf("fd redir: %d\n", redir_node->fd);
 		printf("redir file: %s\n", redir_node->filename);
+		print_tree((t_node *)redir_node->next);
+	}
+	else if (node->type == HEREDOC)
+	{
+		t_redir	*redir_node = (t_redir *)node;
+		printf("node type: %d\n", redir_node->type);
+		printf("redir delim: %s\n", redir_node->eof);
 		print_tree((t_node *)redir_node->next);
 	}
 	else if (node->type == CMD)
@@ -43,72 +50,6 @@ void	print_tree(t_node *node)
 //	ft_strlcpy(new_root->filename, &tokens[*i][j], ft_strlen(&tokens[*i][j]));
 //	new_root->next_node = tree_ptr;
 //}
-
-char	*get_following_str(char *tokens[], int *i, int j)
-{
-	int		len;
-	char	*str;
-
-	if (tokens[*i][j] == '\0')
-	{
-		(*i)++;
-		j = 0;
-	}
-	len = ft_strlen(&tokens[*i][j]) + 1;
-	str = malloc((len + 1) * sizeof(char));
-	ft_strlcpy(str, &tokens[*i][j], len + 1);
-	return (str);
-}
-
-void	parse_redir(t_redir **redirs_ptr, char *tokens[], int *i)
-{
-	t_redir	*new_redir;
-//	t_redir	*temp;
-	int	j;
-
-	j = 0;
-	new_redir = malloc(sizeof(t_redir));
-	new_redir->type = REDIR;
-	if (tokens[*i][j] == '<')
-	{
-		j++;
-		if (tokens[*i][j] == '<')
-		{
-			new_redir->type = HEREDOC;
-			new_redir->mode = O_WRONLY|O_APPEND|O_CREAT;
-			j++;
-		}
-		else
-		new_redir->fd = 0;
-		new_redir->mode = O_RDONLY;
-	}
-	else if (tokens[*i][j] == '>')
-	{
-		new_redir->fd = 1;
-		j++;
-		if (tokens[*i][j] == '>')
-		{
-			new_redir->mode = O_WRONLY|O_APPEND|O_CREAT;
-			j++;
-		}
-		else
-			new_redir->mode = O_WRONLY|O_TRUNC|O_CREAT;
-	}
-	new_redir->next = NULL;
-	new_redir->filename = get_following_str(tokens, i, j);
-	(*i)++;
-//	ft_lstadd_back((t_list **)redirs_ptr, (t_list *)new_redir);
-	ft_lstadd_back(redirs_ptr, new_redir);
-//	if (*redirs_ptr == NULL)
-//		*redirs_ptr = new_redir;
-//	else
-//	{
-//		temp = *redirs_ptr;
-//		while (temp->next_redir != NULL)
-//			temp = temp->next_redir;
-//		temp->next_redir = new_redir;
-//	}
-}
 
 t_node	*parser(char *tokens[])
 {

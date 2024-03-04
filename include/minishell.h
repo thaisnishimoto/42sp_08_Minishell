@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/01 18:00:29 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/04 14:00:51 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct	s_redir
 typedef struct	s_cmd
 {
 	int	type;
-	char	*pathname;
+//	char	*pathname;
 	char	**cmd_args;
 	t_redir	*redirs;
 }	t_cmd;
@@ -64,5 +64,8 @@ void	set_redir_options(t_redir *new_redir, char *token);
 char	*get_following_str(char *tokens[], int *i);
 char	*ft_trim_quotes(char *str, const char *set);
 void	ft_redir_addback(t_redir **redirs_ptr, t_redir *new_redir);
+
+//parse command function
+t_node	*parse_cmd(t_redir **redirs_ptr, char *tokens[], int *i);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/01 18:00:05 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/04 14:51:07 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,40 +35,35 @@ void	print_tree(t_node *node)
 	{
 		t_cmd	*cmd_node = (t_cmd *)node;
 		printf("node type: %d\n", cmd_node->type);
-		printf("cmd pathname: %s\n", cmd_node->pathname);
+		int	i = 0;
+		while (cmd_node->cmd_args[i])
+		{
+			printf("cmd arg[%d]: %s\n", i, cmd_node->cmd_args[i]);
+			i++;
+		}
 		print_tree((t_node *)cmd_node->redirs);
 	}
 }
 
-//t_node	*parse_cmd(t_node **tree_ptr, char *tokens[], int *i)
-//{
-//	t_cmd	*new_node;
-//	char	*operators = "<|>";
-//
-//	node = malloc(sizeof(t_cmd));
-//	new_root->filename = malloc(ft_strlen(&tokens[*i][j]) + 1 * sizeof(char));
-//	ft_strlcpy(new_root->filename, &tokens[*i][j], ft_strlen(&tokens[*i][j]));
-//	new_root->next_node = tree_ptr;
-//}
-
 t_node	*parser(char *tokens[])
 {
 	int	i;
-//	t_node	*tree_ptr;
+	t_node	*tree_ptr;
 	t_redir	*redirs_ptr;
-//	char	*operators = "<|>";
-
+	
 	i = 0;
 	redirs_ptr = NULL;
-//	tree_ptr = NULL;
+	tree_ptr = NULL;
 	while (tokens[i])
 	{
-//		if (ft_strchr(operators, tokens[i][0]))
-//			tree_ptr = parse_cmd(&redirs_ptr, tokens, &i);
-		if (tokens[i][0] == '<' || tokens[i][0] == '>')
+		if (!ft_strchr("<|>", tokens[i][0]))
+			tree_ptr = parse_cmd(&redirs_ptr, tokens, &i);
+		else if (tokens[i][0] == '<' || tokens[i][0] == '>')
 			parse_redir(&redirs_ptr, tokens, &i);
 	}
-	return ((t_node *)redirs_ptr);
+	if (!tree_ptr)
+		tree_ptr = (t_node *)redirs_ptr;
+	return (tree_ptr);
 }
 
 //int	main(int argc, char *argv[], char *envp[])
@@ -93,6 +88,7 @@ int	main(void)
 				return (1);
 			}
 			ast = parser(tokens);
+			printf("parse done\n");
 			print_tree(ast);
 			free(input);
 			input = NULL;

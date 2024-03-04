@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/02/28 14:18:41 by tmina-ni         ###   ########.fr       */
+/*   Created: 2024/03/01 18:25:43 by mchamma           #+#    #+#             */
+/*   Updated: 2024/03/04 11:05:45 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,26 @@
 size_t	preserve_quoted_substr(char *str)
 {
 	size_t	len;
+	char	quote;
 
 	len = 0;
-	if (str[len] == '\'')
+	if (str[len] == '\'' || str[len] == '\"')
 	{
-		len++;
-		while (str[len] != '\'')
+		quote = str[len++];
+		while (str[len] != '\0' && str[len] != quote)
 			len++;
-		len++;
-	}
-	else if (str[len] == '\"')
-	{
-		len++;
-		while (str[len] != '\"')
+		if (str[len] == quote)
 			len++;
-		len++;
+		else
+			return (-1);
 	}
 	return (len);
 }
 
 int	ft_count_tokens(char *str, char delim)
 {
-	int	i;
-	int	count;
+	int		i;
+	int		count;
 
 	i = 0;
 	count = 0;
@@ -47,58 +44,37 @@ int	ft_count_tokens(char *str, char delim)
 			i++;
 		if (str[i] != '\0')
 			count++;
-		if (str[i] == '\'' || str[i] == '\"')
-			i += preserve_quoted_substr(&str[i]);
+		i += preserve_quoted_substr(&str[i]);
 		while (str[i] && str[i] != delim)
 			i++;
 	}
 	return (count);
 }
 
-void	nulterminate_tok(char **tokens, char delim, int tok_count)
-{
-	int	i;
-	int	j;
-
-	j = 0;
-	while (j < tok_count)
-	{
-		i = 0;
-		if (tokens[j][i] == '\'' || tokens[j][i] == '\"')
-			i += preserve_quoted_substr(tokens[j]);
-		while (tokens[j][i] != delim && tokens[j][i])
-			i++;
-		tokens[j][i] = '\0';
-//		printf("token[%d]: %s\n", j, tokens[j]);
-		j++;
-	}
-}
-
 char	**ft_strtok(char *input, char delim)
 {
-	int		tok_count;
+	char	**tokens;
+	int		count;
 	int		i;
 	int		j;
-	char	**tokens;
 
-	tok_count = ft_count_tokens(input, delim);
-	i = 0;
-	j = 0;
-	tokens = malloc((tok_count + 1) * sizeof(char *));
+	count = ft_count_tokens(input, delim);
+	tokens = ft_calloc((count + 1), sizeof(char *));
 	if (tokens == NULL)
 		return (NULL);
-	tokens[tok_count] = NULL;
-	while (j < tok_count)
+	i = 0;
+	j = 0;
+	while (j < count)
 	{
 		while (input[i] == delim)
 			i++;
 		tokens[j] = &input[i];
-		j++;
-		if (input[i] == '\'' || input[i] == '\"')
-			i += preserve_quoted_substr(&input[i]);
+		i += preserve_quoted_substr(&input[i]);
 		while (input[i] && input[i] != delim)
 			i++;
+		if (input[i] == delim)
+			input[i++] = '\0';
+		j++;
 	}
-	nulterminate_tok(tokens, delim, tok_count);
 	return (tokens);
 }

@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 18:25:43 by mchamma           #+#    #+#             */
-/*   Updated: 2024/03/04 11:05:45 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:19:56 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,37 @@ size_t	preserve_quoted_substr(char *str)
 	return (len);
 }
 
+size_t	skip_operator(char *str)
+{
+	size_t	len;
+	char	operator;
+
+	len = 0;
+	operator = str[len];
+	while (str[len] != '\0' && str[len] == operator)
+		len++;
+	return (len);
+}
+
+int	ft_token_len(char *str, char delim)
+{
+	int	len;
+
+	len = 0;
+	while (str[len] && str[len] != delim)
+	{
+		if (ft_strchr("<|>", str[len]))
+		{
+			len += skip_operator(&str[len]);
+			break ;
+		}
+		len += preserve_quoted_substr(&str[len]);
+		while (str[len] && str[len] != delim)
+			len++;
+	}
+	return (len);
+}
+
 int	ft_count_tokens(char *str, char delim)
 {
 	int		i;
@@ -44,9 +75,7 @@ int	ft_count_tokens(char *str, char delim)
 			i++;
 		if (str[i] != '\0')
 			count++;
-		i += preserve_quoted_substr(&str[i]);
-		while (str[i] && str[i] != delim)
-			i++;
+		i += ft_token_len(&str[i], delim);
 	}
 	return (count);
 }
@@ -68,13 +97,13 @@ char	**ft_strtok(char *input, char delim)
 	{
 		while (input[i] == delim)
 			i++;
-		tokens[j] = &input[i];
-		i += preserve_quoted_substr(&input[i]);
-		while (input[i] && input[i] != delim)
-			i++;
-		if (input[i] == delim)
-			input[i++] = '\0';
+		tokens[j] = ft_calloc(ft_token_len(&input[i], delim) + 1, sizeof(char));
+		if (tokens[j] == NULL)
+			return (NULL);
+		ft_strlcpy(tokens[j], &input[i], ft_token_len(&input[i], delim) + 1);
+		i += ft_token_len(&input[i], delim);
 		j++;
 	}
+	free(input);
 	return (tokens);
 }

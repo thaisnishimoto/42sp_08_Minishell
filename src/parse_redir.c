@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:25:30 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/01 18:00:13 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/06 17:00:24 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,23 @@
 
 char	*get_following_str(char *tokens[], int *i)
 {
-	int		j;
 	int		len;
 	char	*str;
 
-	j = 0;
-	while (tokens[*i][j] == '>' || tokens[*i][j] == '<' )
-		j++;
-	if (tokens[*i][j] == '\0')
+	if (ft_strchr("<|>", tokens[*i][0]))
 	{
-		(*i)++;
-		j = 0;
+		printf("syntax error near unexpected token '%s'\n", tokens[*i]);
+		//set exit code to 2
+		return (NULL);
 	}
-	len = ft_strlen(&tokens[*i][j]) + 1;
-	str = malloc(len * sizeof(char));
-	ft_strlcpy(str, &tokens[*i][j], len);
-	if (str[0] == '\'' || str[0] == '\"')
-		str = ft_trim_quotes(str, "\'\"");
+	len = ft_strlen(tokens[*i]) + 1;
+	str = ft_calloc(len, sizeof(char));
+	if (str)
+	{
+		ft_strlcpy(str, tokens[*i], len);
+		if (str[0] == '\'' || str[0] == '\"')
+			str = ft_trim_quotes(str, "\'\"");
+	}
 	return (str);
 }
 
@@ -100,9 +100,11 @@ void	parse_redir(t_redir **redirs_ptr, char *tokens[], int *i)
 {
 	t_redir	*new_redir;
 
-	new_redir = malloc(sizeof(t_redir));
-	*new_redir = (t_redir){};
+	new_redir = ft_calloc(1, sizeof(t_redir));
+	if (new_redir == NULL)
+		return ;
 	set_redir_options(new_redir, tokens[*i]);
+	(*i)++;
 	if (new_redir->type == REDIR)
 		new_redir->filename = get_following_str(tokens, i);
 	else if (new_redir->type == HEREDOC)

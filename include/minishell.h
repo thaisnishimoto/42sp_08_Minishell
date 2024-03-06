@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/04 14:00:51 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/06 17:03:02 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <errno.h> //perror
 # include "../libft/libft.h"
 
+# define OPERATORS "<\>"
+# define OPERATORS "<\>"
 # define CMD 1
 # define PIPE 2
 # define REDIR 3
@@ -47,10 +49,16 @@ typedef struct	s_redir
 typedef struct	s_cmd
 {
 	int	type;
-//	char	*pathname;
-	char	**cmd_args;
+	t_list	*cmd_args;
 	t_redir	*redirs;
 }	t_cmd;
+
+typedef struct	s_pipe
+{
+	int	type;
+	t_node	*left;
+	t_node	*right;
+}	t_pipe;
 
 //tokenizer functions
 char	**ft_strtok(char *input, char delim);
@@ -66,6 +74,9 @@ char	*ft_trim_quotes(char *str, const char *set);
 void	ft_redir_addback(t_redir **redirs_ptr, t_redir *new_redir);
 
 //parse command function
-t_node	*parse_cmd(t_redir **redirs_ptr, char *tokens[], int *i);
+void	parse_cmd(t_cmd **cmd_node, char *tokens[], int *i);
+
+//parse pipe function
+t_node	*parse_pipe(t_node *left, t_node *right);
 
 #endif

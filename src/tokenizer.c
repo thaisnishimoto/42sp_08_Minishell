@@ -5,40 +5,38 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/01 18:25:43 by mchamma           #+#    #+#             */
-/*   Updated: 2024/03/05 16:19:56 by tmina-ni         ###   ########.fr       */
+/*   Created: 2024/03/05 16:55:36 by mchamma           #+#    #+#             */
+/*   Updated: 2024/03/07 15:12:22 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-size_t	preserve_quoted_substr(char *str)
+size_t	substr_quoted(char *str)
 {
 	size_t	len;
 	char	quote;
 
 	len = 0;
-	if (str[len] == '\'' || str[len] == '\"')
-	{
-		quote = str[len++];
-		while (str[len] != '\0' && str[len] != quote)
-			len++;
-		if (str[len] == quote)
-			len++;
-		else
-			return (-1);
-	}
+	quote = str[len++];
+	while (str[len] != '\0' && str[len] != quote)
+		len++;
+	if (str[len] == quote)
+		len++;
+	else
+		exit (43); // syntax error: quote not closed
 	return (len);
 }
 
-size_t	skip_operator(char *str)
+size_t	substr_operator(char *str, int slen)
 {
 	size_t	len;
-	char	operator;
 
 	len = 0;
-	operator = str[len];
-	while (str[len] != '\0' && str[len] == operator)
+	if (slen != 0)
+		return (0);
+	len++;
+	while (str[len] && str[len] == str[len - 1])
 		len++;
 	return (len);
 }
@@ -50,13 +48,17 @@ int	ft_token_len(char *str, char delim)
 	len = 0;
 	while (str[len] && str[len] != delim)
 	{
-		if (ft_strchr("<|>", str[len]))
+		if (str[len] == '\'' || str[len] == '\"')
 		{
-			len += skip_operator(&str[len]);
+			len += substr_quoted(&str[len]);
 			break ;
 		}
-		len += preserve_quoted_substr(&str[len]);
-		while (str[len] && str[len] != delim)
+		else if (ft_strchr("<|>", str[len]))
+		{
+			len += substr_operator(&str[len], len);
+			break ;
+		}
+		else
 			len++;
 	}
 	return (len);

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:25:30 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/06 17:00:24 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:51:15 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_following_str(char *tokens[], int *i)
 	int		len;
 	char	*str;
 
-	if (ft_strchr("<|>", tokens[*i][0]))
+	if (ft_strchr(OPERATORS, tokens[*i][0]))
 	{
 		printf("syntax error near unexpected token '%s'\n", tokens[*i]);
 		//set exit code to 2

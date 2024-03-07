@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/06 17:03:02 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:51:00 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@
 # include <errno.h> //perror
 # include "../libft/libft.h"
 
-# define OPERATORS "<\>"
-# define OPERATORS "<\>"
+# define OPERATORS "<|>"
 # define CMD 1
 # define PIPE 2
 # define REDIR 3

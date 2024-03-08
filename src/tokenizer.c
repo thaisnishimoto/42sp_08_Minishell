@@ -6,13 +6,13 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:55:36 by mchamma           #+#    #+#             */
-/*   Updated: 2024/03/07 15:12:22 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/08 16:07:43 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-size_t	substr_quoted(char *str)
+size_t	substr_quote(char *str)
 {
 	size_t	len;
 	char	quote;
@@ -49,10 +49,7 @@ int	ft_token_len(char *str, char delim)
 	while (str[len] && str[len] != delim)
 	{
 		if (str[len] == '\'' || str[len] == '\"')
-		{
-			len += substr_quoted(&str[len]);
-			break ;
-		}
+			len += substr_quote(&str[len]);
 		else if (ft_strchr("<|>", str[len]))
 		{
 			len += substr_operator(&str[len], len);

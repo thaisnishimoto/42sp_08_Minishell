@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/07 15:51:00 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/10 22:56:24 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,15 @@
 # define PIPE 2
 # define REDIR 3
 # define HEREDOC 4
+
+#define	TABLE_SIZE 7
+
+typedef struct s_env
+{
+	char	*name;
+	char	*value;
+	struct s_env	*next;
+}	t_env;
 
 typedef struct	s_node
 {
@@ -58,6 +67,15 @@ typedef struct	s_pipe
 	t_node	*left;
 	t_node	*right;
 }	t_pipe;
+
+//hashtable functions
+void	init_hashtable(t_env *hashtable[]);
+void	hashtable_insert_replace(t_env *hashtable[], t_env *new_var);
+void	hashtable_insert(t_env *hashtable[], t_env *new_var);
+void	hashtable_delete(t_env *hashtable[], char *name);
+t_env	*hashtable_search(t_env *hashtable[], char *name);
+void	print_hashtable(t_env *hashtable[]);
+unsigned int	hash_function(char *name);
 
 //tokenizer functions
 char	**ft_strtok(char *input, char delim);

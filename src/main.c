@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/06 16:59:00 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/11 17:47:32 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,16 @@ t_node	*parser(char *tokens[])
 	return (tree_ptr);
 }
 
-//int	main(int argc, char *argv[], char *envp[])
-int	main(void)
+int	main(int argc, char *argv[], char *envp[])
 {
+	t_env	*hashtable[TABLE_SIZE];
 	char	*input; 
 	char	**tokens;
 	t_node	*ast;
 
+	(void)argc;
+	(void)argv;
+	load_environ_hashtable(hashtable, envp);
 	tokens = NULL;
 	ast = NULL; 
 	while (1)

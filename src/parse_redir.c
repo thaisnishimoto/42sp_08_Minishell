@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:25:30 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/07 15:51:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/12 16:35:53 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,30 +32,6 @@ char	*get_following_str(char *tokens[], int *i)
 			str = ft_trim_quotes(str, "\'\"");
 	}
 	return (str);
-}
-
-char	*ft_trim_quotes(char *str, const char *set)
-{
-	size_t	start;
-	size_t	end;
-	size_t	trim_len;
-	char	*ptr;
-
-	if (str == NULL || set == NULL)
-		return (NULL);
-	start = 0;
-	end = ft_strlen(str);
-	if (ft_strchr(set, str[start]) && start < end)
-		start++;
-	if (ft_strrchr(set, str[end - 1]) && end > start)
-		end--;
-	trim_len = end - start;
-	ptr = malloc((trim_len + 1) * sizeof(char));
-	if (ptr == NULL)
-		return (NULL);
-	ft_strlcpy(ptr, &str[start], trim_len + 1);
-	free(str);
-	return (ptr);
 }
 
 void	ft_redir_addback(t_redir **redirs_ptr, t_redir *new_redir)

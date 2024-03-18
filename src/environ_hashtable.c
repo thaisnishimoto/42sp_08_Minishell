@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/12 11:05:08 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/12 22:40:37 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,30 @@ t_env	*get_environ_data(char *envp)
 	return (new_var);
 }
 
-void	load_environ_hashtable(t_env *hashtable[], char *envp[])
+t_env	**static_environ_htable(t_env *new_var, char *name, int mode)
+{
+	static t_env	*hashtable[TABLE_SIZE];
+
+	if (mode == INIT)
+		init_hashtable(hashtable);
+	else if (mode == ADD)
+		hashtable_insert_replace(hashtable, new_var);
+	else if (mode == DEL)
+		hashtable_delete(hashtable, name); 
+	return (hashtable);
+}
+
+void	load_environ_hashtable(char *envp[])
 {
 	int		i;
 	t_env	*new_var;
 
-	init_hashtable(hashtable);
+	static_environ_htable(NULL, NULL, INIT);
 	i = 0;
 	while (envp[i])
 	{
 		new_var = get_environ_data(envp[i]);
-		hashtable_insert(hashtable, new_var);
+		static_environ_htable(new_var, NULL, ADD);
 		i++;
 	}
 }

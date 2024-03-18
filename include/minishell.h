@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/12 12:03:19 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/18 14:11:15 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@
 # define PIPE 2
 # define REDIR 3
 # define HEREDOC 4
+
+# define INIT 0
+# define READ 1
+# define ADD 2
+# define DEL 3
 
 # define TABLE_SIZE 97
 
@@ -69,20 +74,24 @@ typedef struct s_pipe
 }	t_pipe;
 
 //hashtable functions
-void			init_hashtable(t_env *hashtable[]);
+void			init_hashtable();
 void			hashtable_insert_replace(t_env *hashtable[], t_env *new_var);
 void			hashtable_insert(t_env *hashtable[], t_env *new_var);
 void			hashtable_delete(t_env *hashtable[], char *name);
 t_env			*hashtable_search(t_env *hashtable[], char *name);
 void			print_hashtable(t_env *hashtable[]);
 unsigned int	hash_function(char *name);
-void			load_environ_hashtable(t_env *hashtable[], char *envp[]);
+t_env	**static_environ_htable(t_env *new_var, char *name, int mode);
+void			load_environ_hashtable(char *envp[]);
+char	*handle_quotes(char *token);
 
 //tokenizer functions
 char			**ft_strtok(char *input, char delim);
 int				ft_count_tokens(char *str, char delim);
-size_t			reserve_quoted_substr(char *str);
-void			nulterminate_tok(char **tokens, char delim, int tok_count);
+int				ft_token_len(char *str, char delim);
+size_t			substr_quote(char *str);
+size_t			substr_operator(char *str, int slen);
+char			*parse_token(char *token, int nested);
 
 //parse redirection functions
 void			parse_redir(t_redir **redirs_ptr, char *tokens[], int *i);

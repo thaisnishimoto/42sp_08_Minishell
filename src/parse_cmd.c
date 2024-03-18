@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 13:33:31 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/06 16:59:47 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/18 14:02:06 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	parse_cmd(t_cmd **cmd_node, char *tokens[], int *i)
 		(*cmd_node)->redirs = NULL;
 		(*cmd_node)->cmd_args = NULL;
 	}
+	tokens[*i] = parse_token(tokens[*i], 0);
+	printf("expanded token[%d] = %s\n", *i, tokens[*i]);
 	add_cmd_arg(&((*cmd_node)->cmd_args), tokens[*i]);
 	(*i)++;
 }

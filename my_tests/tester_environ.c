@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/18 13:42:59 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/18 16:33:58 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ MU_TEST(funtion_should_expand_simple_env)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("$USER\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo $USER");
 	mu_assert_string_eq(expected, result);
@@ -76,7 +76,7 @@ MU_TEST(funtion_should_expand_double_quoted_env)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("\"$USER\"\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \"$USER\"");
 	mu_assert_string_eq(expected, result);
@@ -93,7 +93,7 @@ MU_TEST(funtion_should_not_expand_single_quoted_env)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("\'$USER\'\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \'$USER\'");
 	mu_assert_string_eq(expected, result);
@@ -110,7 +110,7 @@ MU_TEST(funtion_should_expand_quoted_cmd_simple_env)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("\"echo\" $USER\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \"echo\" $USER");
 	mu_assert_string_eq(expected, result);
@@ -127,7 +127,7 @@ MU_TEST(funtion_should_expand_simple_concat_str)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("echo$USER\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo echo$USER");
 	mu_assert_string_eq(expected, result);
@@ -144,7 +144,7 @@ MU_TEST(funtion_should_expand_single_quote_concat_substr)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("\'echo\'$USER\'end\'\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \'echo\'$USER\'end\'");
 	mu_assert_string_eq(expected, result);
@@ -161,7 +161,7 @@ MU_TEST(funtion_should_expand_mult_concat_envs)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("$USER$PWD$HOME\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo $USER$PWD$HOME");
 	mu_assert_string_eq(expected, result);
@@ -178,7 +178,7 @@ MU_TEST(funtion_should_expand_only_double_quoted_envs)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("\'$USER\'\"$USER\"\'$PWD\'\"$PWD\"\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \'$USER\'\"$USER\"\'$PWD\'\"$PWD\"");
 	mu_assert_string_eq(expected, result);
@@ -195,7 +195,7 @@ MU_TEST(funtion_should_not_expand_double_within_single_quotes)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("\'\"$PWD\"\'\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \'\"$PWD\"\'");
 	mu_assert_string_eq(expected, result);
@@ -212,7 +212,7 @@ MU_TEST(funtion_should_expand_single_within_double_quote)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("\"\'$PWD\'\"\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \"\'$PWD\'\"");
 	mu_assert_string_eq(expected, result);
@@ -229,7 +229,7 @@ MU_TEST(funtion_should_expand_single_within_double_with_more_than_env)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("\"Hello \'start$USER\'end\"\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \"Hello \'start$USER\'end\"");
 	mu_assert_string_eq(expected, result);
@@ -246,7 +246,7 @@ MU_TEST(funtion_should_not_expand_not_found_env)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("echo$USERend\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo echo$USERend");
 	mu_assert_string_eq(expected, result);
@@ -263,7 +263,7 @@ MU_TEST(funtion_should_not_expand_not_found_env_but_keep_str_end)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("echo$USR\'end\'\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo echo$USR\'end\'");
 	mu_assert_string_eq(expected, result);
@@ -280,7 +280,7 @@ MU_TEST(funtion_should_remove_quotes_in_middle)
 	printf("\n------------------------\n");
 
 	input = ft_strdup("echo hello\'world\'\n");
-	result = expand_token(input, 0);
+	result = parse_token(input, 0);
 	printf("expanded input: %s", result);
 	expected = exec_command("echo echo hello\'world\'");
 	mu_assert_string_eq(expected, result);

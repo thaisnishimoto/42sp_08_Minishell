@@ -6,7 +6,7 @@
 #    By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/28 20:22:45 by tmina-ni          #+#    #+#              #
-#    Updated: 2024/03/15 17:58:39 by tmina-ni         ###   ########.fr        #
+#    Updated: 2024/03/18 23:35:26 by tmina-ni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,16 +30,15 @@ $(NAME): $(SRC)
 #usage example: make hashtable
 #tester_$@.c
 %:
-	$(CC) $(CFLAGS) ../src/$(wildcard ../src/*$@*.c) $(wildcard *$@*.c) $(LIBFT) -lrt -lm -o program 
-	./program
+	$(CC) $(CFLAGS) $(filter-out ../src/main.c, $(wildcard ../src/*.c)) tester_$@.c $(LIBFT) -lrt -lm -o $(NAME) 
+	./$(NAME)
 
 clean:
 	rm -f *.o
-	rm minishell program
 	rm -f outfile*
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f minishell $(NAME)
 
 re: fclean all
 

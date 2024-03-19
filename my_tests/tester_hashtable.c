@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 16:11:21 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/12 22:52:17 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/18 23:31:00 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)argc;
 	(void)argv;
-	init_hashtable(hashtable);
+	hashtable_init(hashtable);
 	t_env	var1 = {.name="PATH", .value="var1"};
 	t_env	var2 = {.name="USER", .value="var2"};
 	t_env	var3 = {.name="VAR3", .value="var3"};
@@ -58,7 +58,7 @@ int	main(int argc, char *argv[], char *envp[])
 	else
 		printf("Not found\n");
 
-	hashtable_insert(hashtable, &var10);
+	hashtable_insert_replace(hashtable, &var10);
 	print_hashtable(hashtable);
 
 	find = hashtable_search(hashtable, "VAR10");

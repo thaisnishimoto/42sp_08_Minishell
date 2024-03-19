@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/18 14:11:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/18 22:58:56 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@
 # define HEREDOC 4
 
 # define INIT 0
-# define READ 1
+# define DEL 1
 # define ADD 2
-# define DEL 3
+# define READ 3
 
 # define TABLE_SIZE 97
 
@@ -74,16 +74,16 @@ typedef struct s_pipe
 }	t_pipe;
 
 //hashtable functions
-void			init_hashtable();
+void			hashtable_init(t_env *hashtable[]);
 void			hashtable_insert_replace(t_env *hashtable[], t_env *new_var);
 void			hashtable_insert(t_env *hashtable[], t_env *new_var);
 void			hashtable_delete(t_env *hashtable[], char *name);
 t_env			*hashtable_search(t_env *hashtable[], char *name);
 void			print_hashtable(t_env *hashtable[]);
 unsigned int	hash_function(char *name);
-t_env	**static_environ_htable(t_env *new_var, char *name, int mode);
+t_env			**static_environ_htable(t_env *new_var, char *name, int mode);
 void			load_environ_hashtable(char *envp[]);
-char	*handle_quotes(char *token);
+char			*handle_quotes(char *token);
 
 //tokenizer functions
 char			**ft_strtok(char *input, char delim);
@@ -102,6 +102,18 @@ void			ft_redir_addback(t_redir **redirs_ptr, t_redir *new_redir);
 
 //parse command function
 void			parse_cmd(t_cmd **cmd_node, char *tokens[], int *i);
+
+//parse token functions
+char			*parse_token(char *token, int nested);
+char			**ft_split_concat_token(char *token);
+char			*expand_token(char *token);
+char			*ft_rejoin_token_substr(char *token_substr[]);
+//parse token - utils
+int				count_token_substr(char *token);
+size_t			substr_env_name(char *str);
+size_t			ft_substrlen(char *str);
+char			*ft_trim_quotes(char *str, const char *set);
+char			*ft_add_single_quote(char *token_substr);
 
 //parse pipe function
 t_node			*parse_pipe(t_node *left, t_node *right);

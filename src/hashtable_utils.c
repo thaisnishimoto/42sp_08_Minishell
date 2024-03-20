@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hashtable.c                                        :+:      :+:    :+:   */
+/*   hashtable_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 16:11:21 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/11 11:38:52 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/18 23:55:33 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,30 +30,16 @@ unsigned int	hash_function(char *name)
 	return (hash_value);
 }
 
-void	print_hashtable(t_env *hashtable[])
+void	hashtable_init(t_env *hashtable[])
 {
-	int		i;
-	t_env	*temp;
+	int	i;
 
-	printf("\nSTART OF TABLE\n");
 	i = 0;
 	while (i < TABLE_SIZE)
 	{
-		if (hashtable[i])
-		{
-			temp = hashtable[i];
-			while (temp)
-			{
-				printf("%d: %s=%s <-> ", i, temp->name, temp->value);
-				temp = temp->next;
-			}
-			printf("\n");
-		}
-		else
-			printf("%d: --empty--\n", i);
+		hashtable[i] = NULL;
 		i++;
 	}
-	printf("END OF TABLE\n");
 }
 
 t_env	*hashtable_search(t_env *hashtable[], char *name)
@@ -88,10 +74,12 @@ void	hashtable_delete(t_env *hashtable[], char *name)
 		prev->next = temp->next;
 }
 
-void	hashtable_insert(t_env *hashtable[], t_env *new_var)
+void	hashtable_insert_replace(t_env *hashtable[], t_env *new_var)
 {
 	int	index;
 
+	if (hashtable_search(hashtable, new_var->name))
+		hashtable_delete(hashtable, new_var->name);
 	index = hash_function(new_var->name);
 	if (hashtable[index] == NULL)
 		hashtable[index] = new_var;
@@ -99,24 +87,5 @@ void	hashtable_insert(t_env *hashtable[], t_env *new_var)
 	{
 		new_var->next = hashtable[index];
 		hashtable[index] = new_var;
-	}
-}
-
-void	hashtable_insert_replace(t_env *hashtable[], t_env *new_var)
-{
-	if (hashtable_search(hashtable, new_var->name))
-		hashtable_delete(hashtable, new_var->name);
-	hashtable_insert(hashtable, new_var);
-}
-
-void	init_hashtable(t_env *hashtable[])
-{
-	int	i;
-
-	i = 0;
-	while (i < TABLE_SIZE)
-	{
-		hashtable[i] = NULL;
-		i++;
 	}
 }

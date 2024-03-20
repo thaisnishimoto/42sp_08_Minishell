@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/18 22:58:56 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/20 12:00:21 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 # define DEL 1
 # define ADD 2
 # define READ 3
+# define FREE 4
+# define PRINT 5
 
 # define TABLE_SIZE 97
 
@@ -73,12 +75,12 @@ typedef struct s_pipe
 	t_node	*right;
 }	t_pipe;
 
-//hashtable functions
+//hashtable utils functions
 void			hashtable_init(t_env *hashtable[]);
 void			hashtable_insert_replace(t_env *hashtable[], t_env *new_var);
-void			hashtable_insert(t_env *hashtable[], t_env *new_var);
 void			hashtable_delete(t_env *hashtable[], char *name);
 t_env			*hashtable_search(t_env *hashtable[], char *name);
+void			hashtable_free(t_env *hashtable[]);
 void			print_hashtable(t_env *hashtable[]);
 unsigned int	hash_function(char *name);
 t_env			**static_environ_htable(t_env *new_var, char *name, int mode);
@@ -117,5 +119,9 @@ char			*ft_add_single_quote(char *token_substr);
 
 //parse pipe function
 t_node			*parse_pipe(t_node *left, t_node *right);
+
+//free and exit function
+void			free_matrix(char **array);
+void			ft_handle_error(char *error_msg);
 
 #endif

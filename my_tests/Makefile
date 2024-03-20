@@ -6,7 +6,7 @@
 #    By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/28 20:22:45 by tmina-ni          #+#    #+#              #
-#    Updated: 2024/03/18 23:35:26 by tmina-ni         ###   ########.fr        #
+#    Updated: 2024/03/20 11:51:43 by tmina-ni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ $(NAME): $(SRC)
 %:
 	$(CC) $(CFLAGS) $(filter-out ../src/main.c, $(wildcard ../src/*.c)) tester_$@.c $(LIBFT) -lrt -lm -o $(NAME) 
 	./$(NAME)
+#	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME)
 
 clean:
 	rm -f *.o

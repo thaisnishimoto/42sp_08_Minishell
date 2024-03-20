@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/18 22:38:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/20 11:56:57 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*ft_rejoin_token_substr(char *token_substr[])
 	int		i;
 
 	i = 0;
-	result = ft_strdup(token_substr[i]); 
+	result = ft_strdup(token_substr[i]);
 	while (token_substr[++i])
 	{
 		temp = ft_strjoin(result, token_substr[i]);
@@ -81,7 +81,6 @@ char	*parse_token(char *token, int nested)
 
 	token_substr = ft_split_concat_token(token);
 	i = -1;
-	//printf("initiate expand\n");
 	while (token_substr[++i])
 	{
 		if (token_substr[i][0] == '\"')
@@ -93,7 +92,7 @@ char	*parse_token(char *token, int nested)
 		{
 			token_substr[i] = ft_trim_quotes(token_substr[i], "\'");
 			if (nested)
-			{	
+			{
 				token_substr[i] = parse_token(token_substr[i], 1);
 				token_substr[i] = ft_add_single_quote(token_substr[i]);
 			}

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/18 23:25:06 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/20 10:29:41 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,6 +286,23 @@ MU_TEST(funtion_should_remove_quotes_in_middle)
 	mu_assert_string_eq(expected, result);
 }
 
+MU_TEST(funtion_should_expand_specific_env)
+{
+	char	*input; 
+	char	*result; 
+	char    *expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 15: expand $LS_COLORS");
+	printf("\n------------------------\n");
+
+	input = ft_strdup("$LS_COLORS\n");
+	result = parse_token(input, 0);
+	printf("expanded input: %s", result);
+	expected = exec_command("echo $LS_COLORS");
+	mu_assert_string_eq(expected, result);
+}
+
 MU_TEST_SUITE(test_suite)
 {
 	MU_RUN_TEST(funtion_should_expand_simple_env);
@@ -302,6 +319,7 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(funtion_should_not_expand_not_found_env);
 	MU_RUN_TEST(funtion_should_not_expand_not_found_env_but_keep_str_end);
 	MU_RUN_TEST(funtion_should_remove_quotes_in_middle);
+	MU_RUN_TEST(funtion_should_expand_specific_env);
 }
 
 int	main(int argc, char *argv[], char *envp[])

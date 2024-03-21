@@ -6,15 +6,14 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:25:30 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/12 16:35:53 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/21 00:30:33 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*get_following_str(char *tokens[], int *i)
+char	*get_following_str(char *tokens[], int *i, int type)
 {
-	int		len;
 	char	*str;
 
 	if (ft_strchr(OPERATORS, tokens[*i][0]))
@@ -23,14 +22,10 @@ char	*get_following_str(char *tokens[], int *i)
 		//set exit code to 2
 		return (NULL);
 	}
-	len = ft_strlen(tokens[*i]) + 1;
-	str = ft_calloc(len, sizeof(char));
-	if (str)
-	{
-		ft_strlcpy(str, tokens[*i], len);
-		if (str[0] == '\'' || str[0] == '\"')
-			str = ft_trim_quotes(str, "\'\"");
-	}
+	if (type == REDIR)
+		str = parse_token(tokens[*i], 0);
+	else if (type == HEREDOC)
+		str = ft_trim_quotes(tokens[*i], 0);
 	return (str);
 }
 
@@ -82,9 +77,11 @@ void	parse_redir(t_redir **redirs_ptr, char *tokens[], int *i)
 	set_redir_options(new_redir, tokens[*i]);
 	(*i)++;
 	if (new_redir->type == REDIR)
-		new_redir->filename = get_following_str(tokens, i);
+		new_redir->filename = get_following_str(tokens, i, REDIR);
 	else if (new_redir->type == HEREDOC)
-		new_redir->eof = get_following_str(tokens, i);
+	{
+		new_redir->eof = get_following_str(tokens, i, HEREDOC);
+	}
 	ft_redir_addback(redirs_ptr, new_redir);
 	(*i)++;
 }

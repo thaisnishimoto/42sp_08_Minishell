@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/20 12:00:21 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/21 00:29:55 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_redir
 	int				fd;
 	char			*filename;
 	char			*eof;
+	int				eof_expand;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -98,7 +99,7 @@ char			*parse_token(char *token, int nested);
 //parse redirection functions
 void			parse_redir(t_redir **redirs_ptr, char *tokens[], int *i);
 void			set_redir_options(t_redir *new_redir, char *token);
-char			*get_following_str(char *tokens[], int *i);
+char			*get_following_str(char *tokens[], int *i, int type);
 char			*ft_trim_quotes(char *str, const char *set);
 void			ft_redir_addback(t_redir **redirs_ptr, t_redir *new_redir);
 

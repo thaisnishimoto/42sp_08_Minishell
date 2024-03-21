@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/18 22:38:18 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/21 13:47:15 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,26 @@ size_t	ft_substrlen(char *str)
 	size_t	len;
 
 	len = 0;
-	while (str[len])
+	if (str[len] == '\'' || str[len] == '\"')
 	{
-		if (str[len] == '\'' || str[len] == '\"')
-		{
-			len += substr_quote(&str[len]);
-			break ;
-		}
-		else if (str[len++] == '$')
-		{
-			len += substr_env_name(&str[len]);
-			break ;
-		}
-		else
-		{
-			while (str[len] && !ft_strchr("\'\"$", str[len]))
-				len++;
-			break ;
-		}
+		len += substr_quote(&str[len]);
+		return (len);
 	}
-	return (len);
+	else if (str[len] == '$')
+	{
+		len++;
+		if (str[len] == '\'' || str[len] == '\"')
+			len += substr_quote(&str[len]);
+		else
+			len += substr_env_name(&str[len]);
+		return (len);
+	}
+	else
+	{
+		while (str[len] && !ft_strchr("\'\"$", str[len]))
+			len++;
+		return (len);
+	}
 }
 
 size_t	substr_env_name(char *str)

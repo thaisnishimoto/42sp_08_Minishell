@@ -6,12 +6,12 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/20 11:56:57 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/21 14:53:00 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
+//if $"" - trim quotes e substitute token by literal word
 char	**ft_split_concat_token(char *token)
 {
 	char	**token_substr;
@@ -31,7 +31,7 @@ char	**ft_split_concat_token(char *token)
 		if (token_substr[j] == NULL)
 			return (NULL);
 		ft_strlcpy(token_substr[j], &token[i], ft_substrlen(&token[i]) + 1);
-		printf("token substr[%d] = %s\n", j, token_substr[j]);
+//		printf("token substr[%d] = %s\n", j, token_substr[j]);
 		i += ft_substrlen(&token[i]);
 		j++;
 	}
@@ -46,11 +46,17 @@ char	*expand_token(char *token)
 	t_env	*result;
 	char	*env_value;
 
-	hashtable = static_environ_htable(NULL, NULL, READ);
-	env_value = ft_strdup("");
-	result = hashtable_search(hashtable, &token[1]);
-	if (result)
-		env_value = ft_strdup(result->value);
+	if (token[1] == '\'' || token[1] == '\"')
+		env_value = ft_trim_quotes(ft_strdup(&token[1]), "\"\'");
+	else
+	{
+		hashtable = static_environ_htable(NULL, NULL, READ);
+		result = hashtable_search(hashtable, &token[1]);
+		if (result)
+			env_value = ft_strdup(result->value);
+		else
+			env_value = ft_strdup("");
+	}
 	free(token);
 	return (env_value);
 }
@@ -67,10 +73,9 @@ char	*ft_rejoin_token_substr(char *token_substr[])
 	{
 		temp = ft_strjoin(result, token_substr[i]);
 		free(result);
-		free(token_substr[i]);
 		result = temp;
 	}
-	free(token_substr);
+	free_matrix(token_substr);
 	return (result);
 }
 
@@ -97,7 +102,7 @@ char	*parse_token(char *token, int nested)
 				token_substr[i] = ft_add_single_quote(token_substr[i]);
 			}
 		}
-		else if (token_substr[i][0] == '$')
+		else if (token_substr[i][0] == '$' && token_substr[i][1] != '\0')
 			token_substr[i] = expand_token(token_substr[i]);
 	}
 	return (ft_rejoin_token_substr(token_substr));

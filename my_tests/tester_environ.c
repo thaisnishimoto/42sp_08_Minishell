@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/20 10:29:41 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/21 15:31:45 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*exec_command(char *cmd)
 	char	*output;
 
 	line_len = 0;
-	output = ft_calloc(1000, sizeof(char));
+	output = ft_calloc(2000, sizeof(char));
 	stream = popen(cmd, "r");
 	if (stream == NULL)
 	{
@@ -63,6 +63,8 @@ MU_TEST(funtion_should_expand_simple_env)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo $USER");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_expand_double_quoted_env)
@@ -80,6 +82,8 @@ MU_TEST(funtion_should_expand_double_quoted_env)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \"$USER\"");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_not_expand_single_quoted_env)
@@ -97,6 +101,8 @@ MU_TEST(funtion_should_not_expand_single_quoted_env)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \'$USER\'");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_expand_quoted_cmd_simple_env)
@@ -114,6 +120,8 @@ MU_TEST(funtion_should_expand_quoted_cmd_simple_env)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \"echo\" $USER");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_expand_simple_concat_str)
@@ -131,6 +139,8 @@ MU_TEST(funtion_should_expand_simple_concat_str)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo echo$USER");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_expand_single_quote_concat_substr)
@@ -148,6 +158,8 @@ MU_TEST(funtion_should_expand_single_quote_concat_substr)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \'echo\'$USER\'end\'");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_expand_mult_concat_envs)
@@ -165,6 +177,8 @@ MU_TEST(funtion_should_expand_mult_concat_envs)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo $USER$PWD$HOME");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_expand_only_double_quoted_envs)
@@ -182,6 +196,8 @@ MU_TEST(funtion_should_expand_only_double_quoted_envs)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \'$USER\'\"$USER\"\'$PWD\'\"$PWD\"");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_not_expand_double_within_single_quotes)
@@ -199,6 +215,8 @@ MU_TEST(funtion_should_not_expand_double_within_single_quotes)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \'\"$PWD\"\'");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_expand_single_within_double_quote)
@@ -216,6 +234,8 @@ MU_TEST(funtion_should_expand_single_within_double_quote)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \"\'$PWD\'\"");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_expand_single_within_double_with_more_than_env)
@@ -233,6 +253,8 @@ MU_TEST(funtion_should_expand_single_within_double_with_more_than_env)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo \"Hello \'start$USER\'end\"");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_not_expand_not_found_env)
@@ -250,6 +272,8 @@ MU_TEST(funtion_should_not_expand_not_found_env)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo echo$USERend");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_not_expand_not_found_env_but_keep_str_end)
@@ -267,6 +291,8 @@ MU_TEST(funtion_should_not_expand_not_found_env_but_keep_str_end)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo echo$USR\'end\'");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_remove_quotes_in_middle)
@@ -284,6 +310,8 @@ MU_TEST(funtion_should_remove_quotes_in_middle)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo echo hello\'world\'");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST(funtion_should_expand_specific_env)
@@ -301,6 +329,46 @@ MU_TEST(funtion_should_expand_specific_env)
 	printf("expanded input: %s", result);
 	expected = exec_command("echo $LS_COLORS");
 	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_keep_the_empty_dollar_sign)
+{
+	char	*input; 
+	char	*result; 
+	char    *expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 16: echo $");
+	printf("\n------------------------\n");
+
+	input = ft_strdup("echo $\n");
+	result = parse_token(input, 0);
+	printf("expanded input: %s", result);
+	expected = exec_command("echo echo $");
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_not_expand_quoted_env_name)
+{
+	char	*input; 
+	char	*result; 
+	char    *expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 17: not expand echo$\'USER\'");
+	printf("\n------------------------\n");
+
+	input = ft_strdup("echo$\'USER\'\n");
+	result = parse_token(input, 0);
+	printf("expanded input: %s", result);
+	expected = exec_command("bash -c \"echo echo$\'USER\'\"");
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
 }
 
 MU_TEST_SUITE(test_suite)
@@ -320,6 +388,8 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(funtion_should_not_expand_not_found_env_but_keep_str_end);
 	MU_RUN_TEST(funtion_should_remove_quotes_in_middle);
 	MU_RUN_TEST(funtion_should_expand_specific_env);
+	MU_RUN_TEST(funtion_should_keep_the_empty_dollar_sign);
+	MU_RUN_TEST(funtion_should_not_expand_quoted_env_name);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -329,5 +399,6 @@ int	main(int argc, char *argv[], char *envp[])
 	load_environ_hashtable(envp);
 	MU_RUN_SUITE(test_suite);
 	MU_REPORT();
+	static_environ_htable(NULL, NULL, FREE);
 	return MU_EXIT_CODE;
 }

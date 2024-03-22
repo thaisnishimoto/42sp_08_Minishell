@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:25:30 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/21 00:30:33 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/22 12:36:15 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	*get_following_str(char *tokens[], int *i, int type)
 {
 	char	*str;
 
+	str = NULL;
 	if (ft_strchr(OPERATORS, tokens[*i][0]))
 	{
 		printf("syntax error near unexpected token '%s'\n", tokens[*i]);
@@ -24,7 +25,7 @@ char	*get_following_str(char *tokens[], int *i, int type)
 	}
 	if (type == REDIR)
 		str = parse_token(tokens[*i], 0);
-	else if (type == HEREDOC)
+	else
 		str = ft_trim_quotes(tokens[*i], 0);
 	return (str);
 }

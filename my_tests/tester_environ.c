@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/21 15:31:45 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/25 00:53:57 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,6 +371,44 @@ MU_TEST(funtion_should_not_expand_quoted_env_name)
 	free(expected);
 }
 
+MU_TEST(funtion_should_keep_empty_string_when_empty_quoted_token)
+{
+	char	*input; 
+	char	*result; 
+	char    *expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 17: cat \"\"");
+	printf("\n------------------------\n");
+
+	input = ft_strdup("cat \"\"\n");
+	result = parse_token(input, 0);
+	printf("expanded input: %s", result);
+	expected = exec_command("echo cat \"\"");
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_keep_empty_string_when_empty_single_quoted_token)
+{
+	char	*input; 
+	char	*result; 
+	char    *expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 17: cat \'\'");
+	printf("\n------------------------\n");
+
+	input = ft_strdup("cat \'\'\n");
+	result = parse_token(input, 0);
+	printf("expanded input: %s", result);
+	expected = exec_command("echo cat \'\'");
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
 MU_TEST_SUITE(test_suite)
 {
 	MU_RUN_TEST(funtion_should_expand_simple_env);
@@ -390,6 +428,8 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(funtion_should_expand_specific_env);
 	MU_RUN_TEST(funtion_should_keep_the_empty_dollar_sign);
 	MU_RUN_TEST(funtion_should_not_expand_quoted_env_name);
+	MU_RUN_TEST(funtion_should_keep_empty_string_when_empty_quoted_token);
+	MU_RUN_TEST(funtion_should_keep_empty_string_when_empty_single_quoted_token);
 }
 
 int	main(int argc, char *argv[], char *envp[])

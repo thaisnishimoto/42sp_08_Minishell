@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/20 11:49:56 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/26 11:16:03 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,20 @@ t_env	**static_environ_htable(t_env *new_var, char *name, int mode)
 	else if (mode == FREE)
 		hashtable_free(hashtable);
 	return (hashtable);
+}
+
+char	*ft_getenv(char *name)
+{
+	t_env	**hashtable;
+	t_env	*env;
+	char	*env_value;
+
+	env_value = NULL;
+	hashtable = static_environ_htable(NULL, NULL, READ);
+	env = hashtable_search(hashtable, name);
+	if (env)
+		env_value = ft_strdup(env->value);
+	return (env_value);
 }
 
 char	**ft_split_env(char const *s)
@@ -100,4 +114,8 @@ void	load_environ_hashtable(char *envp[])
 		free_matrix(env_content);
 		i++;
 	}
+	env_content = ft_split_env("?=0");
+	new_var = save_environ_data(env_content);
+	static_environ_htable(new_var, NULL, ADD);
+	free_matrix(env_content);
 }

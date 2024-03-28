@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/12 22:55:10 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/28 11:46:46 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,17 @@ t_node	*parser(char *tokens[])
 	return (tree_ptr);
 }
 
+char	*ft_rm_trail_nl(char *str)
+{
+	int	len;
+
+	if (str == NULL)
+		return (NULL);
+	len = ft_strlen(str) - 1;
+	if (str[len] == '\n')
+		str[len] = '\0';
+	return (str);
+}
 
 int	main(int argc, char *argv[], char *envp[])
 {
@@ -111,7 +122,24 @@ int	main(int argc, char *argv[], char *envp[])
 	ast = NULL; 
 	while (1)
 	{
-		input = readline("$ ");
+ 		if (isatty(STDIN_FILENO))
+			input = readline("$ ");
+		else
+		{
+			input = ft_rm_trail_nl(ft_get_next_line(STDIN_FILENO));
+			int	tty_fd = open("/dev/tty", O_RDWR);
+        		if (tty_fd < 0)
+			{
+            			perror("open /dev/tty");
+            			exit(EXIT_FAILURE);
+			}
+			if (dup2(tty_fd, STDIN_FILENO) == -1)
+			{
+            			perror("dup2");
+            			exit(EXIT_FAILURE);
+        		}
+			close(tty_fd);
+		}
 		if (input && *input)
 		{
 			add_history(input);
@@ -121,17 +149,18 @@ int	main(int argc, char *argv[], char *envp[])
 				free(input);
 				return (1);
 			}
-			int	j = 0;
-			while (tokens[j])
-			{
-				printf("token[%d]: %s\n", j, tokens[j]);
-				j++;
-			}
+//			int	j = 0;
+//			while (tokens[j])
+//			{
+//				printf("token[%d]: %s\n", j, tokens[j]);
+//				j++;
+//			}
 			ast = parser(tokens);
-			printf("\nparse done\n");
-			print_tree(ast);
+//			print_tree(ast);
+			executor(ast);
 			input = NULL;
 		}
+//		break ;
 	}
 	return (0);
 }

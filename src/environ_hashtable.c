@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/26 11:16:03 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/26 11:29:14 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,22 @@ char	**ft_split_env(char const *s)
 	return (array);
 }
 
-t_env	*save_environ_data(char *env_content[])
+t_env	*create_environ(char *name, char* value)
 {
 	t_env	*new_var;
 
 	new_var = ft_calloc(1, sizeof(t_env));
 	if (new_var == NULL)
 		return (NULL);
-	new_var->name = ft_strdup(env_content[0]);
+	new_var->name = ft_strdup(name);
 	if (new_var->name == NULL)
 	{
 		free(new_var);
 		return (NULL);
 	}
-	if (env_content[1])
+	if (value)
 	{
-		new_var->value = ft_strdup(env_content[1]);
+		new_var->value = ft_strdup(value);
 		if (new_var->value == NULL)
 		{
 			free(new_var);
@@ -104,7 +104,7 @@ void	load_environ_hashtable(char *envp[])
 		env_content = ft_split_env(envp[i]);
 		if (env_content == NULL)
 			ft_handle_error("malloc failed");
-		new_var = save_environ_data(env_content);
+		new_var = create_environ(env_content[0], env_content[1]);
 		if (new_var == NULL)
 		{
 			free_matrix(env_content);
@@ -114,8 +114,6 @@ void	load_environ_hashtable(char *envp[])
 		free_matrix(env_content);
 		i++;
 	}
-	env_content = ft_split_env("?=0");
-	new_var = save_environ_data(env_content);
+	new_var = create_environ("?", "0");
 	static_environ_htable(new_var, NULL, ADD);
-	free_matrix(env_content);
 }

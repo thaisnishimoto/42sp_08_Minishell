@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/21 00:29:55 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/26 19:28:55 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ void			hashtable_free(t_env *hashtable[]);
 void			print_hashtable(t_env *hashtable[]);
 unsigned int	hash_function(char *name);
 t_env			**static_environ_htable(t_env *new_var, char *name, int mode);
+char			*ft_getenv(char *name);
+t_env			*create_environ(char *name, char *value);
 void			load_environ_hashtable(char *envp[]);
 char			*handle_quotes(char *token);
 
@@ -109,6 +111,7 @@ void			parse_cmd(t_cmd **cmd_node, char *tokens[], int *i);
 //parse token functions
 char			*parse_token(char *token, int nested);
 char			**ft_split_concat_token(char *token);
+char			*process_quotes(char *token_substr, int nested);
 char			*expand_token(char *token);
 char			*ft_rejoin_token_substr(char *token_substr[]);
 //parse token - utils
@@ -121,8 +124,14 @@ char			*ft_add_single_quote(char *token_substr);
 //parse pipe function
 t_node			*parse_pipe(t_node *left, t_node *right);
 
+//executor functions
+void			executor(t_node *node);
+void			exec_cmd(t_list *cmd_args);
+
 //free and exit function
 void			free_matrix(char **array);
+void			update_exit_code(char *new_value);
+int			get_exit_code(void);
 void			ft_handle_error(char *error_msg);
 
 #endif

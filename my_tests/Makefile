@@ -6,7 +6,7 @@
 #    By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/28 20:22:45 by tmina-ni          #+#    #+#              #
-#    Updated: 2024/03/21 15:33:50 by tmina-ni         ###   ########.fr        #
+#    Updated: 2024/03/22 14:54:51 by tmina-ni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,11 @@ CFLAGS = -Wall -Wextra -Werror -g3
 SRC = $(wildcard *.c)
 LIBFT = -L../libft -lft
 
-all: minishell $(NAME)
-	./$(NAME)
-	make --no-print fclean
-
-minishell:
+all: 
 	$(MAKE) -C ../ 
 	cp ../minishell ./
+	$(CC) $(CFLAGS) $(filter-out ../src/main.c, $(wildcard ../src/*.c)) tester_minishell.c $(LIBFT) -lrt -lm -o $(NAME) 
+	./$(NAME)
 
 $(NAME): $(SRC)
 	$(CC) $(CFLAGS) -o $(NAME) $(SRC) -lrt -lm $(LIBFT)

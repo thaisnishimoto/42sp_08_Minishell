@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/25 01:22:00 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/25 17:17:43 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,25 @@ char	**ft_split_concat_token(char *token)
 	}
 	free(token);
 	token = NULL;
+	return (token_substr);
+}
+
+char	*process_quotes(char *token_substr, int nested)
+{
+	if (token_substr[0] == '\"')
+	{
+		token_substr = ft_trim_quotes(token_substr, "\"");
+		token_substr = parse_token(token_substr, 1);
+	}
+	else if (token_substr[0] == '\'')
+	{
+		token_substr = ft_trim_quotes(token_substr, "\'");
+		if (nested)
+		{
+			token_substr = parse_token(token_substr, 1);
+			token_substr = ft_add_single_quote(token_substr);
+		}
+	}
 	return (token_substr);
 }
 
@@ -77,25 +96,6 @@ char	*ft_rejoin_token_substr(char *token_substr[])
 	}
 	free_matrix(token_substr);
 	return (result);
-}
-
-char	*process_quotes(char *token_substr, int nested)
-{
-	if (token_substr[0] == '\"')
-	{
-		token_substr = ft_trim_quotes(token_substr, "\"");
-		token_substr = parse_token(token_substr, 1);
-	}
-	else if (token_substr[0] == '\'')
-	{
-		token_substr = ft_trim_quotes(token_substr, "\'");
-		if (nested)
-		{
-			token_substr = parse_token(token_substr, 1);
-			token_substr = ft_add_single_quote(token_substr);
-		}
-	}
-	return (token_substr);
 }
 
 char	*parse_token(char *token, int nested)

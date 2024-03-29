@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:25:30 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/22 12:36:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/29 17:30:47 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 char	*get_following_str(char *tokens[], int *i, int type)
 {
-	char	*str;
-
-	str = NULL;
 	if (ft_strchr(OPERATORS, tokens[*i][0]))
 	{
 		printf("syntax error near unexpected token '%s'\n", tokens[*i]);
@@ -24,10 +21,10 @@ char	*get_following_str(char *tokens[], int *i, int type)
 		return (NULL);
 	}
 	if (type == REDIR)
-		str = parse_token(tokens[*i], 0);
+		tokens[*i] = parse_token(tokens[*i], 0);
 	else
-		str = ft_trim_quotes(tokens[*i], 0);
-	return (str);
+		tokens[*i] = ft_trim_quotes(tokens[*i], "\"\'");
+	return (ft_strdup(tokens[*i]));
 }
 
 void	ft_redir_addback(t_redir **redirs_ptr, t_redir *new_redir)

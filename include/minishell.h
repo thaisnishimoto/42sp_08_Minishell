@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/26 19:28:55 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/31 10:30:40 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,10 @@ typedef struct s_pipe
 	t_node	*right;
 }	t_pipe;
 
+//minishell loop functions
+char			*prompt(void);
+t_node			*parser(char *tokens[]);
+
 //hashtable utils functions
 void			hashtable_init(t_env *hashtable[]);
 void			hashtable_insert_replace(t_env *hashtable[], t_env *new_var);
@@ -133,5 +137,7 @@ void			free_matrix(char **array);
 void			update_exit_code(char *new_value);
 int			get_exit_code(void);
 void			ft_handle_error(char *error_msg);
+t_node	*static_ast_holder(t_node *ast, int mode);
+
 
 #endif

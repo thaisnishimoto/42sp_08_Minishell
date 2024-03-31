@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:25:30 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/29 17:30:47 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/29 17:39:17 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ void	set_redir_options(t_redir *new_redir, char *token)
 	if (token[0] == '<')
 	{
 		if (token[1] == '<')
+		{
 			new_redir->type = HEREDOC;
+			new_redir->eof_expand = 1;
+		}
 		else
 		{
 			new_redir->fd = 0;
@@ -78,6 +81,8 @@ void	parse_redir(t_redir **redirs_ptr, char *tokens[], int *i)
 		new_redir->filename = get_following_str(tokens, i, REDIR);
 	else if (new_redir->type == HEREDOC)
 	{
+		if (ft_strchr("\"\'", tokens[*i][0]))
+			new_redir->eof_expand = 0;
 		new_redir->eof = get_following_str(tokens, i, HEREDOC);
 	}
 	ft_redir_addback(redirs_ptr, new_redir);

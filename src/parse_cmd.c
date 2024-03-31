@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 13:33:31 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/20 15:37:32 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/29 13:30:33 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	add_cmd_arg(t_list **cmd_args, char *token)
 {
 	t_list	*new_arg;
 
-	new_arg = ft_lstnew(token);
+	new_arg = ft_lstnew(ft_strdup(token));
 	if (new_arg == NULL)
 		return ;
 	ft_lstadd_back(cmd_args, new_arg);

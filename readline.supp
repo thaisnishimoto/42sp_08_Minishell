@@ -1,11 +1,56 @@
 {
    <insert_a_suppression_name_here>
    Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:rl_set_prompt
+   fun:readline
+   fun:prompt
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
    match-leak-kinds: definite
    fun:malloc
    fun:xmalloc
    fun:readline_internal_teardown
    fun:readline
+   fun:prompt
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   fun:_nc_doalloc
+   fun:_nc_read_termtype
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+   fun:_nc_read_entry2
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+   fun:_nc_setupterm
+   fun:tgetent_sp
+   fun:_rl_init_terminal_io
+   fun:rl_initialize
+   fun:readline
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:_nc_first_db
+   fun:_nc_read_entry2
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+   fun:_nc_setupterm
+   fun:tgetent_sp
+   fun:_rl_init_terminal_io
+   fun:rl_initialize
+   fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -13,9 +58,45 @@
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
+   fun:_nc_first_db
+   fun:_nc_read_entry2
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+   fun:_nc_setupterm
+   fun:tgetent_sp
+   fun:_rl_init_terminal_io
+   fun:rl_initialize
+   fun:readline
+   fun:prompt
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   fun:_nc_doalloc
+   fun:_nc_read_termtype
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+   fun:_nc_read_entry2
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+   fun:_nc_setupterm
+   fun:tgetent_sp
+   fun:_rl_init_terminal_io
+   fun:rl_initialize
+   fun:readline
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
    fun:xmalloc
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
+   fun:rl_expand_prompt
    fun:rl_set_prompt
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -28,18 +109,7 @@
    fun:rl_expand_prompt
    fun:rl_set_prompt
    fun:readline
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   fun:xmalloc
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
-   fun:rl_expand_prompt
-   fun:rl_set_prompt
-   fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -53,25 +123,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   fun:xmalloc
-   fun:alloc_history_entry
-   fun:add_history
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   fun:xmalloc
-   fun:add_history
+   fun:prompt
    fun:main
 }
 {
@@ -83,6 +135,7 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -98,6 +151,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -111,6 +165,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -120,6 +175,7 @@
    fun:malloc
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -133,6 +189,7 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -150,7 +207,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
-   fun:main
+   fun:prompt
 }
 {
    <insert_a_suppression_name_here>
@@ -166,16 +223,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   fun:xmalloc
-   fun:alloc_history_entry
-   fun:add_history
+   fun:prompt
    fun:main
 }
 {
@@ -192,51 +240,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:realloc
-   fun:_nc_doalloc
-   fun:_nc_read_termtype
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   fun:_nc_read_entry2
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   fun:_nc_setupterm
-   fun:tgetent_sp
-   fun:_rl_init_terminal_io
-   fun:rl_initialize
-   fun:readline
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   fun:_nc_setupterm
-   fun:tgetent_sp
-   fun:_rl_init_terminal_io
-   fun:rl_initialize
-   fun:readline
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:calloc
-   fun:_nc_first_db
-   fun:_nc_read_entry2
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   fun:_nc_setupterm
-   fun:tgetent_sp
-   fun:_rl_init_terminal_io
-   fun:rl_initialize
-   fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -250,6 +254,21 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+   fun:_nc_setupterm
+   fun:tgetent_sp
+   fun:_rl_init_terminal_io
+   fun:rl_initialize
+   fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -266,6 +285,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -282,39 +302,8 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   fun:_nc_first_db
-   fun:_nc_read_entry2
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   fun:_nc_setupterm
-   fun:tgetent_sp
-   fun:_rl_init_terminal_io
-   fun:rl_initialize
-   fun:readline
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:realloc
-   fun:_nc_doalloc
-   fun:_nc_read_termtype
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   fun:_nc_read_entry2
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   fun:_nc_setupterm
-   fun:tgetent_sp
-   fun:_rl_init_terminal_io
-   fun:rl_initialize
-   fun:readline
 }
 {
    <insert_a_suppression_name_here>
@@ -329,6 +318,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -339,6 +329,7 @@
    fun:xmalloc
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -356,7 +347,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
-   fun:main
+   fun:prompt
 }
 {
    <insert_a_suppression_name_here>
@@ -369,6 +360,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -381,6 +373,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -398,6 +391,20 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xrealloc
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
+   fun:rl_redisplay
+   fun:readline_internal_setup
+   fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -411,6 +418,7 @@
    fun:rl_redisplay
    fun:readline_internal_setup
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -424,6 +432,7 @@
    fun:rl_redisplay
    fun:readline_internal_setup
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -437,19 +446,7 @@
    fun:rl_redisplay
    fun:readline_internal_setup
    fun:readline
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   fun:xrealloc
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
-   fun:rl_redisplay
-   fun:readline_internal_setup
-   fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -462,6 +459,7 @@
    fun:rl_redisplay
    fun:readline_internal_setup
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -474,6 +472,7 @@
    fun:rl_redisplay
    fun:readline_internal_setup
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -486,6 +485,7 @@
    fun:rl_redisplay
    fun:readline_internal_setup
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -498,6 +498,7 @@
    fun:rl_redisplay
    fun:readline_internal_setup
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -510,6 +511,7 @@
    fun:rl_initialize_funmap
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -527,7 +529,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
-   fun:main
+   fun:prompt
 }
 {
    <insert_a_suppression_name_here>
@@ -538,6 +540,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -550,24 +553,8 @@
    fun:rl_initialize_funmap
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:realloc
-   fun:_nc_doalloc
-   fun:_nc_read_termtype
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   fun:_nc_read_entry2
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-   fun:_nc_setupterm
-   fun:tgetent_sp
-   fun:_rl_init_terminal_io
-   fun:rl_initialize
-   fun:readline
 }
 {
    <insert_a_suppression_name_here>
@@ -580,15 +567,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   fun:xmalloc
-   fun:add_history
+   fun:prompt
    fun:main
 }
 {
@@ -600,6 +579,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -615,6 +595,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -630,6 +611,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -645,6 +627,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -660,6 +643,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -674,6 +658,7 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -688,6 +673,7 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -702,6 +688,7 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -715,6 +702,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -730,6 +718,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -745,6 +734,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -760,6 +750,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -775,6 +766,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -790,6 +782,7 @@
    fun:_rl_init_terminal_io
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -804,6 +797,7 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -818,6 +812,7 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -832,6 +827,7 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -845,6 +841,7 @@
    fun:rl_bind_keyseq_if_unbound_in_map
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -858,6 +855,7 @@
    fun:rl_bind_keyseq_if_unbound_in_map
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -872,6 +870,7 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -886,6 +885,7 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
    fun:main
 }
 {
@@ -900,5 +900,25 @@
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
    fun:rl_initialize
    fun:readline
+   fun:prompt
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:alloc_history_entry
+   fun:add_history
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:add_history
    fun:main
 }

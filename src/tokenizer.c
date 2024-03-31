@@ -6,77 +6,36 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:55:36 by mchamma           #+#    #+#             */
-/*   Updated: 2024/03/08 16:07:43 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/31 10:53:20 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-size_t	substr_quote(char *str)
+int	validate_quotes(char *input)
 {
-	size_t	len;
-	char	quote;
-
-	len = 0;
-	quote = str[len++];
-	while (str[len] != '\0' && str[len] != quote)
-		len++;
-	if (str[len] == quote)
-		len++;
-	else
-		exit (43); // syntax error: quote not closed
-	return (len);
-}
-
-size_t	substr_operator(char *str, int slen)
-{
-	size_t	len;
-
-	len = 0;
-	if (slen != 0)
-		return (0);
-	len++;
-	while (str[len] && str[len] == str[len - 1])
-		len++;
-	return (len);
-}
-
-int	ft_token_len(char *str, char delim)
-{
-	int	len;
-
-	len = 0;
-	while (str[len] && str[len] != delim)
-	{
-		if (str[len] == '\'' || str[len] == '\"')
-			len += substr_quote(&str[len]);
-		else if (ft_strchr("<|>", str[len]))
-		{
-			len += substr_operator(&str[len], len);
-			break ;
-		}
-		else
-			len++;
-	}
-	return (len);
-}
-
-int	ft_count_tokens(char *str, char delim)
-{
-	int		i;
-	int		count;
+	int	i;
+	int	single_quote;
+	int	double_quote;
 
 	i = 0;
-	count = 0;
-	while (str[i])
+	single_quote = 0;
+	double_quote = 0;
+	while (input[i])
 	{
-		while (str[i] == delim)
-			i++;
-		if (str[i] != '\0')
-			count++;
-		i += ft_token_len(&str[i], delim);
+		if (input[i] == '\'')
+			single_quote++;
+		else if (input[i] == '\"')
+			double_quote++;
+		i++;
 	}
-	return (count);
+	if (single_quote % 2 || double_quote % 2)
+	{
+		ft_putendl_fd("syntax error: quote not closed", 2);
+		update_exit_code("2");
+		return (0);
+	}
+	return (1);
 }
 
 char	**ft_strtok(char *input, char delim)
@@ -91,17 +50,38 @@ char	**ft_strtok(char *input, char delim)
 	if (tokens == NULL)
 		return (NULL);
 	i = 0;
-	j = 0;
-	while (j < count)
+	j = -1;
+	while (++j < count)
 	{
 		while (input[i] == delim)
 			i++;
 		tokens[j] = ft_calloc(ft_token_len(&input[i], delim) + 1, sizeof(char));
 		if (tokens[j] == NULL)
+		{
+			free_matrix(tokens);
 			return (NULL);
+		}
 		ft_strlcpy(tokens[j], &input[i], ft_token_len(&input[i], delim) + 1);
 		i += ft_token_len(&input[i], delim);
-		j++;
+	}
+	return (tokens);
+}
+
+char	**tokenizer(char *input)
+{
+	char	**tokens;
+
+	if (input == NULL)
+		return (NULL);
+	tokens = NULL;
+	if (validate_quotes(input))
+	{
+		tokens = ft_strtok(input, ' ');
+		if (tokens == NULL)
+		{
+			ft_putendl_fd("tokenizer: malloc failed", 2);
+			update_exit_code("1");
+		}
 	}
 	free(input);
 	return (tokens);

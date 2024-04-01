@@ -6,11 +6,11 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:07:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/31 22:04:00 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/31 22:13:27 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 static char	*ft_rm_trail_nl(char *str)
 {

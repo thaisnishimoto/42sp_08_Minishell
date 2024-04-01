@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 16:10:07 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:27:15 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_env	**static_environ_htable(t_env *new_var, char *name, int mode)
 		hashtable_delete(hashtable, name);
 	else if (mode == ADD)
 		hashtable_insert_replace(hashtable, new_var);
+	else if (mode == PRINT)
+		print_hashtable(hashtable);
 	else if (mode == FREE)
 		hashtable_free(hashtable);
 	return (hashtable);

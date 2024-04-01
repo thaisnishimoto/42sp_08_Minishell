@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/31 22:55:30 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 00:04:17 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,12 @@ int	main(int argc, char *argv[], char *envp[])
 		tokens = tokenizer(input);
 		ast = parser(tokens);
 		static_ast_holder(ast, INIT);
-		static_ast_holder(NULL, READ);
+		//static_ast_holder(NULL, READ);
+		//executor(ast);
 		static_ast_holder(NULL, FREE);
-//			executor(ast);
-		//static_environ_htable(NULL, NULL, FREE);
-		//break ;
+		static_environ_htable(NULL, NULL, FREE);
+		rl_clear_history();
+		break ;
 	}
 	return (0);
 }

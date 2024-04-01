@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 16:10:41 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:26:02 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_getenv(char *name)
 	return (env_value);
 }
 
-t_env	*create_environ(char *name, char* value)
+t_env	*create_environ(char *name, char *value)
 {
 	t_env	*new_var;
 
@@ -63,7 +63,7 @@ void	update_exit_code(char *new_value)
 int	get_exit_code(void)
 {
 	char	*env_value;
-	int	exit_code;
+	int		exit_code;
 
 	env_value = ft_getenv("?");
 	exit_code = ft_atoi(env_value);

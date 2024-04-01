@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:25:30 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/29 17:39:17 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/31 22:46:12 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,6 @@
 
 char	*get_following_str(char *tokens[], int *i, int type)
 {
-	if (ft_strchr(OPERATORS, tokens[*i][0]))
-	{
-		printf("syntax error near unexpected token '%s'\n", tokens[*i]);
-		//set exit code to 2
-		return (NULL);
-	}
 	if (type == REDIR)
 		tokens[*i] = parse_token(tokens[*i], 0);
 	else

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 16:11:21 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 13:15:11 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 14:21:37 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ void	hashtable_delete(t_env *hashtable[], char *name)
 		hashtable[index] = temp->next;
 	else
 		prev->next = temp->next;
+	free(temp->name);
+	free(temp->value);
+	free(temp);
 }
 
 void	hashtable_insert_replace(t_env *hashtable[], t_env *new_var)

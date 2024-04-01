@@ -6,7 +6,7 @@
 #    By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 14:02:42 by tmina-ni          #+#    #+#              #
-#    Updated: 2024/03/29 13:34:12 by tmina-ni         ###   ########.fr        #
+#    Updated: 2024/03/31 21:41:12 by tmina-ni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ HEADER_PATH = ./include
 #================================FILES=========================================#
 
 NAME = minishell
-SRC = $(wildcard $(SRC_PATH)/*.c)
+#SRC = $(wildcard $(SRC_PATH)/*.c)
+SRC = $(shell find src -name "*.c")
 OBJ = $(SRC:.c=.o)
 HEADER = $(HEADER_PATH)/minishell.h
 

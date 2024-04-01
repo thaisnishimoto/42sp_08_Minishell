@@ -6,39 +6,51 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:55:36 by mchamma           #+#    #+#             */
-/*   Updated: 2024/03/31 10:53:20 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/31 21:45:04 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-int	validate_quotes(char *input)
+static int	ft_token_len(char *str, char delim)
 {
-	int	i;
-	int	single_quote;
-	int	double_quote;
+	int	len;
 
-	i = 0;
-	single_quote = 0;
-	double_quote = 0;
-	while (input[i])
+	len = 0;
+	while (str[len] && str[len] != delim)
 	{
-		if (input[i] == '\'')
-			single_quote++;
-		else if (input[i] == '\"')
-			double_quote++;
-		i++;
+		if (str[len] == '\'' || str[len] == '\"')
+			len += substr_quote(&str[len]);
+		else if (ft_strchr("<|>", str[len]))
+		{
+			len += substr_operator(&str[len], len);
+			break ;
+		}
+		else
+			len++;
 	}
-	if (single_quote % 2 || double_quote % 2)
-	{
-		ft_putendl_fd("syntax error: quote not closed", 2);
-		update_exit_code("2");
-		return (0);
-	}
-	return (1);
+	return (len);
 }
 
-char	**ft_strtok(char *input, char delim)
+static int	ft_count_tokens(char *str, char delim)
+{
+	int		i;
+	int		count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		while (str[i] == delim)
+			i++;
+		if (str[i] != '\0')
+			count++;
+		i += ft_token_len(&str[i], delim);
+	}
+	return (count);
+}
+
+static char	**ft_strtok(char *input, char delim)
 {
 	char	**tokens;
 	int		count;
@@ -82,7 +94,13 @@ char	**tokenizer(char *input)
 			ft_putendl_fd("tokenizer: malloc failed", 2);
 			update_exit_code("1");
 		}
+		else if (!validate_syntax(tokens))
+		{
+			update_exit_code("2");
+			free_matrix(tokens);
+		}
 	}
 	free(input);
+	input = NULL;
 	return (tokens);
 }

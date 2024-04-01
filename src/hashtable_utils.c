@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 16:11:21 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/18 23:55:33 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 13:15:11 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	hashtable_delete(t_env *hashtable[], char *name)
 	t_env	*temp;
 	t_env	*prev;
 
+	if (!hashtable_search(hashtable, name))
+		return ;
 	index = hash_function(name);
 	prev = NULL;
 	temp = hashtable[index];

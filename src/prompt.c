@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:07:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/30 17:33:22 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/31 22:04:00 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ char	*prompt(void)
 		if (tty_fd < 0)
 			ft_handle_error("open /dev/tty");
 		if (dup2(tty_fd, STDIN_FILENO) == -1)
+		{
+			close(tty_fd);
 			ft_handle_error("dup2");
+		}
 		close(tty_fd);
 	}
 	if (input && *input)

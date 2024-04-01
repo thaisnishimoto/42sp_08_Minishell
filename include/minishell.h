@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/31 21:49:34 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:11:20 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,19 +81,21 @@ char			*prompt(void);
 char			**tokenizer(char *input);
 t_node			*parser(char *tokens[]);
 
-//hashtable utils functions
-void			hashtable_init(t_env *hashtable[]);
-void			hashtable_insert_replace(t_env *hashtable[], t_env *new_var);
-void			hashtable_delete(t_env *hashtable[], char *name);
-t_env			*hashtable_search(t_env *hashtable[], char *name);
-void			hashtable_free(t_env *hashtable[]);
-void			print_hashtable(t_env *hashtable[]);
-unsigned int	hash_function(char *name);
+//environ hashtable functions
 t_env			**static_environ_htable(t_env *new_var, char *name, int mode);
+void			load_environ_hashtable(char *envp[]);
 char			*ft_getenv(char *name);
 t_env			*create_environ(char *name, char *value);
-void			load_environ_hashtable(char *envp[]);
-char			*handle_quotes(char *token);
+void			update_exit_code(char *new_value);
+int				get_exit_code(void);
+
+//hashtable utils functions
+void			hashtable_init(t_env *hashtable[]);
+t_env			*hashtable_search(t_env *hashtable[], char *name);
+void			hashtable_delete(t_env *hashtable[], char *name);
+void			hashtable_insert_replace(t_env *hashtable[], t_env *new_var);
+void			hashtable_free(t_env *hashtable[]);
+void			print_hashtable(t_env *hashtable[]);
 
 //tokenizer and syntax utils
 int				validate_quotes(char *input);
@@ -102,6 +104,7 @@ size_t			substr_quote(char *str);
 size_t			substr_operator(char *str, int slen);
 
 char			*parse_token(char *token, int nested);
+char			*handle_quotes(char *token);
 
 //parse redirection functions
 void			parse_redir(t_redir **redirs_ptr, char *tokens[], int *i);
@@ -135,8 +138,6 @@ void			exec_cmd(t_list *cmd_args);
 
 //free and exit function
 void			free_matrix(char **array);
-void			update_exit_code(char *new_value);
-int				get_exit_code(void);
 void			ft_handle_error(char *error_msg);
 t_node			*static_ast_holder(t_node *ast, int mode);
 

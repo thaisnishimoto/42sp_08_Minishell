@@ -6,11 +6,11 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/26 11:29:14 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:10:07 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 t_env	**static_environ_htable(t_env *new_var, char *name, int mode)
 {
@@ -27,21 +27,7 @@ t_env	**static_environ_htable(t_env *new_var, char *name, int mode)
 	return (hashtable);
 }
 
-char	*ft_getenv(char *name)
-{
-	t_env	**hashtable;
-	t_env	*env;
-	char	*env_value;
-
-	env_value = NULL;
-	hashtable = static_environ_htable(NULL, NULL, READ);
-	env = hashtable_search(hashtable, name);
-	if (env)
-		env_value = ft_strdup(env->value);
-	return (env_value);
-}
-
-char	**ft_split_env(char const *s)
+static char	**ft_split_env(char const *s)
 {
 	char		**array;
 	char		*delim_pos;
@@ -63,32 +49,6 @@ char	**ft_split_env(char const *s)
 		return (NULL);
 	ft_strlcpy(array[1], delim_pos + 1, ft_strlen(delim_pos + 1) + 1);
 	return (array);
-}
-
-t_env	*create_environ(char *name, char* value)
-{
-	t_env	*new_var;
-
-	new_var = ft_calloc(1, sizeof(t_env));
-	if (new_var == NULL)
-		return (NULL);
-	new_var->name = ft_strdup(name);
-	if (new_var->name == NULL)
-	{
-		free(new_var);
-		return (NULL);
-	}
-	if (value)
-	{
-		new_var->value = ft_strdup(value);
-		if (new_var->value == NULL)
-		{
-			free(new_var);
-			free(new_var->name);
-			return (NULL);
-		}
-	}
-	return (new_var);
 }
 
 void	load_environ_hashtable(char *envp[])

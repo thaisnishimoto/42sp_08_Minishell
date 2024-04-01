@@ -6,13 +6,13 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 16:11:21 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 14:21:37 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:02:44 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-unsigned int	hash_function(char *name)
+static unsigned int	hash_function(char *name)
 {
 	int				len;
 	int				i;

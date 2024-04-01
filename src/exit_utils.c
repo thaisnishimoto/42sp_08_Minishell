@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/31 17:00:35 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:11:32 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,6 @@ void	free_matrix(char **array)
 	}
 	free(array);
 	array = NULL;
-}
-
-void	update_exit_code(char *new_value)
-{
-	t_env	*new_var;
-
-	new_var = create_environ("?", new_value);
-	static_environ_htable(new_var, NULL, ADD);
-}
-
-int	get_exit_code(void)
-{
-	char	*env_value;
-	int	exit_code;
-
-	env_value = ft_getenv("?");
-	exit_code = ft_atoi(env_value);
-	free(env_value);
-	return (exit_code);
 }
 
 //void	free_matrix_size(char **array, int size)

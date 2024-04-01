@@ -6,11 +6,11 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 13:33:31 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/29 13:30:33 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:27:14 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	add_cmd_arg(t_list **cmd_args, char *token)
 {

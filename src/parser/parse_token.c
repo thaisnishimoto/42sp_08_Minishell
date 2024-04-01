@@ -6,11 +6,11 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/25 17:17:43 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:30:32 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 char	**ft_split_concat_token(char *token)
 {
@@ -31,7 +31,6 @@ char	**ft_split_concat_token(char *token)
 		if (token_substr[j] == NULL)
 			return (NULL);
 		ft_strlcpy(token_substr[j], &token[i], ft_substrlen(&token[i]) + 1);
-//		printf("token substr[%d] = %s\n", j, token_substr[j]);
 		i += ft_substrlen(&token[i]);
 		j++;
 	}

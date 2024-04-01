@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 16:11:21 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 12:11:09 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 14:26:31 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ void	test_htable_operations(char *envp[])
 	t_env	var2 = {.name="VAR2", .value="var2_value"};
 	t_env	var3 = {.name="VAR3", .value="var3_value"};
 	t_env	var4 = {.name="VAR4", .value="var4_value"};
-	t_env	var5 = {.name="VAR5", .value="var5_value"};
+	t_env	*var5 = create_environ("VAR5", "var5_value");
 	t_env	var6 = {.name="HOME", .value="var6_value"};
 	hashtable_insert_replace(hashtable, &var1);
 	hashtable_insert_replace(hashtable, &var2);
 	hashtable_insert_replace(hashtable, &var3);
 	hashtable_insert_replace(hashtable, &var4);
-	hashtable_insert_replace(hashtable, &var5);
+	hashtable_insert_replace(hashtable, var5);
 
 	printf("\n**Init hashtable**\n");
 	print_hashtable(hashtable);

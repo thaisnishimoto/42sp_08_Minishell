@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/31 10:30:40 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/03/31 21:49:34 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_pipe
 
 //minishell loop functions
 char			*prompt(void);
+char			**tokenizer(char *input);
 t_node			*parser(char *tokens[]);
 
 //hashtable utils functions
@@ -94,12 +95,12 @@ t_env			*create_environ(char *name, char *value);
 void			load_environ_hashtable(char *envp[]);
 char			*handle_quotes(char *token);
 
-//tokenizer functions
-char			**ft_strtok(char *input, char delim);
-int				ft_count_tokens(char *str, char delim);
-int				ft_token_len(char *str, char delim);
+//tokenizer and syntax utils
+int				validate_quotes(char *input);
+int				validate_syntax(char **tokens);
 size_t			substr_quote(char *str);
 size_t			substr_operator(char *str, int slen);
+
 char			*parse_token(char *token, int nested);
 
 //parse redirection functions
@@ -135,9 +136,8 @@ void			exec_cmd(t_list *cmd_args);
 //free and exit function
 void			free_matrix(char **array);
 void			update_exit_code(char *new_value);
-int			get_exit_code(void);
+int				get_exit_code(void);
 void			ft_handle_error(char *error_msg);
-t_node	*static_ast_holder(t_node *ast, int mode);
-
+t_node			*static_ast_holder(t_node *ast, int mode);
 
 #endif

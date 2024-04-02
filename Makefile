@@ -6,7 +6,7 @@
 #    By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 14:02:42 by tmina-ni          #+#    #+#              #
-#    Updated: 2024/03/31 21:41:12 by tmina-ni         ###   ########.fr        #
+#    Updated: 2024/04/01 23:39:39 by tmina-ni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ $(NAME): $(OBJ) $(HEADER)
 $(SRC_PATH)/%.o: $(SRC_PATH)/%.c $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-leak: $(NAME)
+leak: all
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=readline.supp ./$(NAME)
 
 #================================CLEAN=========================================#

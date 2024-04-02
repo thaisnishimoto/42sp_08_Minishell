@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/31 23:22:09 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:32:48 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ static t_node	*build_tree(char *tokens[])
 		else if (tokens[i][0] == '|')
 		{
 			tree_ptr = build_tree_branch(cmd_node, redirs_ptr);
-			tree_ptr = parse_pipe(tree_ptr, parser(&tokens[++i]));
+			tree_ptr = parse_pipe(tree_ptr, build_tree(&tokens[++i]));
+			break ;
 		}
 	}
 	if (!tree_ptr)

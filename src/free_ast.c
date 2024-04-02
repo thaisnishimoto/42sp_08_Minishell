@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 13:47:07 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/29 17:38:03 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:24:28 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ t_node	*static_ast_holder(t_node *ast, int mode)
 		static_ast = ast;
 	else if (mode == FREE)
 		free_ast(static_ast);
-	else if (mode == READ)
+	else if (mode == PRINT)
 		print_tree(static_ast);
 	return (static_ast);
 }

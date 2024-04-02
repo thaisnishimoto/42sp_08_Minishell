@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/27 14:55:02 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 23:20:11 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	executor(t_node *node)
 		{
 			waitpid(pid, &wstatus, 0);
 			if (WIFEXITED(wstatus))
-				update_exit_code(ft_itoa(WEXITSTATUS(wstatus)));
+				update_exit_code(WEXITSTATUS(wstatus));
 			else if (WIFSIGNALED(wstatus))
-				update_exit_code(ft_itoa(WTERMSIG(wstatus)));
+				update_exit_code(WTERMSIG(wstatus));
 			if (get_exit_code() == 126)
 			{
 				msg = ft_strjoin(cmd_node->cmd_args->content, ": Permission denied");

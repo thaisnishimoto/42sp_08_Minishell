@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 17:26:02 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 23:16:42 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,15 @@ t_env	*create_environ(char *name, char *value)
 	return (new_var);
 }
 
-void	update_exit_code(char *new_value)
+void	update_exit_code(int new_value)
 {
 	t_env	*new_var;
+	char	*value;
 
-	new_var = create_environ("?", new_value);
+	value = ft_itoa(new_value);
+	new_var = create_environ("?", value);
 	static_environ_htable(new_var, NULL, ADD);
+	free(value);
 }
 
 int	get_exit_code(void)

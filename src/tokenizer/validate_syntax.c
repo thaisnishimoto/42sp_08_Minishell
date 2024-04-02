@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 02:03:43 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/31 22:06:51 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 23:20:37 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	validate_quotes(char *input)
 	if (single_quote % 2 || double_quote % 2)
 	{
 		ft_putendl_fd("syntax error: unclosed quotes", 2);
-		update_exit_code("2");
+		update_exit_code(2);
 		return (0);
 	}
 	return (1);

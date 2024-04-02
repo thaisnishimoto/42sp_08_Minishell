@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/27 14:48:01 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 23:21:11 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ char	*find_pathname(char **path, char *cmd)
 		i = 0;
 		while (path[i])
 		{
-			update_exit_code("0");
+			update_exit_code(0);
 			pathname = ft_strjoin(path[i], cmd);
 			if (access(pathname, F_OK) == -1)
 			{
-				update_exit_code("127");
+				update_exit_code(127);
 				free(pathname);
 				pathname = NULL;
 				i++;
@@ -73,14 +73,14 @@ char	*search_executable(char *cmd)
 
 	if (*cmd == '\0')
 	{
-		update_exit_code("127");
+		update_exit_code(127);
 		return (NULL);
 	}
 	path = get_path();
 	pathname = find_pathname(path, cmd);
 	if (pathname && access(pathname, X_OK) == -1)
 	{
-		update_exit_code("126");
+		update_exit_code(126);
 		free(pathname);
 		pathname = NULL;
 	}
@@ -124,7 +124,7 @@ void	exec_cmd(t_list *cmd_args)
 	{
 		execve(pathname, cmd_argv, NULL);
 		free(pathname);
-		update_exit_code("-1");
+		update_exit_code(-1);
 	}
 	free_matrix(cmd_argv);
 	exit (get_exit_code());

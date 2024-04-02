@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 16:11:20 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 23:18:49 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_env			**static_environ_htable(t_env *new_var, char *name, int mode);
 void			load_environ_hashtable(char *envp[]);
 char			*ft_getenv(char *name);
 t_env			*create_environ(char *name, char *value);
-void			update_exit_code(char *new_value);
+void			update_exit_code(int new_value);
 int				get_exit_code(void);
 
 //hashtable utils functions

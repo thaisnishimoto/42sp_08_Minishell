@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/03/27 16:03:26 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:01:56 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*exec_command(char *cmd)
 		exit(EXIT_FAILURE);
 	}
 	else
-        	printf("EXIT CODE: %d,%d,%d\n", exit_status, WIFEXITED(exit_status), WEXITSTATUS(exit_status));
+        	printf("EXIT CODE: %d\n", WEXITSTATUS(exit_status));
 	return (output);
 }
 

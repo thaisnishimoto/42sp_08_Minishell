@@ -6,13 +6,13 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 17:30:32 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:39:10 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	**ft_split_concat_token(char *token)
+static char	**ft_split_concat_token(char *token)
 {
 	char	**token_substr;
 	int		count;
@@ -24,22 +24,24 @@ char	**ft_split_concat_token(char *token)
 	if (token_substr == NULL)
 		return (NULL);
 	i = 0;
-	j = 0;
-	while (j < count)
+	j = -1;
+	while (++j < count)
 	{
 		token_substr[j] = ft_calloc(ft_substrlen(&token[i]) + 1, sizeof(char));
 		if (token_substr[j] == NULL)
+		{
+			free_matrix(token_substr);
 			return (NULL);
+		}
 		ft_strlcpy(token_substr[j], &token[i], ft_substrlen(&token[i]) + 1);
 		i += ft_substrlen(&token[i]);
-		j++;
 	}
 	free(token);
 	token = NULL;
 	return (token_substr);
 }
 
-char	*process_quotes(char *token_substr, int nested)
+static char	*process_quotes(char *token_substr, int nested)
 {
 	if (token_substr[0] == '\"')
 	{
@@ -58,7 +60,7 @@ char	*process_quotes(char *token_substr, int nested)
 	return (token_substr);
 }
 
-char	*expand_token(char *token)
+static char	*expand_token(char *token)
 {
 	t_env	**hashtable;
 	t_env	*result;
@@ -79,7 +81,7 @@ char	*expand_token(char *token)
 	return (env_value);
 }
 
-char	*ft_rejoin_token_substr(char *token_substr[])
+static char	*ft_rejoin_token_substr(char *token_substr[])
 {
 	char	*result;
 	char	*temp;
@@ -102,17 +104,25 @@ char	*parse_token(char *token, int nested)
 	char	**token_substr;
 	int		i;
 
+	if (token == NULL)
+		return (NULL);
 	if (token[0] == '\0')
 		return (token);
 	token_substr = ft_split_concat_token(token);
-	i = 0;
-	while (token_substr[i])
+	if (token_substr == NULL)
+		return (NULL);
+	i = -1;
+	while (token_substr[++i])
 	{
 		if (ft_strchr("\"\'", token_substr[i][0]))
 			token_substr[i] = process_quotes(token_substr[i], nested);
 		else if (token_substr[i][0] == '$' && token_substr[i][1] != '\0')
 			token_substr[i] = expand_token(token_substr[i]);
-		i++;
+		if (token_substr[i] == NULL)
+		{
+			free_matrix(token_substr);
+			return (NULL);
+		}
 	}
 	return (ft_rejoin_token_substr(token_substr));
 }

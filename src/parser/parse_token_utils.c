@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 17:31:13 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:43:13 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,8 @@ char	*ft_trim_quotes(char *str, const char *set)
 		end--;
 	trim_len = end - start;
 	ptr = malloc((trim_len + 1) * sizeof(char));
-	if (ptr == NULL)
-		return (NULL);
-	ft_strlcpy(ptr, &str[start], trim_len + 1);
+	if (ptr)
+		ft_strlcpy(ptr, &str[start], trim_len + 1);
 	free(str);
 	return (ptr);
 }
@@ -93,6 +92,8 @@ char	*ft_add_single_quote(char *token_substr)
 	char	*result;
 	char	*temp;
 
+	if (token_substr == NULL)
+		return (NULL);
 	temp = ft_strjoin("\'", token_substr);
 	free(token_substr);
 	result = ft_strjoin(temp, "\'");

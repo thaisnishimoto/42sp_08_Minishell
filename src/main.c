@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 00:04:17 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/04 23:49:22 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,26 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	(void)argv;
 	load_environ_hashtable(envp);
-	//print_hashtable(static_environ_htable(NULL, NULL, READ));
+	//static_environ_htable(NULL, NULL, PRINT);
 //	tokens = NULL;
 //	ast = NULL; 
 	while (1)
 	{
 		input = prompt();
+		if (input && ft_strncmp(input, "exit", ft_strlen(input)) == 0)
+		{
+			free(input);
+			break ;
+		}
 		tokens = tokenizer(input);
 		ast = parser(tokens);
 		static_ast_holder(ast, INIT);
-		//static_ast_holder(NULL, READ);
-		//executor(ast);
+//		static_ast_holder(NULL, PRINT);
+		executor(ast);
 		static_ast_holder(NULL, FREE);
-		static_environ_htable(NULL, NULL, FREE);
-		rl_clear_history();
 		break ;
 	}
-	return (0);
+//	static_environ_htable(NULL, NULL, FREE);
+	rl_clear_history();
+	return (get_exit_code());
 }

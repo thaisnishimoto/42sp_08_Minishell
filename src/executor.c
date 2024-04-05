@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 23:20:11 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/05 15:44:17 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,7 @@ void	executor(t_node *node)
 //	}
 //	else if (node->type == REDIR)
 //	{
-//		t_redir	*redir_node = (t_redir *)node;
-//		printf("->node type: REDIR(%d)\n", redir_node->type);
-//		printf("fd redir: %d\n", redir_node->fd);
-//		printf("redir file: %s\n", redir_node->filename);
-//		print_tree((t_node *)redir_node->next);
+//		exec_redir((t_redir *)node);
 //	}
 //	else if (node->type == HEREDOC)
 //	{
@@ -49,6 +45,11 @@ void	executor(t_node *node)
 		char	*msg;
 		
 		cmd_node = (t_cmd *)node;
+		if (cmd_node->redirs)
+		{
+			if (!exec_redir(cmd_node->redirs))
+				return ;
+		}
 		//check for builtin
 		pid = fork();
 //		if (pid < 0)

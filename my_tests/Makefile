@@ -6,7 +6,7 @@
 #    By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/28 20:22:45 by tmina-ni          #+#    #+#              #
-#    Updated: 2024/04/01 13:22:56 by tmina-ni         ###   ########.fr        #
+#    Updated: 2024/04/05 14:15:31 by tmina-ni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ all:
 	cp ../minishell ./
 	$(CC) $(CFLAGS) tester_minishell.c $(LIBFT) -lrt -lm -o $(NAME) 
 	./$(NAME)
+	$(MAKE) fclean
 
 $(NAME): $(SRC)
 	$(CC) $(CFLAGS) -o $(NAME) $(SRC) -lrt -lm $(LIBFT)
@@ -34,7 +35,7 @@ $(NAME): $(SRC)
 
 clean:
 	rm -f *.o
-	rm -f outfile*
+	rm -f ./files/outfile*
 
 fclean: clean
 	rm -f minishell $(NAME)

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/03 17:03:39 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/04 18:03:45 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ t_node	*parser(char *tokens[])
 		return (NULL);
 	tree_ptr = NULL;
 	tree_ptr = build_tree(tokens);
+	if (tree_ptr == NULL)
+	{
+		ft_putendl_fd("AST build failed", 2);
+		update_exit_code(EXIT_FAILURE);
+	}
 	free_matrix(tokens);
 	return (tree_ptr);
 }

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 17:01:56 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/05 15:38:14 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char *fgets (char *str, int n, FILE *stream);
 reads from stream and stores in str, until n-1 chars, \n, EOF
 */
 
-char	*exec_command(char *cmd)
+char	*exec_command(char *cmd, int exit_print)
 {
 	int	line_len;
 	FILE	*stream;
@@ -50,8 +50,8 @@ char	*exec_command(char *cmd)
 		printf("pclose error\n");
 		exit(EXIT_FAILURE);
 	}
-	else
-        	printf("EXIT CODE: %d\n", WEXITSTATUS(exit_status));
+	if (exit_print == 1)
+	        printf("EXIT CODE: %d\n", WEXITSTATUS(exit_status));
 	return (output);
 }
 
@@ -64,14 +64,274 @@ MU_TEST(function_should_run_command_echo)
 	printf(" TEST 1: echo Hello");
 	printf("\n------------------------\n");
 
-	result = exec_command("echo \"echo Hello\" | ./minishell");
-	//result = exec_command("echo echo Hello | ./minishell");
-	expected = exec_command("echo Hello");
-
-	ft_printf("%s\n", result);
+	result = exec_command("echo 'echo Hello' | ./minishell", 1);
+	expected = exec_command("echo Hello", 1);
+	printf("%s", result);
 	mu_assert_string_eq(expected, result);
 	free(result);
 	free(expected);
+}
+
+MU_TEST(function_should_run_command_echo_with_env)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 2: echo Hello $USER");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo $USER' | ./minishell", 1);
+	expected = exec_command("echo $USER", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_command_echo_concat_with_env)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 3: echo Hello$HOME");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo Hello$HOME' | ./minishell", 1);
+	expected = exec_command("echo Hello$HOME", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_command_echo_concat_double_quote_env)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 4: echo Hello\"$HOME\"");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo \'echo Hello\"$HOME\"\' | ./minishell", 1);
+	expected = exec_command("echo Hello\"$HOME\"", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_wrong_command)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 5: catz");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'catz' | ./minishell", 1);
+	expected = exec_command("catz", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_command_with_empty_env)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 6: echo $WSLENV");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo $WSLENV' | ./minishell", 1);
+	expected = exec_command("echo $WSLENV", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_command_infile_redir)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 7: < infile grep 1");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '< ./files/infile grep 1' | ./minishell", 1);
+	expected = exec_command("< ./files/infile grep 1", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_try_not_found_infile_redir)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 8: < filex cat");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '< ./files/filex cat' | ./minishell", 1);
+	expected = exec_command("bash -c < ./files/filex cat", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_multiple_infile_redirs)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 9: < infile2  <infile cat");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '< ./files/infile2 <./files/infile cat' | ./minishell", 1);
+	expected = exec_command("bash -c < ./files/infile2 <./files/infile cat", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_multiple_infile_redirs_first_not_found)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 10: < infilex  <infile cat");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '< ./files/infilex <./files/infile cat' | ./minishell", 1);
+	expected = exec_command("bash -c < ./files/infilex <./files/infile cat", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_multiple_infile_redirs_last_not_found)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 11: < infile < infilex grep 1");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '< ./files/infile <./files/infilex grep 1' | ./minishell", 1);
+	expected = exec_command("bash -c < ./files/infile <./files/infilex grep 1", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_command_new_outfile_redir)
+{
+	char    *expected = "Files ./files/outfile1 and ./files/outfile1_expected are identical\n";
+	char	*diff_result;
+	char    *outfile;
+
+	printf("\n------------------------\n");
+	printf(" TEST 12: echo New oufile test > outfile1");
+	printf("\n------------------------\n");
+
+	exec_command("echo 'echo New outfile teste > ./files/outfile1' | ./minishell", 1);
+	exec_command("echo New outfile teste > ./files/outfile1_expected", 1);
+
+	diff_result = exec_command("diff -s ./files/outfile1 ./files/outfile1_expected", 0);
+	outfile = exec_command("cat ./files/outfile1", 0);
+	ft_printf("Outfile: %s", outfile);
+	mu_assert_string_eq(expected, diff_result);
+	free(diff_result);
+	free(outfile);
+}
+
+MU_TEST(function_should_run_command_trunc_outfile_redir)
+{
+	char    *expected = "Files ./files/outfile1 and ./files/outfile1_expected are identical\n";
+	char	*diff_result;
+	char    *outfile;
+
+	printf("\n------------------------\n");
+	printf(" TEST 13: echo Old oufile teste! > outfile1");
+	printf("\n------------------------\n");
+
+	exec_command("echo 'echo Truncate! > ./files/outfile1' | ./minishell", 1);
+	exec_command("echo Truncate! > ./files/outfile1_expected", 1);
+
+	diff_result = exec_command("diff -s ./files/outfile1 ./files/outfile1_expected", 0);
+	outfile = exec_command("cat ./files/outfile1", 0);
+	ft_printf("Outfile: %s", outfile);
+	mu_assert_string_eq(expected, diff_result);
+	free(diff_result);
+	free(outfile);
+}
+
+MU_TEST(function_should_run_command_append_outfile_redir)
+{
+	char    *expected = "Files ./files/outfile1 and ./files/outfile1_expected are identical\n";
+	char	*diff_result;
+	char    *outfile;
+
+	printf("\n------------------------\n");
+	printf(" TEST 14: echo Append text!! >>outfile1");
+	printf("\n------------------------\n");
+
+	exec_command("echo 'echo Append text!! >>./files/outfile1' | ./minishell", 1);
+	exec_command("echo Append text!! >>./files/outfile1_expected", 1);
+
+	diff_result = exec_command("diff -s ./files/outfile1 ./files/outfile1_expected", 0);
+	outfile = exec_command("cat ./files/outfile1", 0);
+	ft_printf("Outfile: %s", outfile);
+	mu_assert_string_eq(expected, diff_result);
+	free(diff_result);
+	free(outfile);
+}
+
+MU_TEST(function_should_run_command_multiple_outfile_redir)
+{
+	char    *expected2 = "Files ./files/outfile2 and ./files/outfile2_expected are identical\n";
+	char    *expected3 = "Files ./files/outfile3 and ./files/outfile3_expected are identical\n";
+	char	*diff_result;
+	char    *outfile;
+
+	printf("\n------------------------\n");
+	printf(" TEST 15: echo oi > outfile2 > outfile3");
+	printf("\n------------------------\n");
+
+	exec_command("echo 'echo oi > ./files/outfile2 >./files/outfile3' | ./minishell", 1);
+	exec_command("echo oi > ./files/outfile2_expected >./files/outfile3_expected", 1);
+
+	diff_result = exec_command("diff -s ./files/outfile2 ./files/outfile2_expected", 0);
+	outfile = exec_command("cat ./files/outfile2", 0);
+	ft_printf("Outfile: %s", outfile);
+	mu_assert_string_eq(expected2, diff_result);
+	free(diff_result);
+	free(outfile);
+
+	diff_result = exec_command("diff -s ./files/outfile3 ./files/outfile3_expected", 0);
+	outfile = exec_command("cat ./files/outfile3", 0);
+	ft_printf("Outfile: %s", outfile);
+	mu_assert_string_eq(expected3, diff_result);
+	free(diff_result);
+	free(outfile);
 }
 
 //MU_TEST(function_should_run_command_ls_l_wc_l)
@@ -351,6 +611,20 @@ MU_TEST(function_should_run_command_echo)
 MU_TEST_SUITE(test_suite)
 {
 	MU_RUN_TEST(function_should_run_command_echo);
+	MU_RUN_TEST(function_should_run_command_echo_with_env);
+	MU_RUN_TEST(function_should_run_command_echo_concat_with_env);
+	MU_RUN_TEST(function_should_run_command_echo_concat_double_quote_env);
+	MU_RUN_TEST(function_should_run_wrong_command);
+	MU_RUN_TEST(function_should_run_command_with_empty_env);
+	MU_RUN_TEST(function_should_run_command_infile_redir);
+	MU_RUN_TEST(function_should_try_not_found_infile_redir);
+	MU_RUN_TEST(function_should_run_multiple_infile_redirs);
+	MU_RUN_TEST(function_should_run_multiple_infile_redirs_first_not_found);
+	MU_RUN_TEST(function_should_run_multiple_infile_redirs_last_not_found);
+	MU_RUN_TEST(function_should_run_command_new_outfile_redir);
+	MU_RUN_TEST(function_should_run_command_trunc_outfile_redir);
+	MU_RUN_TEST(function_should_run_command_append_outfile_redir);
+	MU_RUN_TEST(function_should_run_command_multiple_outfile_redir);
 //	MU_RUN_TEST(funtion_should_run_command_ls_l_wc_l);
 //	MU_RUN_TEST(funtion_should_run_command_grep_a1_wc_w);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);

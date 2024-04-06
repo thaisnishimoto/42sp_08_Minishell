@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 23:21:11 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/06 17:50:16 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	**get_path(void)
 	char	*path_value;
 	char	**path;
 	char	*temp;
-	int	i;
+	int		i;
 
 	path = NULL;
 	path_value = ft_getenv("PATH");
@@ -40,7 +40,7 @@ char	**get_path(void)
 
 char	*find_pathname(char **path, char *cmd)
 {
-	int	i;
+	int		i;
 	char	*pathname;
 
 	if (cmd[0] == '/' || cmd[0] == '.')
@@ -92,12 +92,12 @@ char	**create_cmd_arg_vector(t_list *cmd_args)
 {
 	t_list	*temp;
 	char	**cmd_argv;
-	int	count;
-	int	i;
-	
+	int		count;
+	int		i;
+
 	temp = cmd_args;
 	count = 0;
-	while(temp)
+	while (temp)
 	{
 		count++;
 		temp = temp->next;

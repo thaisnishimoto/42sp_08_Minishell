@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/05 15:46:12 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/06 17:18:07 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ char			*ft_add_single_quote(char *token_substr);
 void			executor(t_node *node);
 void			exec_cmd(t_list *cmd_args);
 int				exec_redir(t_redir *node);
+int				handle_heredoc(t_redir *node);
 
 //free and exit function
 void			free_ast(t_node *node);

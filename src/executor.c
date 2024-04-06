@@ -6,11 +6,12 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/05 15:44:17 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/06 17:55:23 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
 
 void	executor(t_node *node)
 {
@@ -45,17 +46,19 @@ void	executor(t_node *node)
 		char	*msg;
 		
 		cmd_node = (t_cmd *)node;
-		if (cmd_node->redirs)
-		{
-			if (!exec_redir(cmd_node->redirs))
-				return ;
-		}
+		if (!handle_heredoc(cmd_node->redirs))
+			return ;
+		update_exit_code(0);
 		//check for builtin
 		pid = fork();
 //		if (pid < 0)
 //			ft_handle_error();
 		if (pid == 0)
+		{
+			if (!exec_redir(cmd_node->redirs))
+				return ;
 			exec_cmd(cmd_node->cmd_args);
+		}
 		else
 		{
 			waitpid(pid, &wstatus, 0);

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:25:30 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/03 17:35:55 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/06 16:45:50 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,12 @@ static void	set_redir_options(t_redir *new_redir, char *token)
 	new_redir->type = REDIR;
 	if (token[0] == '<')
 	{
+		new_redir->fd = 0;
+		new_redir->mode = O_RDONLY;
 		if (token[1] == '<')
 		{
 			new_redir->type = HEREDOC;
 			new_redir->eof_expand = 1;
-		}
-		else
-		{
-			new_redir->fd = 0;
-			new_redir->mode = O_RDONLY;
 		}
 	}
 	else if (token[0] == '>')

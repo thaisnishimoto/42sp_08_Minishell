@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/06 17:18:07 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:18:52 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct s_pipe
 }	t_pipe;
 
 //minishell loop functions
-char			*prompt(void);
+char			*prompt(char *symbol);
 char			**tokenizer(char *input);
 t_node			*parser(char *tokens[]);
 
@@ -115,12 +115,16 @@ size_t			substr_env_name(char *str);
 size_t			ft_substrlen(char *str);
 char			*ft_trim_quotes(char *str, const char *set);
 char			*ft_add_single_quote(char *token_substr);
+char			*expand_env(char *token);
+char			*ft_rejoin_substr(char *token_substr[]);
 
 //executor functions
 void			executor(t_node *node);
 void			exec_cmd(t_list *cmd_args);
 int				exec_redir(t_redir *node);
 int				handle_heredoc(t_redir *node);
+char			*hdoc_prompt(void);
+char			*parse_hdoc(char *buffer, t_redir *node);
 
 //free and exit function
 void			free_ast(t_node *node);

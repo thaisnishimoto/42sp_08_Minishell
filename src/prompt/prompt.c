@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:07:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/08 15:18:13 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/08 18:45:47 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*prompt(char *symbol)
 			close(tty_fd);
 		}
 	}
-	if (input && *input)
+	if (input && *input && symbol[0] == '$')
 		add_history(input);
 	return (input);
 }

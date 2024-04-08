@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/03 17:39:10 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:35:24 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static char	*process_quotes(char *token_substr, int nested)
 	return (token_substr);
 }
 
-static char	*expand_token(char *token)
+char	*expand_env(char *token)
 {
 	t_env	**hashtable;
 	t_env	*result;
@@ -81,7 +81,7 @@ static char	*expand_token(char *token)
 	return (env_value);
 }
 
-static char	*ft_rejoin_token_substr(char *token_substr[])
+char	*ft_rejoin_substr(char *token_substr[])
 {
 	char	*result;
 	char	*temp;
@@ -117,12 +117,12 @@ char	*parse_token(char *token, int nested)
 		if (ft_strchr("\"\'", token_substr[i][0]))
 			token_substr[i] = process_quotes(token_substr[i], nested);
 		else if (token_substr[i][0] == '$' && token_substr[i][1] != '\0')
-			token_substr[i] = expand_token(token_substr[i]);
+			token_substr[i] = expand_env(token_substr[i]);
 		if (token_substr[i] == NULL)
 		{
 			free_matrix(token_substr);
 			return (NULL);
 		}
 	}
-	return (ft_rejoin_token_substr(token_substr));
+	return (ft_rejoin_substr(token_substr));
 }

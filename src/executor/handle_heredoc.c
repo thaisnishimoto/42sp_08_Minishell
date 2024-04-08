@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/08 16:05:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/08 17:14:03 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	get_heredoc_content(t_redir *node)
 		return (0);
 	}
 	buffer = expand_hdoc(prompt("> "), node);
-	while (ft_strncmp(buffer, node->eof, ft_strlen(node->eof)) != 0)
+	while (ft_strncmp(buffer, node->eof, ft_strlen(node->eof) + 1) != 0)
 	{
 //		if (!input)
 //			ft_putchar_fd('\n', 1);

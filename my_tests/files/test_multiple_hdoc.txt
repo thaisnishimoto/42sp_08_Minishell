@@ -1,0 +1,7 @@
+cat << EOF << EOF1
+Hello
+EOF1
+EOF
+Bye
+EOF
+EOF1

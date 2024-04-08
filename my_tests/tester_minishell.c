@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/08 15:38:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:33:21 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,16 +334,33 @@ MU_TEST(function_should_run_command_multiple_outfile_redir)
 	free(outfile);
 }
 
-MU_TEST(funtion_should_run_heredoc_expanding_var)
+MU_TEST(funtion_should_run_two_heredocs)
 {
 	char	*result;
 	char	*expected;
 
 	printf("\n------------------------\n");
-	printf(" TEST 16: cat << EOF Hello World!");
+	printf(" TEST 16: << EOF << EOF1");
 	printf("\n------------------------\n");
 
-	result = exec_command("< test_hdoc_input.txt ./minishell", 1);
+	result = exec_command("< ./files/test_multiple_hdoc.txt ./minishell", 1);
+	expected = exec_command("bash -c cat << EOF << EOF1\nHello\nEOF1\nEOF\nBye\nEOF\nEOF1\n", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_run_heredoc_expanding_vars)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 16: cat << EOF multiple ENV");
+	printf("\n------------------------\n");
+
+	result = exec_command("< ./files/test_hdoc_vars.txt ./minishell", 1);
 	expected = exec_command("bash -c cat << EOF\n\"$USER\"\n'$USER'\n$USR\n$\"USER\"\n$'USER'\n\"'$USER'\"\n'\"$USER\"'\n$USERoi\noi$USER\n$\n$?\nEOF\n", 1);
 	printf("%s", result);
 	mu_assert_string_eq(expected, result);
@@ -642,7 +659,8 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(function_should_run_command_trunc_outfile_redir);
 	MU_RUN_TEST(function_should_run_command_append_outfile_redir);
 	MU_RUN_TEST(function_should_run_command_multiple_outfile_redir);
-	MU_RUN_TEST(funtion_should_run_heredoc_expanding_var);
+	MU_RUN_TEST(funtion_should_run_two_heredocs);
+	MU_RUN_TEST(funtion_should_run_heredoc_expanding_vars);
 //	MU_RUN_TEST(funtion_should_run_command_ls_l_wc_l);
 //	MU_RUN_TEST(funtion_should_run_command_grep_a1_wc_w);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);

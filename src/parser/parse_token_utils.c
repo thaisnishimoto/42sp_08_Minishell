@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/03 17:43:13 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:40:02 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ size_t	substr_env_name(char *str)
 	size_t	len;
 
 	len = 0;
-	while (ft_isalpha(str[len]) || str[len] == '_')
+	while (ft_isalpha(str[len]) || str[len] == '_' || str[len] == '?')
 		len++;
 	return (len);
 }

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/08 21:25:51 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:28:27 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,7 +378,75 @@ MU_TEST(function_should_run_pipeline_ls_l_wc_l)
 	printf("\n------------------------\n");
 
 	result = exec_command("echo 'ls -l | wc -l' | ./minishell", 1);
-	expected = exec_command("bash -c ls -l | wc -l", 1);
+	expected = exec_command("ls -l | wc -l", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_pipeline_echo_hello_grep_without_arg)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 19: echo hello | grep");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo hello | grep' | ./minishell", 1);
+	expected = exec_command("echo hello | grep", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_pipeline_first_invalid)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 20: echoo hello | echo bye");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echoo hello | echo bye' | ./minishell", 1);
+	expected = exec_command("echoo hello | echo bye", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_pipeline_second_invalid)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 21: echo hello | echoo bye");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo hello | echoo bye' | ./minishell", 1);
+	expected = exec_command("echo hello | echoo bye", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_run_multiple_simple_pipeline)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 22: echo hello | echo bye | rev");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo hello | echo bye | rev' | ./minishell", 1);
+	expected = exec_command("echo hello | echo bye | rev", 1);
 	printf("%s", result);
 	mu_assert_string_eq(expected, result);
 	free(result);
@@ -657,6 +725,10 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(funtion_should_run_two_heredocs);
 	MU_RUN_TEST(funtion_should_run_heredoc_expanding_vars);
 	MU_RUN_TEST(function_should_run_pipeline_ls_l_wc_l);
+	MU_RUN_TEST(function_should_run_pipeline_echo_hello_grep_without_arg);
+	MU_RUN_TEST(function_should_run_pipeline_first_invalid);
+	MU_RUN_TEST(function_should_run_pipeline_second_invalid);
+	MU_RUN_TEST(function_should_run_multiple_simple_pipeline);
 //	MU_RUN_TEST(funtion_should_run_command_ls_l_wc_l);
 //	MU_RUN_TEST(funtion_should_run_command_grep_a1_wc_w);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);
@@ -670,6 +742,8 @@ MU_TEST_SUITE(test_suite)
 //	MU_RUN_TEST(funtion_should_overwrite_output);
 //	MU_RUN_TEST(funtion_should_run_here_doc);
 //	MU_RUN_TEST(funtion_should_append_output);
+//hdoc and redir middle of pipeline
+//$? expansion in middle of pipeline
 }
 
 int	main(void)

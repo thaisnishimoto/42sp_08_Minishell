@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/09 13:10:39 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/09 14:30:14 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,5 @@ void	executor(t_node *node)
 		wait_for_cmd_process(pid, cmd_node->cmd_args->content);
 	}
 	else if (node->type == PIPE)
-		exec_pipeline((t_pipe *)node);
+		exec_pipeline(node);
 }

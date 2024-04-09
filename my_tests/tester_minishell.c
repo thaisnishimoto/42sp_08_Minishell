@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/08 16:33:21 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/08 21:25:51 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -357,7 +357,7 @@ MU_TEST(funtion_should_run_heredoc_expanding_vars)
 	char	*expected;
 
 	printf("\n------------------------\n");
-	printf(" TEST 16: cat << EOF multiple ENV");
+	printf(" TEST 17: cat << EOF multiple ENV");
 	printf("\n------------------------\n");
 
 	result = exec_command("< ./files/test_hdoc_vars.txt ./minishell", 1);
@@ -368,28 +368,23 @@ MU_TEST(funtion_should_run_heredoc_expanding_vars)
 	free(expected);
 }
 
-//MU_TEST(function_should_run_command_ls_l_wc_l)
-//{
-//	char    *expected = "Files ../outfile and ../outfile_expected are identical\n";
-//	char    *outfile;
-//	char    *diff_result;
-//
-//	printf("\n------------------------\n");
-//	printf(" TEST 1: ls -l | wc -l");
-//	printf("\n------------------------\n");
-//
-//	exec_command("< infile ls -l | wc -l > ../outfile_expected");
-//	exec_command("../pipex_bonus infile \"ls -l\" \"wc -l\" ../outfile");
-//
-//	diff_result = exec_command("diff -s ../outfile ../outfile_expected");
-//	ft_printf("%s", diff_result);
-//	outfile = exec_command("cat ../outfile");
-//	ft_printf("Outfile: %s", outfile);
-//	mu_assert_string_eq(expected, diff_result);
-//	free(diff_result);
-//}
-//
-//
+MU_TEST(function_should_run_pipeline_ls_l_wc_l)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 18: ls -l | wc -l");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'ls -l | wc -l' | ./minishell", 1);
+	expected = exec_command("bash -c ls -l | wc -l", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
 //MU_TEST(funtion_should_run_command_grep_a1_wc_w)
 //{
 //	char    *expected = "Files ../outfile2 and ../outfile_expected2 are identical\n";
@@ -661,6 +656,7 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(function_should_run_command_multiple_outfile_redir);
 	MU_RUN_TEST(funtion_should_run_two_heredocs);
 	MU_RUN_TEST(funtion_should_run_heredoc_expanding_vars);
+	MU_RUN_TEST(function_should_run_pipeline_ls_l_wc_l);
 //	MU_RUN_TEST(funtion_should_run_command_ls_l_wc_l);
 //	MU_RUN_TEST(funtion_should_run_command_grep_a1_wc_w);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:00:52 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/09 15:54:27 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/09 19:02:14 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,8 @@ static void	first_cmd_pipeline(t_node *node, int *pipe_fd)
 	pid_t	pid;
 	
 	cmd_node = (t_cmd *)node;
-	if (pipe(pipe_fd) == -1)
-	{
-		perror("pipe error");
-		free(pipe_fd);
-		update_exit_code(EXIT_FAILURE);
+	if (ft_pipe(pipe_fd) == -1)
 		return ;
-	}
 	pid = ft_fork();
 	if (pid < 0)
 		return ;
@@ -32,6 +27,8 @@ static void	first_cmd_pipeline(t_node *node, int *pipe_fd)
 	{
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		ft_close_pipe(pipe_fd);
+		if (!exec_redir(cmd_node->redirs))
+			return ;
 		exec_cmd((t_list *)cmd_node->cmd_args);
 	}
 	close(pipe_fd[1]);
@@ -46,13 +43,8 @@ static void	middle_cmd_pipeline(t_node *node, int *pipe_fd)
 	
 	prev_pipe_fd = pipe_fd[0]; 
 	cmd_node = (t_cmd *)node;
-	if (pipe(pipe_fd) == -1)
-	{
-		perror("pipe error");
-		free(pipe_fd);
-		update_exit_code(EXIT_FAILURE);
+	if (ft_pipe(pipe_fd) == -1)
 		return ;
-	}
 	pid = ft_fork();
 	if (pid < 0)
 		return ;
@@ -62,6 +54,8 @@ static void	middle_cmd_pipeline(t_node *node, int *pipe_fd)
 		close(prev_pipe_fd);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		ft_close_pipe(pipe_fd);
+		if (!exec_redir(cmd_node->redirs))
+			return ;
 		exec_cmd((t_list *)cmd_node->cmd_args);
 	}
 	close(prev_pipe_fd);
@@ -82,10 +76,11 @@ static void	last_cmd_pipeline(t_node *node, int *pipe_fd)
 	{
 		dup2(pipe_fd[0], STDIN_FILENO);
 		ft_close_pipe(pipe_fd);
+		if (!exec_redir(cmd_node->redirs))
+			return ;
 		exec_cmd((t_list *)cmd_node->cmd_args);
 	}
 	close(pipe_fd[0]);
-	free(pipe_fd);
 	wait_for_cmd_process(pid, cmd_node->cmd_args->content);
 }
 
@@ -108,4 +103,5 @@ void	exec_pipeline(t_node *node)
 		node = ((t_pipe *)node)->right;
 	}
 	last_cmd_pipeline(node, pipe_fd_holder);
+	free(pipe_fd_holder);
 }

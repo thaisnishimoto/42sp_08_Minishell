@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/09 14:29:55 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/09 16:13:34 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ void			exec_pipeline(t_node *node);
 
 //exec utils
 pid_t			ft_fork(void);
+int				ft_pipe(int *pipe_fd);
 void			ft_close_pipe(int *pipe_fd);
 void			wait_for_cmd_process(pid_t pid, char *cmd);
 

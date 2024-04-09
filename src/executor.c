@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/09 14:30:14 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/09 16:17:07 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,20 @@ pid_t	ft_fork(void)
 		update_exit_code(EXIT_FAILURE);
 	}
 	return (pid);
+}
+
+int	ft_pipe(int *pipe_fd)
+{
+	int	return_value;
+
+	return_value = pipe(pipe_fd);
+	if (return_value == -1)
+	{
+		perror("pipe error");
+		free(pipe_fd);
+		update_exit_code(EXIT_FAILURE);
+	}
+	return (return_value);
 }
 
 void	executor(t_node *node)

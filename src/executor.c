@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/06 17:55:23 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/09 00:17:18 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,59 @@ void	executor(t_node *node)
 {
 	if (node == NULL)
 		return ;
-//	printf("\n");
-//	if (node->type == PIPE)
-//	{
-//		t_pipe	*pipe_node = (t_pipe *)node;
-//		printf("->node type: PIPE(%d)\n", pipe_node->type);
-//		printf("\n---LEFT OF PIPE---");
-//		print_tree((t_node *)pipe_node->left);
-//		printf("\n---RIGHT OF PIPE---");
-//		print_tree((t_node *)pipe_node->right);
-//	}
-//	else if (node->type == REDIR)
-//	{
-//		exec_redir((t_redir *)node);
-//	}
-//	else if (node->type == HEREDOC)
-//	{
-//		t_redir	*redir_node = (t_redir *)node;
-//		printf("->node type: HEREDOC(%d)\n", redir_node->type);
-//		printf("redir delim: %s\n", redir_node->eof);
-//		print_tree((t_node *)redir_node->next);
-//	}
+	if (node->type == PIPE)
+	{
+		t_pipe	*pipe_node;
+		int	pipe_fd[2];
+		pid_t	pid;
+	//	int	wstatus;
+		
+		pipe_node = (t_pipe *)node;
+		if (pipe(pipe_fd) == -1)
+		{
+			perror("pipe error");
+			update_exit_code(EXIT_FAILURE);
+			return ;
+		}
+		pid = fork();
+//		if (pid < 0)
+//			ft_handle_error();
+		if (pid == 0)
+		{
+			dup2(pipe_fd[1], STDOUT_FILENO);
+			close(pipe_fd[1]);
+			close(pipe_fd[0]);
+			exec_cmd((t_list *)((t_cmd *)pipe_node->left)->cmd_args);
+		}
+		else
+		{
+			close(pipe_fd[1]);
+	//		waitpid(pid, &wstatus, 0);
+	//		if (WIFEXITED(wstatus))
+	//			update_exit_code(WEXITSTATUS(wstatus));
+	//		else if (WIFSIGNALED(wstatus))
+	//			update_exit_code(WTERMSIG(wstatus));
+		}
+		pid = fork();
+//		if (pid < 0)
+//			ft_handle_error();
+		if (pid == 0)
+		{
+			dup2(pipe_fd[0], STDIN_FILENO);
+			close(pipe_fd[1]);
+			close(pipe_fd[0]);
+			exec_cmd((t_list *)((t_cmd *)pipe_node->right)->cmd_args);
+		}
+		else
+		{
+			close(pipe_fd[0]);
+	//		waitpid(pid, &wstatus, 0);
+	//		if (WIFEXITED(wstatus))
+	//			update_exit_code(WEXITSTATUS(wstatus));
+	//		else if (WIFSIGNALED(wstatus))
+	//			update_exit_code(WTERMSIG(wstatus));
+		}
+	}
 	if (node->type == CMD)
 	{
 		t_cmd	*cmd_node;
@@ -79,7 +111,5 @@ void	executor(t_node *node)
 				free(msg);
 			}
 		}
-//		printf("exit code: %d\n", get_exit_code());
-//		print_tree((t_node *)cmd_node->redirs);
 	}
 }

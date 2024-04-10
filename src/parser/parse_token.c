@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/08 13:35:24 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 17:58:07 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	**ft_split_concat_token(char *token)
 		token_substr[j] = ft_calloc(ft_substrlen(&token[i]) + 1, sizeof(char));
 		if (token_substr[j] == NULL)
 		{
-			free_matrix(token_substr);
+			ft_free_matrix(token_substr);
 			return (NULL);
 		}
 		ft_strlcpy(token_substr[j], &token[i], ft_substrlen(&token[i]) + 1);
@@ -95,7 +95,7 @@ char	*ft_rejoin_substr(char *token_substr[])
 		free(result);
 		result = temp;
 	}
-	free_matrix(token_substr);
+	ft_free_matrix(token_substr);
 	return (result);
 }
 
@@ -120,7 +120,7 @@ char	*parse_token(char *token, int nested)
 			token_substr[i] = expand_env(token_substr[i]);
 		if (token_substr[i] == NULL)
 		{
-			free_matrix(token_substr);
+			ft_free_matrix(token_substr);
 			return (NULL);
 		}
 	}

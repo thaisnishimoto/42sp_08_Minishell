@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 11:24:35 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 17:53:59 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*search_executable(char *cmd)
 		free(pathname);
 		pathname = NULL;
 	}
-	free_matrix(path);
+	ft_free_matrix(path);
 	return (pathname);
 }
 
@@ -127,6 +127,6 @@ void	exec_cmd(t_list *cmd_args)
 		free(pathname);
 		update_exit_code(EXIT_FAILURE);
 	}
-	free_matrix(cmd_argv);
+	ft_free_matrix(cmd_argv);
 	exit (get_exit_code());
 }

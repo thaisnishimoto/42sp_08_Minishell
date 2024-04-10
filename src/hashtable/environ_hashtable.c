@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 16:27:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 17:57:05 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,11 @@ void	load_environ_hashtable(char *envp[])
 		new_var = create_environ(env_content[0], env_content[1]);
 		if (new_var == NULL)
 		{
-			free_matrix(env_content);
+			ft_free_matrix(env_content);
 			ft_handle_error("malloc failed");
 		}
 		static_environ_htable(new_var, NULL, ADD);
-		free_matrix(env_content);
+		ft_free_matrix(env_content);
 		i++;
 	}
 	new_var = create_environ("?", "0");

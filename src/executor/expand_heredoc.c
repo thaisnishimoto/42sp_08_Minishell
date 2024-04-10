@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/08 16:10:28 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 17:54:30 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static char	**ft_split_hdoc(char *buffer)
 		buff_substr[j] = ft_calloc(buf_substrlen(&buffer[i]) + 1, sizeof(char));
 		if (buff_substr[j] == NULL)
 		{
-			free_matrix(buff_substr);
+			ft_free_matrix(buff_substr);
 			return (NULL);
 		}
 		ft_strlcpy(buff_substr[j], &buffer[i], buf_substrlen(&buffer[i]) + 1);
@@ -95,7 +95,7 @@ char	*expand_hdoc(char *buffer, t_redir *node)
 			hdoc_substr[i] = expand_env(hdoc_substr[i]);
 			if (hdoc_substr[i] == NULL)
 			{
-				free_matrix(hdoc_substr);
+				ft_free_matrix(hdoc_substr);
 				return (NULL);
 			}
 		}

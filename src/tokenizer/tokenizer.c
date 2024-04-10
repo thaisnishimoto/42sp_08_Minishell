@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:55:36 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/01 23:19:20 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 17:58:34 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static char	**ft_strtok(char *input, char delim)
 		tokens[j] = ft_calloc(ft_token_len(&input[i], delim) + 1, sizeof(char));
 		if (tokens[j] == NULL)
 		{
-			free_matrix(tokens);
+			ft_free_matrix(tokens);
 			return (NULL);
 		}
 		ft_strlcpy(tokens[j], &input[i], ft_token_len(&input[i], delim) + 1);
@@ -97,7 +97,7 @@ char	**tokenizer(char *input)
 		else if (!validate_syntax(tokens))
 		{
 			update_exit_code(2);
-			free_matrix(tokens);
+			ft_free_matrix(tokens);
 			tokens = NULL;
 		}
 	}

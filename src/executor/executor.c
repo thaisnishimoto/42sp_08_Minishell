@@ -6,38 +6,11 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/09 16:17:07 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 15:03:47 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-
-pid_t	ft_fork(void)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("fork error");
-		update_exit_code(EXIT_FAILURE);
-	}
-	return (pid);
-}
-
-int	ft_pipe(int *pipe_fd)
-{
-	int	return_value;
-
-	return_value = pipe(pipe_fd);
-	if (return_value == -1)
-	{
-		perror("pipe error");
-		free(pipe_fd);
-		update_exit_code(EXIT_FAILURE);
-	}
-	return (return_value);
-}
+#include "../../include/minishell.h"
 
 void	executor(t_node *node)
 {
@@ -49,20 +22,21 @@ void	executor(t_node *node)
 		pid_t	pid;
 		
 		cmd_node = (t_cmd *)node;
-		if (!handle_heredoc(cmd_node->redirs))
+		if (!handle_heredoc(((t_cmd *)node)->redirs))
 			return ;
 		update_exit_code(0);
 		//check for builtin
-		//if (ft_strncmp("env", cmd_node->cmd_args->content, ft_strlen("env") + 1) == 0)
-		//	printf("env found\n");
-		pid = fork();
-//		if (pid < 0)
-//			ft_handle_error();
+		//exec_redir in parent
+		//exec buiiltin
+		//reset fds to stdin and stdout
+		pid = ft_fork();
+		if (pid < 0)
+			return ;
 		if (pid == 0)
 		{
-			if (!exec_redir(cmd_node->redirs))
-				return ;
-			exec_cmd(cmd_node->cmd_args);
+			if (exec_redir(cmd_node->redirs))
+				exec_cmd((t_list *)cmd_node->cmd_args);
+			ft_exit_child_process(get_exit_code());
 		}
 		wait_for_cmd_process(pid, cmd_node->cmd_args->content);
 	}

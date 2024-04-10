@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/09 16:13:34 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:16:31 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,13 +121,14 @@ char			*ft_rejoin_substr(char *token_substr[]);
 //executor functions
 void			executor(t_node *node);
 void			exec_cmd(t_list *cmd_args);
-int				exec_redir(t_redir *node);
 void			exec_pipeline(t_node *node);
+int				exec_redir(t_redir *node);
 
 //exec utils
 pid_t			ft_fork(void);
 int				ft_pipe(int *pipe_fd);
 void			ft_close_pipe(int *pipe_fd);
+void			ft_exit_child_process(int exit_code);
 void			wait_for_cmd_process(pid_t pid, char *cmd);
 
 //heredoc exec functions

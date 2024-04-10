@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/09 19:04:55 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:59:50 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,37 +34,6 @@ void	free_matrix(char **array)
 	}
 	free(array);
 	array = NULL;
-}
-
-void	ft_close_pipe(int *pipe_fd)
-{
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
-	free(pipe_fd);
-}
-
-void	wait_for_cmd_process(pid_t pid, char *cmd)
-{
-	int	wstatus;
-	char	*msg;
-
-	waitpid(pid, &wstatus, 0);
-	if (WIFEXITED(wstatus))
-		update_exit_code(WEXITSTATUS(wstatus));
-	else if (WIFSIGNALED(wstatus))
-		update_exit_code(WTERMSIG(wstatus));
-	if (get_exit_code() == 126)
-	{
-		msg = ft_strjoin(cmd, ": Permission denied");
-		ft_putendl_fd(msg, 2);
-		free(msg);
-	}
-	else if (get_exit_code() == 127)
-	{
-		msg = ft_strjoin(cmd, ": command not found");
-		ft_putendl_fd(msg, 2);
-		free(msg);
-	}
 }
 
 //void	free_matrix_size(char **array, int size)

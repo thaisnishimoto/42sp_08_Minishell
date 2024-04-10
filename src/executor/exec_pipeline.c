@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:00:52 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/09 19:02:14 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:18:44 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ static void	first_cmd_pipeline(t_node *node, int *pipe_fd)
 	{
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		ft_close_pipe(pipe_fd);
-		if (!exec_redir(cmd_node->redirs))
-			return ;
-		exec_cmd((t_list *)cmd_node->cmd_args);
+		if (exec_redir(cmd_node->redirs))
+			exec_cmd((t_list *)cmd_node->cmd_args);
+		ft_exit_child_process(get_exit_code());
 	}
 	close(pipe_fd[1]);
 	wait_for_cmd_process(pid, cmd_node->cmd_args->content);
@@ -54,9 +54,9 @@ static void	middle_cmd_pipeline(t_node *node, int *pipe_fd)
 		close(prev_pipe_fd);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		ft_close_pipe(pipe_fd);
-		if (!exec_redir(cmd_node->redirs))
-			return ;
-		exec_cmd((t_list *)cmd_node->cmd_args);
+		if (exec_redir(cmd_node->redirs))
+			exec_cmd((t_list *)cmd_node->cmd_args);
+		ft_exit_child_process(get_exit_code());
 	}
 	close(prev_pipe_fd);
 	close(pipe_fd[1]);
@@ -76,9 +76,9 @@ static void	last_cmd_pipeline(t_node *node, int *pipe_fd)
 	{
 		dup2(pipe_fd[0], STDIN_FILENO);
 		ft_close_pipe(pipe_fd);
-		if (!exec_redir(cmd_node->redirs))
-			return ;
-		exec_cmd((t_list *)cmd_node->cmd_args);
+		if (exec_redir(cmd_node->redirs))
+			exec_cmd((t_list *)cmd_node->cmd_args);
+		ft_exit_child_process(get_exit_code());
 	}
 	close(pipe_fd[0]);
 	wait_for_cmd_process(pid, cmd_node->cmd_args->content);

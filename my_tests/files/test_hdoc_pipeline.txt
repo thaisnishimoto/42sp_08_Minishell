@@ -1,0 +1,5 @@
+<< EOF cat | << EOF1 cat
+$?
+EOF
+$?
+EOF1

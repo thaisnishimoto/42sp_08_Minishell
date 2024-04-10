@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/09 17:44:23 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 15:10:16 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -561,11 +561,28 @@ MU_TEST(funtion_should_run_command_echo_tr_with_invalid_infile)
 	char	*expected;
 
 	printf("\n------------------------\n");
-	printf(" TEST 27: < invalid_file echo o_i | tr -d");
+	printf(" TEST 27: < invalid_file echo oi | echo bye");
 	printf("\n------------------------\n");
 
-	result = exec_command("echo '< invalid_file echo o_i | tr -d _' | ./minishell", 1);
-	expected = exec_command("< invalid_file echo o_i | tr -d _", 1);
+	result = exec_command("echo '< invalid_file echo oi | echo bye' | ./minishell", 1);
+	expected = exec_command("< invalid_file echo oi | echo bye", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_run_heredocs_with_pipe_and_exit_code)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 28: << EOF cat | << EOF1 cat");
+	printf("\n------------------------\n");
+
+	result = exec_command("< ./files/test_hdoc_pipeline.txt ./minishell", 1);
+	expected = exec_command("bash -c cat << EOF << EOF1\n$?\nEOF\n$?\nEOF1\n", 1);
 	printf("%s", result);
 	mu_assert_string_eq(expected, result);
 	free(result);
@@ -769,6 +786,7 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(function_should_run_pipeline_invalid_in_echo_out);
 	MU_RUN_TEST(function_should_run_out_redir_mid_pipeline);
 	MU_RUN_TEST(funtion_should_run_command_echo_tr_with_invalid_infile);
+	MU_RUN_TEST(funtion_should_run_heredocs_with_pipe_and_exit_code);
 //	MU_RUN_TEST(funtion_should_run_command_ls_l_wc_l);
 //	MU_RUN_TEST(funtion_should_run_command_grep_a1_wc_w);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);

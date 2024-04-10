@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/07 23:23:10 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 11:24:35 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,9 @@ void	exec_cmd(t_list *cmd_args)
 	if (pathname != NULL)
 	{
 		execve(pathname, cmd_argv, NULL);
+		perror("execve failed");
 		free(pathname);
-		update_exit_code(-1);
+		update_exit_code(EXIT_FAILURE);
 	}
 	free_matrix(cmd_argv);
 	exit (get_exit_code());

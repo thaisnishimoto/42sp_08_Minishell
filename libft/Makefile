@@ -6,7 +6,7 @@
 #    By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 10:48:14 by tmina-ni          #+#    #+#              #
-#    Updated: 2024/02/29 15:53:15 by tmina-ni         ###   ########.fr        #
+#    Updated: 2024/04/10 16:43:31 by tmina-ni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ ft_strnstr.c ft_atoi.c ft_calloc.c ft_strdup.c ft_substr.c \
 ft_strjoin.c ft_strtrim.c ft_split.c ft_itoa.c ft_strmapi.c \
 ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c \
 ft_get_next_line.c ft_utoa.c ft_utoa_base.c ft_printf.c ft_printf_utils.c \
-ft_printf_utils_bonus.c ft_str_rm_dup.c ft_swap.c
+ft_printf_utils_bonus.c ft_str_rm_dup.c ft_swap.c ft_strcmp.c ft_free_matrix.c \
+ft_mtx_free.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -41,9 +42,6 @@ $(NAME): $(OBJS) $(B_OBJS)
 %.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
-#bonus: $(B_OBJS)
-#	ar rc $(NAME) $(B_OBJS)
-	
 clean:
 	rm -f *.o
 

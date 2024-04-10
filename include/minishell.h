@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 14:16:31 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:50:20 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ char			*expand_hdoc(char *buffer, t_redir *node);
 
 //free and exit function
 void			free_ast(t_node *node);
-void			free_matrix(char **array);
 void			ft_handle_error(char *error_msg);
 t_node			*static_ast_holder(t_node *ast, int mode);
 

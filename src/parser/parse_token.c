@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 17:58:07 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 16:14:38 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ char	*expand_env(char *token)
 
 	if (token[1] == '\'' || token[1] == '\"')
 		env_value = ft_trim_quotes(ft_strdup(&token[1]), "\"\'");
+	else if (token[1] == '?')
+		env_value = ft_itoa(last_exit_code(-1));
 	else
 	{
 		hashtable = static_environ_htable(NULL, NULL, READ);

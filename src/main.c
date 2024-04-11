@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/08 18:52:57 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 16:17:23 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	static_environ_htable(NULL, NULL, FREE);
 	rl_clear_history();
-//	return (get_exit_code());
+//	return (last_exit_code(-1));
 	return (0);
 }

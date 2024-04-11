@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 23:25:53 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:57:46 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	exec_simple_cmd(t_node *node)
 	{
 		if (exec_redir(cmd_node->redirs))
 			exec_cmd((t_list *)cmd_node->cmd_args);
-		ft_exit_child_process(get_exit_code());
+		ft_exit_child_process(last_exit_code(-1));
 	}
 	wait_for_cmd_process(pid, cmd_node->cmd_args);
 }
@@ -38,7 +38,7 @@ static void	exec_pipeline(t_node *node)
 	if (pipe_fd_holder == NULL)
 	{
 		perror("pipe malloc failed");
-		update_exit_code(EXIT_FAILURE);
+		last_exit_code(EXIT_FAILURE);
 		return ;
 	}
 	first_cmd_pipeline(((t_pipe *)node)->left, pipe_fd_holder);

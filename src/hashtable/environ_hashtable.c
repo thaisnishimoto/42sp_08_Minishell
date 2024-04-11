@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 17:57:05 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 16:00:17 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,4 @@ void	load_environ_hashtable(char *envp[])
 		ft_free_matrix(env_content);
 		i++;
 	}
-	new_var = create_environ("?", "0");
-	static_environ_htable(new_var, NULL, ADD);
 }

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 23:19:45 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:50:13 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ static char	*find_pathname(char **path, char *cmd)
 		i = 0;
 		while (path[i])
 		{
-			update_exit_code(0);
+			last_exit_code(0);
 			pathname = ft_strjoin(path[i], cmd);
 			if (access(pathname, F_OK) == -1)
 			{
-				update_exit_code(127);
+				last_exit_code(127);
 				free(pathname);
 				pathname = NULL;
 				i++;
@@ -73,14 +73,14 @@ static char	*search_executable(char *cmd)
 
 	if (*cmd == '\0')
 	{
-		update_exit_code(127);
+		last_exit_code(127);
 		return (NULL);
 	}
 	path = get_path();
 	pathname = find_pathname(path, cmd);
 	if (pathname && access(pathname, X_OK) == -1)
 	{
-		update_exit_code(126);
+		last_exit_code(126);
 		free(pathname);
 		pathname = NULL;
 	}
@@ -127,8 +127,8 @@ void	exec_cmd(t_list *cmd_args)
 		execve(pathname, cmd_argv, NULL);
 		perror("execve failed");
 		free(pathname);
-		update_exit_code(EXIT_FAILURE);
+		last_exit_code(EXIT_FAILURE);
 	}
 	ft_free_matrix(cmd_argv);
-	exit (get_exit_code());
+	exit (last_exit_code(-1));
 }

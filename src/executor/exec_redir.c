@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/07 23:23:36 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:48:39 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static int	handle_infile_redir(t_redir *node)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		perror(node->filename);
-		update_exit_code(EXIT_FAILURE);
+		last_exit_code(EXIT_FAILURE);
 		return (0);
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		perror("dup2 error");
-		update_exit_code(EXIT_FAILURE);
+		last_exit_code(EXIT_FAILURE);
 		close(fd);
 		return (0);
 	}
@@ -44,13 +44,13 @@ static int	handle_outfile_redir(t_redir *node)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		perror(node->filename);
-		update_exit_code(EXIT_FAILURE);
+		last_exit_code(EXIT_FAILURE);
 		return (0);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("dup2 error");
-		update_exit_code(EXIT_FAILURE);
+		last_exit_code(EXIT_FAILURE);
 		close(fd);
 		return (0);
 	}

@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:55:36 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/10 17:58:34 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:50:54 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,11 @@ char	**tokenizer(char *input)
 		if (tokens == NULL)
 		{
 			ft_putendl_fd("tokenizer: malloc failed", 2);
-			update_exit_code(EXIT_FAILURE);
+			last_exit_code(EXIT_FAILURE);
 		}
 		else if (!validate_syntax(tokens))
 		{
-			update_exit_code(2);
+			last_exit_code(2);
 			ft_free_matrix(tokens);
 			tokens = NULL;
 		}

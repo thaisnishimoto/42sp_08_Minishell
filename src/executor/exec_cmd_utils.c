@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 23:00:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:55:19 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ pid_t	ft_fork(void)
 	if (pid < 0)
 	{
 		perror("fork error");
-		update_exit_code(EXIT_FAILURE);
+		last_exit_code(EXIT_FAILURE);
 	}
 	return (pid);
 }
@@ -34,7 +34,7 @@ int	ft_pipe(int *pipe_fd)
 	{
 		perror("pipe error");
 		free(pipe_fd);
-		update_exit_code(EXIT_FAILURE);
+		last_exit_code(EXIT_FAILURE);
 	}
 	return (return_value);
 }
@@ -64,16 +64,16 @@ void	wait_for_cmd_process(pid_t pid, t_list *cmd_args)
 
 	waitpid(pid, &wstatus, 0);
 	if (WIFEXITED(wstatus))
-		update_exit_code(WEXITSTATUS(wstatus));
+		last_exit_code(WEXITSTATUS(wstatus));
 	else if (WIFSIGNALED(wstatus))
-		update_exit_code(WTERMSIG(wstatus));
-	if (get_exit_code() == 126)
+		last_exit_code(WTERMSIG(wstatus));
+	if (last_exit_code(-1) == 126)
 	{
 		msg = ft_strjoin(cmd_args->content, ": Permission denied");
 		ft_putendl_fd(msg, 2);
 		free(msg);
 	}
-	else if (get_exit_code() == 127)
+	else if (last_exit_code(-1) == 127)
 	{
 		msg = ft_strjoin(cmd_args->content, ": command not found");
 		ft_putendl_fd(msg, 2);

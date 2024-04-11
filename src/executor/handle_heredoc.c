@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 22:59:52 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:49:51 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	get_heredoc_content(t_redir *node)
 	if (heredoc_fd < 0)
 	{
 		perror(node->filename);
-		update_exit_code(EXIT_FAILURE);
+		last_exit_code(EXIT_FAILURE);
 		return (0);
 	}
 	buffer = expand_hdoc(prompt("> "), node);

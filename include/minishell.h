@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 16:50:20 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 22:53:10 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ char			*ft_rejoin_substr(char *token_substr[]);
 
 //executor functions
 void			executor(t_node *node);
+int				handle_heredoc(t_node *node);
+char			*expand_hdoc(char *buffer, t_redir *node);
 void			exec_cmd(t_list *cmd_args);
 void			exec_pipeline(t_node *node);
 int				exec_redir(t_redir *node);
@@ -129,11 +131,7 @@ pid_t			ft_fork(void);
 int				ft_pipe(int *pipe_fd);
 void			ft_close_pipe(int *pipe_fd);
 void			ft_exit_child_process(int exit_code);
-void			wait_for_cmd_process(pid_t pid, char *cmd);
-
-//heredoc exec functions
-int				handle_heredoc(t_redir *node);
-char			*expand_hdoc(char *buffer, t_redir *node);
+void			wait_for_cmd_process(pid_t pid, t_list *cmd_args);
 
 //free and exit function
 void			free_ast(t_node *node);

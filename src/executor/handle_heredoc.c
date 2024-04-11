@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/08 17:14:03 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 22:55:27 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,29 @@ static int	get_heredoc_content(t_redir *node)
 	return (1);
 }
 
-int	handle_heredoc(t_redir *node)
+int	handle_heredoc(t_node *node)
 {
-	if (node == NULL)
-		return (1);
-	if (node->type == HEREDOC)
+	t_redir	*redir;
+
+	if (node->type == CMD)
 	{
-		if (!get_heredoc_content(node))
+		redir = ((t_cmd *)node)->redirs;
+		while (redir)
+		{
+			if (redir->type == HEREDOC)
+			{
+				if (!get_heredoc_content(redir))
+					return (0);
+			}
+			redir=redir->next;
+		}
+	}
+	else
+	{
+		if (!handle_heredoc(((t_pipe *)node)->left))
+			return (0);
+		if (!handle_heredoc(((t_pipe *)node)->right))
 			return (0);
 	}
-	if (!handle_heredoc(node->next))
-		return (0);
 	return (1);
 }

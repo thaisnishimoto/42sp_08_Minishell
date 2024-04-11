@@ -10,5 +10,5 @@ $USERoi
 oi$USER
 $
 $?
-EOF
+"E O F"
 E O F

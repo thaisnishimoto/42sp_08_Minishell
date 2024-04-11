@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/11 12:16:57 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 16:19:29 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -634,7 +634,7 @@ MU_TEST(funtion_should_run_heredoc_single_quote_eof_not_expanding_vars)
 	printf("\n------------------------\n");
 
 	result = exec_command("< ./files/test_hdoc_vars_single_quote.txt ./minishell", 1);
-	expected = exec_command("bash -c cat << ' EOF '\n\"$USER\"\n'$USER'\n$USR\n$\"USER\"\n$'USER'\n\"'$USER'\"\n'\"$USER\"'\n$USERoi\noi$USER\n$\n$?\nEOF\n EOF \n", 1);
+	expected = exec_command("bash -c cat << ' EOF '\n\"$USER\"\n'$USER'\n$USR\n$\"USER\"\n$'USER'\n\"'$USER'\"\n'\"$USER\"'\n$USERoi\noi$USER\n$\n$?\n' EOF '\n EOF \n", 1);
 	printf("%s", result);
 	mu_assert_string_eq(expected, result);
 	free(result);
@@ -651,7 +651,7 @@ MU_TEST(funtion_should_run_heredoc_double_quote_eof_not_expanding_vars)
 	printf("\n------------------------\n");
 
 	result = exec_command("< ./files/test_hdoc_vars_double_quote.txt ./minishell", 1);
-	expected = exec_command("bash -c cat << \"E O F\"\n\"$USER\"\n'$USER'\n$USR\n$\"USER\"\n$'USER'\n\"'$USER'\"\n'\"$USER\"'\n$USERoi\noi$USER\n$\n$?\nEOF\nE O F\n", 1);
+	expected = exec_command("bash -c cat << \"E O F\"\n\"$USER\"\n'$USER'\n$USR\n$\"USER\"\n$'USER'\n\"'$USER'\"\n'\"$USER\"'\n$USERoi\noi$USER\n$\n$?\n\"E O F\"\nE O F\n", 1);
 	printf("%s", result);
 	mu_assert_string_eq(expected, result);
 	free(result);

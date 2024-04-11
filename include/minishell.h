@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 22:53:10 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 23:19:03 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,9 @@ void			executor(t_node *node);
 int				handle_heredoc(t_node *node);
 char			*expand_hdoc(char *buffer, t_redir *node);
 void			exec_cmd(t_list *cmd_args);
-void			exec_pipeline(t_node *node);
+void			first_cmd_pipeline(t_node *node, int *pipe_fd);
+void			middle_cmd_pipeline(t_node *node, int *pipe_fd);
+void			last_cmd_pipeline(t_node *node, int *pipe_fd);
 int				exec_redir(t_redir *node);
 
 //exec utils

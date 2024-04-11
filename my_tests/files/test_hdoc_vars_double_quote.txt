@@ -1,0 +1,14 @@
+cat << "E O F"
+"$USER"
+'$USER'
+$USR
+$"USER"
+$'USER'
+"'$USER'"
+'"$USER"'
+$USERoi
+oi$USER
+$
+$?
+EOF
+E O F

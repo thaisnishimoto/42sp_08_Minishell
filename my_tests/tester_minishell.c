@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 22:46:53 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 12:16:57 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -623,6 +623,41 @@ MU_TEST(function_should_run_redir_pipeline_without_cmd)
 	free(diff_result);
 	free(outfile);
 }
+
+MU_TEST(funtion_should_run_heredoc_single_quote_eof_not_expanding_vars)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 30: cat << ' EOF ' cat");
+	printf("\n------------------------\n");
+
+	result = exec_command("< ./files/test_hdoc_vars_single_quote.txt ./minishell", 1);
+	expected = exec_command("bash -c cat << ' EOF '\n\"$USER\"\n'$USER'\n$USR\n$\"USER\"\n$'USER'\n\"'$USER'\"\n'\"$USER\"'\n$USERoi\noi$USER\n$\n$?\nEOF\n EOF \n", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_run_heredoc_double_quote_eof_not_expanding_vars)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 31: cat << \"E O F\" cat");
+	printf("\n------------------------\n");
+
+	result = exec_command("< ./files/test_hdoc_vars_double_quote.txt ./minishell", 1);
+	expected = exec_command("bash -c cat << \"E O F\"\n\"$USER\"\n'$USER'\n$USR\n$\"USER\"\n$'USER'\n\"'$USER'\"\n'\"$USER\"'\n$USERoi\noi$USER\n$\n$?\nEOF\nE O F\n", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
 //MU_TEST(funtion_should_create_outfile_and_run_2nd_command)
 //{
 //	char    *expected = "Files ../outfile6 and ../outfile_expected6 are identical\n";
@@ -822,6 +857,8 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(funtion_should_run_command_echo_tr_with_invalid_infile);
 	MU_RUN_TEST(funtion_should_run_heredocs_with_pipe_and_exit_code);
 	MU_RUN_TEST(function_should_run_redir_pipeline_without_cmd);
+	MU_RUN_TEST(funtion_should_run_heredoc_single_quote_eof_not_expanding_vars);
+	MU_RUN_TEST(funtion_should_run_heredoc_double_quote_eof_not_expanding_vars);
 //	MU_RUN_TEST(funtion_should_run_command_ls_l_wc_l);
 //	MU_RUN_TEST(funtion_should_run_command_grep_a1_wc_w);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);

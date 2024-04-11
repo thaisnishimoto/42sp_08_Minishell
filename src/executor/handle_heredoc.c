@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 22:55:27 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 22:59:52 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	handle_heredoc(t_node *node)
 				if (!get_heredoc_content(redir))
 					return (0);
 			}
-			redir=redir->next;
+			redir = redir->next;
 		}
 	}
 	else

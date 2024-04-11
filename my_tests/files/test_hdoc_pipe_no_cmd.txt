@@ -1,0 +1,5 @@
+<< EOF > ./files/outfile4 | << EOF1 > ./files/outfile5
+$?
+EOF
+$?
+EOF1

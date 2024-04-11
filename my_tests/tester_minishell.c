@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 15:10:16 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 22:46:53 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -589,6 +589,40 @@ MU_TEST(funtion_should_run_heredocs_with_pipe_and_exit_code)
 	free(expected);
 }
 
+MU_TEST(function_should_run_redir_pipeline_without_cmd)
+{
+	char	*result;
+	char	*expected;
+	char    *expected4 = "Files ./files/outfile4 and ./files/outfile4_expected are identical\n";
+	char    *expected5 = "Files ./files/outfile5 and ./files/outfile5_expected are identical\n";
+	char	*diff_result;
+	char    *outfile;
+
+	printf("\n------------------------\n");
+	printf(" TEST 29: << EOF > outfile4 | << EOF2 > outfile5");
+	printf("\n------------------------\n");
+
+	result = exec_command("< ./files/test_hdoc_pipe_no_cmd.txt ./minishell", 1);
+	expected = exec_command("bash -c << EOF > ./files/outfile4_expected | << EOF1 > ./files/outfile5_expected\n$?\nEOF\n$?\nEOF1\n", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+
+	diff_result = exec_command("diff -s ./files/outfile4 ./files/outfile4_expected", 0);
+	outfile = exec_command("cat ./files/outfile4", 0);
+	ft_printf("Outfile 4: %s", outfile);
+	mu_assert_string_eq(expected4, diff_result);
+	free(diff_result);
+	free(outfile);
+
+	diff_result = exec_command("diff -s ./files/outfile5 ./files/outfile5_expected", 0);
+	outfile = exec_command("cat ./files/outfile5", 0);
+	ft_printf("Outfile 5: %s", outfile);
+	mu_assert_string_eq(expected5, diff_result);
+	free(diff_result);
+	free(outfile);
+}
 //MU_TEST(funtion_should_create_outfile_and_run_2nd_command)
 //{
 //	char    *expected = "Files ../outfile6 and ../outfile_expected6 are identical\n";
@@ -787,6 +821,7 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(function_should_run_out_redir_mid_pipeline);
 	MU_RUN_TEST(funtion_should_run_command_echo_tr_with_invalid_infile);
 	MU_RUN_TEST(funtion_should_run_heredocs_with_pipe_and_exit_code);
+	MU_RUN_TEST(function_should_run_redir_pipeline_without_cmd);
 //	MU_RUN_TEST(funtion_should_run_command_ls_l_wc_l);
 //	MU_RUN_TEST(funtion_should_run_command_grep_a1_wc_w);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);

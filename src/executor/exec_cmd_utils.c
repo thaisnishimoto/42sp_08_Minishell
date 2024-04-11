@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 14:17:17 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 23:00:15 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ void	ft_exit_child_process(int exit_code)
 	exit(exit_code);
 }
 
-void	wait_for_cmd_process(pid_t pid, char *cmd)
+void	wait_for_cmd_process(pid_t pid, t_list *cmd_args)
 {
-	int	wstatus;
+	int		wstatus;
 	char	*msg;
 
 	waitpid(pid, &wstatus, 0);
@@ -69,13 +69,13 @@ void	wait_for_cmd_process(pid_t pid, char *cmd)
 		update_exit_code(WTERMSIG(wstatus));
 	if (get_exit_code() == 126)
 	{
-		msg = ft_strjoin(cmd, ": Permission denied");
+		msg = ft_strjoin(cmd_args->content, ": Permission denied");
 		ft_putendl_fd(msg, 2);
 		free(msg);
 	}
 	else if (get_exit_code() == 127)
 	{
-		msg = ft_strjoin(cmd, ": command not found");
+		msg = ft_strjoin(cmd_args->content, ": command not found");
 		ft_putendl_fd(msg, 2);
 		free(msg);
 	}

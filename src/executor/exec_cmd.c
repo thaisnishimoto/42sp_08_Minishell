@@ -6,13 +6,13 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/10 17:53:59 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/10 23:19:45 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	**get_path(void)
+static char	**get_path(void)
 {
 	char	*path_value;
 	char	**path;
@@ -38,7 +38,7 @@ char	**get_path(void)
 	return (path);
 }
 
-char	*find_pathname(char **path, char *cmd)
+static char	*find_pathname(char **path, char *cmd)
 {
 	int		i;
 	char	*pathname;
@@ -66,7 +66,7 @@ char	*find_pathname(char **path, char *cmd)
 	return (pathname);
 }
 
-char	*search_executable(char *cmd)
+static char	*search_executable(char *cmd)
 {
 	char	**path;
 	char	*pathname;
@@ -88,7 +88,7 @@ char	*search_executable(char *cmd)
 	return (pathname);
 }
 
-char	**create_cmd_arg_vector(t_list *cmd_args)
+static char	**create_cmd_arg_vector(t_list *cmd_args)
 {
 	t_list	*temp;
 	char	**cmd_argv;
@@ -118,6 +118,8 @@ void	exec_cmd(t_list *cmd_args)
 	char	**cmd_argv;
 	char	*pathname;
 
+	if (cmd_args == NULL)
+		return ;
 	cmd_argv = create_cmd_arg_vector(cmd_args);
 	pathname = search_executable(cmd_argv[0]);
 	if (pathname != NULL)

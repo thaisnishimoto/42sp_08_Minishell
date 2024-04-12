@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/11 15:50:13 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/12 13:05:22 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static char	**get_path(void)
 	int		i;
 
 	path = NULL;
-	path_value = ft_getenv("PATH");
+	// path_value = ft_getenv("PATH");
+	path_value = hashtable_search("PATH")->value;
 	if (path_value)
 	{
 		path = ft_split(path_value, ':');

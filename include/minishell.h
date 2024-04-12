@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/11 15:56:27 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/12 13:31:35 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
+# include <stdio.h> // EXCLUIR
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h> //pipe, dup, access, execve, fork
@@ -41,8 +41,9 @@
 
 typedef struct s_env
 {
-	char			*name;
+	char			*key;
 	char			*value;
+	char			*sign;
 	struct s_env	*next;
 }	t_env;
 
@@ -81,19 +82,42 @@ char			*prompt(char *symbol);
 char			**tokenizer(char *input);
 t_node			*parser(char *tokens[]);
 
-//environ hashtable functions
-t_env			**static_environ_htable(t_env *new_var, char *name, int mode);
-void			load_environ_hashtable(char *envp[]);
-char			*ft_getenv(char *name);
-t_env			*create_environ(char *name, char *value);
+// //environ hashtable functions
+// t_env			**static_environ_htable(t_env *new_var, char *name, int mode);
+// void			load_environ_hashtable(char *envp[]);
+// char			*ft_getenv(char *name);
+// t_env			*create_environ(char *name, char *value);
 
-//hashtable utils functions
-void			hashtable_init(t_env *hashtable[]);
-t_env			*hashtable_search(t_env *hashtable[], char *name);
-void			hashtable_delete(t_env *hashtable[], char *name);
-void			hashtable_insert_replace(t_env *hashtable[], t_env *new_var);
-void			hashtable_free(t_env *hashtable[]);
-void			print_hashtable(t_env *hashtable[]);
+// //hashtable utils functions
+// void			hashtable_init(t_env *hashtable[]);
+// t_env			*hashtable_search(t_env *hashtable[], char *name);
+// void			hashtable_delete(t_env *hashtable[], char *name);
+// void			hashtable_insert_replace(t_env *hashtable[], t_env *new_var);
+// void			hashtable_free(t_env *hashtable[]);
+// void			print_hashtable(t_env *hashtable[]);
+
+//-------------------------------------------//
+
+//new hashtable functions
+void			hashtable_load(char **envp);
+t_env			**hashtable_mx(t_env *new, char *key, int mode);
+void			hashtable_init(t_env *hash[]);
+void			hashtable_delete(t_env *hash[], char *key);
+void			hashtable_insert_replace(t_env *hash[], t_env *new);
+void			hashtable_print(t_env *hash[]);
+void			hashtable_free_hash(t_env *hash[]);
+void			hashtable_free_node(t_env *list);
+void			hashtable_free_content(t_env *env);
+t_env			*hashtable_create_node_type1(char *env);
+t_env			*hashtable_create_node_type2(char *key, char *value);
+t_env			*hashtable_search(char *key);
+int				hashtable_count_content(void);
+char			**hashtable_key_mtx(void);
+
+//builtin
+void			env_call(t_cmd *cmd_node);
+
+//-------------------------------------------//
 
 //tokenizer and syntax utils
 int				validate_quotes(char *input);

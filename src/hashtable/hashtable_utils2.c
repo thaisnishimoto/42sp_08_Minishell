@@ -3,57 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   hashtable_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 16:11:21 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/01 16:04:58 by tmina-ni         ###   ########.fr       */
+/*   Created: 2024/03/31 11:59:16 by mchamma           #+#    #+#             */
+/*   Updated: 2024/04/12 13:07:25 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	hashtable_free(t_env *hashtable[])
+int	hashtable_count_content(void)
 {
-	int		i;
+	t_env	**hash;
 	t_env	*temp;
+	int		count;
+	int		i;
 
+	hash = hashtable_mx(NULL, NULL, READ);
+	count = 0;
 	i = 0;
 	while (i < TABLE_SIZE)
 	{
-		while (hashtable[i])
+		temp = hash[i];
+		while (temp)
 		{
-			temp = hashtable[i]->next;
-			free(hashtable[i]->name);
-			free(hashtable[i]->value);
-			free(hashtable[i]);
-			hashtable[i] = temp;
+			count++;
+			temp = temp->next;
 		}
 		i++;
 	}
+	return (count);
 }
 
-void	print_hashtable(t_env *hashtable[])
+char	**hashtable_key_mtx(void)
 {
-	int		i;
+	t_env	**hash;
 	t_env	*temp;
+	char	**key;
+	int		i;
+	int		j;
 
-	printf("\nSTART OF TABLE\n");
+	hash = hashtable_mx(NULL, NULL, READ);
+	key = ft_calloc(hashtable_count_content() + 1, sizeof(char *));
+	j = 0;
 	i = 0;
 	while (i < TABLE_SIZE)
 	{
-		if (hashtable[i])
+		temp = hash[i];
+		while (temp)
 		{
-			temp = hashtable[i];
-			while (temp)
-			{
-				printf("%d: %s=%s <-> ", i, temp->name, temp->value);
-				temp = temp->next;
-			}
-			printf("\n");
+			key[j++] = ft_strdup(temp->key);
+			temp = temp->next;
 		}
-		else
-			printf("%d: --empty--\n", i);
 		i++;
 	}
-	printf("END OF TABLE\n");
+	return (key);
 }

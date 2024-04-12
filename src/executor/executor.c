@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/11 15:57:46 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/12 14:47:39 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ static void	exec_pipeline(t_node *node)
 
 void	executor(t_node *node)
 {
+	t_cmd	*cmd_node;
+
+	cmd_node = (t_cmd *)node;
 	if (node == NULL)
 		return ;
 	if (!handle_heredoc(node))
@@ -64,6 +67,12 @@ void	executor(t_node *node)
 		//exec_redir in parent
 		//exec buiiltin
 		//reset fds to stdin and stdout
+		if (ft_strcmp("env", cmd_node->cmd_args->content) == 0)
+		{
+			printf("env found\n");
+			env_call(cmd_node);
+		}
+
 		exec_simple_cmd(node);
 	}
 	else if (node->type == PIPE)

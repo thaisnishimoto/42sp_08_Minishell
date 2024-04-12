@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/11 16:14:38 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/12 13:00:08 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	*process_quotes(char *token_substr, int nested)
 
 char	*expand_env(char *token)
 {
-	t_env	**hashtable;
+	// t_env	**hashtable;
 	t_env	*result;
 	char	*env_value;
 
@@ -72,8 +72,9 @@ char	*expand_env(char *token)
 		env_value = ft_itoa(last_exit_code(-1));
 	else
 	{
-		hashtable = static_environ_htable(NULL, NULL, READ);
-		result = hashtable_search(hashtable, &token[1]);
+		// hashtable = static_environ_htable(NULL, NULL, READ);
+		// result = hashtable_search(hashtable, &token[1]);
+		result = hashtable_search(&token[1]);
 		if (result)
 			env_value = ft_strdup(result->value);
 		else

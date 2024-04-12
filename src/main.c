@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/11 16:17:23 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/11 17:56:32 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,8 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		input = prompt("$ ");
-		if (input && ft_strncmp(input, "exit", ft_strlen(input)) == 0)
-		{
-			free(input);
-			break ;
-		}
+		if (!input)
+			input = strdup("exit");	
 		tokens = tokenizer(input);
 		ast = parser(tokens);
 		static_ast_holder(ast, INIT);
@@ -42,6 +39,5 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	static_environ_htable(NULL, NULL, FREE);
 	rl_clear_history();
-//	return (last_exit_code(-1));
-	return (0);
+	return (last_exit_code(-1));
 }

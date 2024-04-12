@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/11 15:49:51 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/12 00:30:15 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@ static char	*create_tmp_filename(void)
 	return (filename);
 }
 
+static void	handle_hdoc_ctrl_d(char *expected_eof)
+{
+	ft_putstr_fd("minishell: warning: here-document delimited by"
+		"end-of-file (wanted '", 2);
+	ft_putstr_fd(expected_eof, 2);
+	ft_putendl_fd("')", 2);
+}
+
 static int	get_heredoc_content(t_redir *node)
 {
 	int		heredoc_fd;
@@ -39,13 +47,15 @@ static int	get_heredoc_content(t_redir *node)
 		return (0);
 	}
 	buffer = expand_hdoc(prompt("> "), node);
-	while (ft_strncmp(buffer, node->eof, ft_strlen(node->eof) + 1) != 0)
+	if (!buffer)
+		handle_hdoc_ctrl_d(node->eof);
+	while (buffer && ft_strcmp(buffer, node->eof) != 0)
 	{
-//		if (!input)
-//			ft_putchar_fd('\n', 1);
 		ft_putendl_fd(buffer, heredoc_fd);
 		free(buffer);
 		buffer = expand_hdoc(prompt("> "), node);
+		if (!buffer)
+			handle_hdoc_ctrl_d(node->eof);
 	}
 	free(buffer);
 	close(heredoc_fd);

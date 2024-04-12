@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 00:30:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/12 17:57:47 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,6 @@ static char	*create_tmp_filename(void)
 	filename = ft_strjoin("/tmp/hdoc", file_id);
 	free(file_id);
 	return (filename);
-}
-
-static void	handle_hdoc_ctrl_d(char *expected_eof)
-{
-	ft_putstr_fd("minishell: warning: here-document delimited by"
-		"end-of-file (wanted '", 2);
-	ft_putstr_fd(expected_eof, 2);
-	ft_putendl_fd("')", 2);
 }
 
 static int	get_heredoc_content(t_redir *node)
@@ -62,6 +54,29 @@ static int	get_heredoc_content(t_redir *node)
 	return (1);
 }
 
+static int	fork_heredoc(t_redir *node)
+{
+	pid_t	pid;
+	int		wstatus;
+
+	pid = ft_fork();
+	if (pid < 0)
+		return (0);
+	if (pid == 0)
+	{
+		set_hdoc_signal(pid);
+		if (!get_heredoc_content(node))
+			last_exit_code(EXIT_FAILURE);
+		exit (last_exit_code(-1));
+	}
+	waitpid(pid, &wstatus, 0);
+	if (WIFEXITED(wstatus))
+		last_exit_code(WEXITSTATUS(wstatus));
+	else if (WIFSIGNALED(wstatus))
+		last_exit_code(WTERMSIG(wstatus));
+	return (1);
+}
+
 int	handle_heredoc(t_node *node)
 {
 	t_redir	*redir;
@@ -73,7 +88,7 @@ int	handle_heredoc(t_node *node)
 		{
 			if (redir->type == HEREDOC)
 			{
-				if (!get_heredoc_content(redir))
+				if (!fork_heredoc(redir))
 					return (0);
 			}
 			redir = redir->next;

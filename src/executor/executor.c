@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 14:47:39 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/12 17:39:56 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ static void	exec_simple_cmd(t_node *node)
 		return ;
 	if (pid == 0)
 	{
+//		set_hdoc_signal(pid);
+		ft_putstr_fd("child sleeping\n", 2);
+		sleep(10);
 		if (exec_redir(cmd_node->redirs))
 			exec_cmd((t_list *)cmd_node->cmd_args);
 		ft_exit_child_process(last_exit_code(-1));
@@ -72,7 +75,6 @@ void	executor(t_node *node)
 			printf("env found\n");
 			env_call(cmd_node);
 		}
-
 		exec_simple_cmd(node);
 	}
 	else if (node->type == PIPE)

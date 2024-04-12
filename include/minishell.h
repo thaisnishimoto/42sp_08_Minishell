@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 13:31:35 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/12 17:36:43 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h> // EXCLUIR
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h> //pipe, dup, access, execve, fork
@@ -82,23 +81,13 @@ char			*prompt(char *symbol);
 char			**tokenizer(char *input);
 t_node			*parser(char *tokens[]);
 
-// //environ hashtable functions
-// t_env			**static_environ_htable(t_env *new_var, char *name, int mode);
-// void			load_environ_hashtable(char *envp[]);
-// char			*ft_getenv(char *name);
-// t_env			*create_environ(char *name, char *value);
+//signals
+void			init_signal(void);
+void			sigint_handler(int signum);
+void			set_hdoc_signal(pid_t pid);
+void			handle_hdoc_ctrl_d(char *expected_eof);
 
-// //hashtable utils functions
-// void			hashtable_init(t_env *hashtable[]);
-// t_env			*hashtable_search(t_env *hashtable[], char *name);
-// void			hashtable_delete(t_env *hashtable[], char *name);
-// void			hashtable_insert_replace(t_env *hashtable[], t_env *new_var);
-// void			hashtable_free(t_env *hashtable[]);
-// void			print_hashtable(t_env *hashtable[]);
-
-//-------------------------------------------//
-
-//new hashtable functions
+//environ hashtable functions
 void			hashtable_load(char **envp);
 t_env			**hashtable_mx(t_env *new, char *key, int mode);
 void			hashtable_init(t_env *hash[]);
@@ -116,8 +105,6 @@ char			**hashtable_key_mtx(void);
 
 //builtin
 void			env_call(t_cmd *cmd_node);
-
-//-------------------------------------------//
 
 //tokenizer and syntax utils
 int				validate_quotes(char *input);

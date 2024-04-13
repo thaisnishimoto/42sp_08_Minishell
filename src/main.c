@@ -6,11 +6,13 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 15:43:30 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/13 12:37:03 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	g_signum;
 
 int	main(int argc, char *argv[], char *envp[])
 {
@@ -20,21 +22,22 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)argc;
 	(void)argv;
-	init_signal();
 	hashtable_load(envp);
-//	tokens = NULL;
-//	ast = NULL; 
 	while (1)
 	{
+		set_signals_interactive_mode();
 		input = prompt("$ ");
 		if (!input)
+		{
 			input = strdup("exit");	
+			break ;
+		}
 		tokens = tokenizer(input);
 		ast = parser(tokens);
 		static_ast_holder(ast, INIT);
 		executor(ast);
 		static_ast_holder(NULL, FREE);
-		break ;
+//		break ;
 	}
 	hashtable_mx(NULL, NULL, FREE);
 	rl_clear_history();

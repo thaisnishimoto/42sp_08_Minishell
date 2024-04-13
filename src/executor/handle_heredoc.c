@@ -6,78 +6,94 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 17:57:47 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/13 12:33:21 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static char	*create_tmp_filename(void)
+static char	*open_tmp_filename(int *hdoc_fd)
 {
+	static int	num;
 	char		*filename;
 	char		*file_id;
-	static int	num;
 
 	num++;
 	file_id = ft_itoa(num);
 	filename = ft_strjoin("/tmp/hdoc", file_id);
 	free(file_id);
+	*hdoc_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	if (*hdoc_fd < 0)
+	{
+		perror(filename);
+		free(filename);
+		filename = NULL;
+		last_exit_code(EXIT_FAILURE);
+	}
 	return (filename);
 }
 
-static int	get_heredoc_content(t_redir *node)
+static void	get_heredoc_content(t_redir *node, int hdoc_fd)
 {
-	int		heredoc_fd;
 	char	*buffer;
 
-	node->filename = create_tmp_filename();
-	heredoc_fd = open(node->filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	if (heredoc_fd < 0)
+	buffer = expand_hdoc(prompt("> "), node);
+	signal_received(buffer, node->eof, hdoc_fd);
+	while (buffer && ft_strncmp(buffer, node->eof, ft_strlen(node->eof) + 1) != 0)
 	{
-		perror(node->filename);
+		ft_putendl_fd(buffer, hdoc_fd);
+//		ft_putendl_fd(buffer, 1);
+		free(buffer);
+		buffer = expand_hdoc(prompt("> "), node);
+		signal_received(buffer, node->eof, hdoc_fd);
+	}
+	free(buffer);
+	close(hdoc_fd);
+}
+
+static int	wait_for_hdoc_process(pid_t pid)
+{
+	int		wstatus;
+
+	if (waitpid(pid, &wstatus, 0) == -1)
+	{
+		perror("waitpid error");
 		last_exit_code(EXIT_FAILURE);
 		return (0);
 	}
-	buffer = expand_hdoc(prompt("> "), node);
-	if (!buffer)
-		handle_hdoc_ctrl_d(node->eof);
-	while (buffer && ft_strcmp(buffer, node->eof) != 0)
-	{
-		ft_putendl_fd(buffer, heredoc_fd);
-		free(buffer);
-		buffer = expand_hdoc(prompt("> "), node);
-		if (!buffer)
-			handle_hdoc_ctrl_d(node->eof);
-	}
-	free(buffer);
-	close(heredoc_fd);
-	return (1);
-}
-
-static int	fork_heredoc(t_redir *node)
-{
-	pid_t	pid;
-	int		wstatus;
-
-	pid = ft_fork();
-	if (pid < 0)
-		return (0);
-	if (pid == 0)
-	{
-		set_hdoc_signal(pid);
-		if (!get_heredoc_content(node))
-			last_exit_code(EXIT_FAILURE);
-		exit (last_exit_code(-1));
-	}
-	waitpid(pid, &wstatus, 0);
 	if (WIFEXITED(wstatus))
 		last_exit_code(WEXITSTATUS(wstatus));
 	else if (WIFSIGNALED(wstatus))
-		last_exit_code(WTERMSIG(wstatus));
+		last_exit_code(128 + WTERMSIG(wstatus));
+	if (last_exit_code(-1) >= 130)
+		return (0); 
 	return (1);
 }
 
-int	handle_heredoc(t_node *node)
+static int	exec_heredoc(t_redir *node)
+{
+	int		heredoc_fd;
+	pid_t	pid;
+
+	node->filename = open_tmp_filename(&heredoc_fd);
+	if (node->filename == NULL)
+		return (0);
+	pid = ft_fork();
+	if (pid < 0)
+		return (0);
+	set_signals_hdoc(pid);
+	if (pid == 0)
+	{
+		get_heredoc_content(node, heredoc_fd);
+		ft_exit_child_process(last_exit_code(-1));
+	}
+	close(heredoc_fd);
+	if (!wait_for_hdoc_process(pid))
+		return (0);
+	return (1);
+}
+
+int	handle_heredocs(t_node *node)
 {
 	t_redir	*redir;
 
@@ -88,7 +104,7 @@ int	handle_heredoc(t_node *node)
 		{
 			if (redir->type == HEREDOC)
 			{
-				if (!fork_heredoc(redir))
+				if (!exec_heredoc(redir))
 					return (0);
 			}
 			redir = redir->next;
@@ -96,9 +112,9 @@ int	handle_heredoc(t_node *node)
 	}
 	else
 	{
-		if (!handle_heredoc(((t_pipe *)node)->left))
+		if (!handle_heredocs(((t_pipe *)node)->left))
 			return (0);
-		if (!handle_heredoc(((t_pipe *)node)->right))
+		if (!handle_heredocs(((t_pipe *)node)->right))
 			return (0);
 	}
 	return (1);

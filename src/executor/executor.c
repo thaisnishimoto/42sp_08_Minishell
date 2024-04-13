@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 17:39:56 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/13 10:37:14 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ static void	exec_simple_cmd(t_node *node)
 	pid = ft_fork();
 	if (pid < 0)
 		return ;
+	//set_signals_exec_mode(pid);
 	if (pid == 0)
 	{
-//		set_hdoc_signal(pid);
-		ft_putstr_fd("child sleeping\n", 2);
-		sleep(10);
+//		ft_putstr_fd("child sleeping\n", 2);
+//		sleep(3);
 		if (exec_redir(cmd_node->redirs))
 			exec_cmd((t_list *)cmd_node->cmd_args);
 		ft_exit_child_process(last_exit_code(-1));
@@ -57,12 +57,12 @@ static void	exec_pipeline(t_node *node)
 
 void	executor(t_node *node)
 {
-	t_cmd	*cmd_node;
+//	t_cmd	*cmd_node;
 
-	cmd_node = (t_cmd *)node;
+//	cmd_node = (t_cmd *)node;
 	if (node == NULL)
 		return ;
-	if (!handle_heredoc(node))
+	if (!handle_heredocs(node))
 		return ;
 	if (node->type == CMD)
 	{
@@ -70,11 +70,11 @@ void	executor(t_node *node)
 		//exec_redir in parent
 		//exec buiiltin
 		//reset fds to stdin and stdout
-		if (ft_strcmp("env", cmd_node->cmd_args->content) == 0)
-		{
-			printf("env found\n");
-			env_call(cmd_node);
-		}
+	//	if (ft_strcmp("env", cmd_node->cmd_args->content) == 0)
+	//	{
+	//		printf("env found\n");
+	//		env_call(cmd_node);
+	//	}
 		exec_simple_cmd(node);
 	}
 	else if (node->type == PIPE)

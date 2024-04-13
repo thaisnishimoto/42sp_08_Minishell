@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 17:36:43 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/13 02:58:05 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # define PRINT 5
 
 # define TABLE_SIZE 97
+
+extern int	g_signum;
 
 typedef struct s_env
 {
@@ -82,10 +84,12 @@ char			**tokenizer(char *input);
 t_node			*parser(char *tokens[]);
 
 //signals
-void			init_signal(void);
-void			sigint_handler(int signum);
-void			set_hdoc_signal(pid_t pid);
+void			set_signals_interactive_mode(void);
+void			sigint_display_new_prompt(int signum);
+void			set_signals_exec_mode(pid_t pid);
+void			set_signals_hdoc(pid_t pid);
 void			handle_hdoc_ctrl_d(char *expected_eof);
+void			signal_received(char *buffer, char *expected_eof, int hdoc_fd);
 
 //environ hashtable functions
 void			hashtable_load(char **envp);
@@ -129,7 +133,7 @@ char			*ft_rejoin_substr(char *token_substr[]);
 
 //executor functions
 void			executor(t_node *node);
-int				handle_heredoc(t_node *node);
+int				handle_heredocs(t_node *node);
 char			*expand_hdoc(char *buffer, t_redir *node);
 void			exec_cmd(t_list *cmd_args);
 void			first_cmd_pipeline(t_node *node, int *pipe_fd);

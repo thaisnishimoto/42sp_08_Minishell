@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 13:06:42 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/13 09:48:15 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,16 @@ void	wait_for_cmd_process(pid_t pid, t_list *cmd_args)
 	int		wstatus;
 	char	*msg;
 
-	waitpid(pid, &wstatus, 0);
+	if (waitpid(pid, &wstatus, 0) == -1)
+	{
+		perror("waitpid error");
+		last_exit_code(EXIT_FAILURE);
+		return ;
+	}
 	if (WIFEXITED(wstatus))
 		last_exit_code(WEXITSTATUS(wstatus));
 	else if (WIFSIGNALED(wstatus))
-		last_exit_code(WTERMSIG(wstatus));
+		last_exit_code(128 + WTERMSIG(wstatus));
 	if (last_exit_code(-1) == 126)
 	{
 		msg = ft_strjoin(cmd_args->content, ": Permission denied");

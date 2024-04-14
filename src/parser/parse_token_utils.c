@@ -3,100 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   parse_token_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 13:52:24 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/14 15:02:18 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	count_token_substr(char *token)
+char	*process_quotes(char *token_substr, int nested)
 {
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (token[i])
+	if (token_substr[0] == '\"')
 	{
-		i += ft_substrlen(&token[i]);
-		count++;
+		token_substr = ft_trim_quotes(token_substr, "\"");
+		token_substr = parse_token(token_substr, 1);
 	}
-	return (count);
+	else if (token_substr[0] == '\'')
+	{
+		token_substr = ft_trim_quotes(token_substr, "\'");
+		if (nested)
+		{
+			token_substr = parse_token(token_substr, 1);
+			token_substr = ft_add_single_quote(token_substr);
+		}
+	}
+	return (token_substr);
 }
 
-size_t	ft_substrlen(char *str)
+char	*expand_env(char *token)
 {
-	size_t	len;
+	t_env	*result;
+	char	*env_value;
 
-	len = 0;
-	if (str[len] == '\'' || str[len] == '\"')
-	{
-		len += substr_quote(&str[len]);
-		return (len);
-	}
-	else if (str[len] == '$')
-	{
-		len++;
-		if (str[len] == '\'' || str[len] == '\"')
-			len += substr_quote(&str[len]);
-		else
-			len += substr_env_name(&str[len]);
-		return (len);
-	}
+	if (token[1] == '\'' || token[1] == '\"')
+		env_value = ft_trim_quotes(ft_strdup(&token[1]), "\"\'");
+	else if (token[1] == '?')
+		env_value = ft_itoa(last_exit_code(-1));
+	else if (ft_isdigit(token[1]))
+		env_value = ft_strdup(&token[2]);
 	else
 	{
-		while (str[len] && !ft_strchr("\'\"$", str[len]))
-			len++;
-		return (len);
+		result = hashtable_search(&token[1]);
+		if (result)
+			env_value = ft_strdup(result->value);
+		else
+			env_value = ft_strdup("");
 	}
-}
-
-size_t	substr_env_name(char *str)
-{
-	size_t	len;
-
-	len = 0;
-	while (ft_isalnum(str[len]) || str[len] == '_' || str[len] == '?')
-		len++;
-	return (len);
-}
-
-char	*ft_trim_quotes(char *str, const char *set)
-{
-	size_t	start;
-	size_t	end;
-	size_t	trim_len;
-	char	*ptr;
-
-	if (str == NULL || set == NULL)
-		return (NULL);
-	start = 0;
-	end = ft_strlen(str);
-	if (ft_strchr(set, str[start]) && start < end)
-		start++;
-	if (ft_strrchr(set, str[end - 1]) && end > start)
-		end--;
-	trim_len = end - start;
-	ptr = malloc((trim_len + 1) * sizeof(char));
-	if (ptr)
-		ft_strlcpy(ptr, &str[start], trim_len + 1);
-	free(str);
-	return (ptr);
-}
-
-char	*ft_add_single_quote(char *token_substr)
-{
-	char	*result;
-	char	*temp;
-
-	if (token_substr == NULL)
-		return (NULL);
-	temp = ft_strjoin("\'", token_substr);
-	free(token_substr);
-	result = ft_strjoin(temp, "\'");
-	free(temp);
-	return (result);
+	free(token);
+	return (env_value);
 }

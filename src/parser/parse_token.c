@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 13:53:18 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/14 14:58:49 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,46 +41,15 @@ static char	**ft_split_concat_token(char *token)
 	return (token_substr);
 }
 
-static char	*process_quotes(char *token_substr, int nested)
+static char	*process_substr(char *token_substr, int nested)
 {
-	if (token_substr[0] == '\"')
-	{
-		token_substr = ft_trim_quotes(token_substr, "\"");
-		token_substr = parse_token(token_substr, 1);
-	}
-	else if (token_substr[0] == '\'')
-	{
-		token_substr = ft_trim_quotes(token_substr, "\'");
-		if (nested)
-		{
-			token_substr = parse_token(token_substr, 1);
-			token_substr = ft_add_single_quote(token_substr);
-		}
-	}
+	if (ft_strchr("\"\'", token_substr[0]))
+		token_substr = process_quotes(token_substr, nested);
+	else if (token_substr[0] == '~' && token_substr[1] == '\0')
+		token_substr = expand_env(ft_strdup("$HOME"));
+	else if (token_substr[0] == '$' && token_substr[1] != '\0')
+		token_substr = expand_env(token_substr);
 	return (token_substr);
-}
-
-char	*expand_env(char *token)
-{
-	t_env	*result;
-	char	*env_value;
-
-	if (token[1] == '\'' || token[1] == '\"')
-		env_value = ft_trim_quotes(ft_strdup(&token[1]), "\"\'");
-	else if (token[1] == '?')
-		env_value = ft_itoa(last_exit_code(-1));
-	else if (ft_isdigit(token[1]))
-		env_value = ft_strdup(&token[2]);
-	else
-	{
-		result = hashtable_search(&token[1]);
-		if (result)
-			env_value = ft_strdup(result->value);
-		else
-			env_value = ft_strdup("");
-	}
-	free(token);
-	return (env_value);
 }
 
 char	*ft_rejoin_substr(char *token_substr[])
@@ -113,18 +82,16 @@ char	*parse_token(char *token, int nested)
 	token_substr = ft_split_concat_token(token);
 	if (token_substr == NULL)
 		return (NULL);
-	i = -1;
-	while (token_substr[++i])
+	i = 0;
+	while (token_substr[i])
 	{
-		if (ft_strchr("\"\'", token_substr[i][0]))
-			token_substr[i] = process_quotes(token_substr[i], nested);
-		else if (token_substr[i][0] == '$' && token_substr[i][1] != '\0')
-			token_substr[i] = expand_env(token_substr[i]);
+		token_substr[i] = process_substr(token_substr[i], nested);
 		if (token_substr[i] == NULL)
 		{
 			ft_free_matrix(token_substr);
 			return (NULL);
 		}
+		i++;
 	}
 	return (ft_rejoin_substr(token_substr));
 }

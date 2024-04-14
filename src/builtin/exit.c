@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:37 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/12 21:24:17 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 13:27:54 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,31 +29,30 @@ int	str_is_int(char *str)
 	return (1);
 }
 
-int	exit_call(t_cmd *cmd_node)
+void    exit_call(t_cmd *cmd_node)
 {
 	t_list	*arg;
-	int		exit_code;
 
-	exit_code = -1;
 	arg = (t_list *)cmd_node->cmd_args->next;
-	printf("exit\n");
-	if (arg && !str_is_int((char *)arg->content))
+	ft_putendl_fd("exit", 2);
+	if (arg && !str_is_int(arg->content))
 	{
-		exit_code = 2;
-		printf("bash: exit: %s: numeric argument required\n",
-			(char *)arg->content);
+		last_exit_code(2);
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(arg->content, 2);
+		ft_putendl_fd(": numeric argument required", 2);
 	}
 	else if (arg && arg->next)
-		printf("bash: exit: too many arguments\n");
-	else if (!arg || (arg && str_is_int((char *)arg->content)))
 	{
-		printf("\n");
-		if (!arg)
-			exit_code = 0;
-		else
-			exit_code = (ft_atoi((char *)arg->content) % 256)
-				+ 256 * (1 - (ft_atoi((char *)arg->content) >= 0));
+		last_exit_code(EXIT_FAILURE);
+		ft_putendl_fd("minishell: exit: too many arguments", 2);
+		return ;
 	}
-	// printf("exit_code: %i\n", exit_code);
-	return (exit_code);
+	else if (arg)
+	{
+		printf("teste\n");
+		last_exit_code(ft_atoi(arg->content) % 256
+			+ 256 * (1 - (ft_atoi(arg->content) >= 0)));
+	}
+	ft_free_exit();
 }

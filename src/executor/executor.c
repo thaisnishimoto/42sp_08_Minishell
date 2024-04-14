@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/13 23:12:57 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/14 12:44:25 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	executor(t_node *node)
 		else if (!ft_strcmp("env", cmd_node->cmd_args->content))
 			env_call(cmd_node);
 		else if (!ft_strcmp("exit", cmd_node->cmd_args->content))
-			printf("exit_code = %i\n", exit_call(cmd_node));
+			exit_call(cmd_node);
 		else if (!ft_strcmp("export", cmd_node->cmd_args->content))
 			export_call(cmd_node);
 		else if (!ft_strcmp("pwd", cmd_node->cmd_args->content))

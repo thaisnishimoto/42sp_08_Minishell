@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/13 10:37:14 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/13 23:12:57 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,9 @@ static void	exec_simple_cmd(t_node *node)
 	pid = ft_fork();
 	if (pid < 0)
 		return ;
-	//set_signals_exec_mode(pid);
+	set_signals_exec_mode(pid);
 	if (pid == 0)
 	{
-//		ft_putstr_fd("child sleeping\n", 2);
-//		sleep(3);
 		if (exec_redir(cmd_node->redirs))
 			exec_cmd((t_list *)cmd_node->cmd_args);
 		ft_exit_child_process(last_exit_code(-1));

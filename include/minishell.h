@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/13 02:58:05 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/13 23:28:56 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,11 @@ t_node			*parser(char *tokens[]);
 
 //signals
 void			set_signals_interactive_mode(void);
-void			sigint_display_new_prompt(int signum);
-void			set_signals_exec_mode(pid_t pid);
 void			set_signals_hdoc(pid_t pid);
-void			handle_hdoc_ctrl_d(char *expected_eof);
-void			signal_received(char *buffer, char *expected_eof, int hdoc_fd);
+void			set_signals_exec_mode(pid_t pid);
+void			handle_display_new_prompt(int signum);
+void			handle_hdoc_sigint(int signum);
+void			handle_if_signaled(char *buffer, char *expected_eof, int hdoc_fd);
 
 //environ hashtable functions
 void			hashtable_load(char **envp);

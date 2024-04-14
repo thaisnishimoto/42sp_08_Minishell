@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:00:52 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/11 15:53:53 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/13 20:03:42 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	first_cmd_pipeline(t_node *node, int *pipe_fd)
 	pid = ft_fork();
 	if (pid < 0)
 		return ;
+	set_signals_exec_mode(pid);
 	if (pid == 0)
 	{
 		dup2(pipe_fd[1], STDOUT_FILENO);
@@ -48,6 +49,7 @@ void	middle_cmd_pipeline(t_node *node, int *pipe_fd)
 	pid = ft_fork();
 	if (pid < 0)
 		return ;
+	set_signals_exec_mode(pid);
 	if (pid == 0)
 	{
 		dup2(prev_pipe_fd, STDIN_FILENO);
@@ -72,6 +74,7 @@ void	last_cmd_pipeline(t_node *node, int *pipe_fd)
 	pid = ft_fork();
 	if (pid < 0)
 		return ;
+	set_signals_exec_mode(pid);
 	if (pid == 0)
 	{
 		dup2(pipe_fd[0], STDIN_FILENO);

@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/13 09:48:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/13 22:41:36 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,10 @@ void	ft_exit_child_process(int exit_code)
 void	wait_for_cmd_process(pid_t pid, t_list *cmd_args)
 {
 	int		wstatus;
-	char	*msg;
 
 	if (waitpid(pid, &wstatus, 0) == -1)
 	{
 		perror("waitpid error");
-		last_exit_code(EXIT_FAILURE);
 		return ;
 	}
 	if (WIFEXITED(wstatus))
@@ -75,14 +73,16 @@ void	wait_for_cmd_process(pid_t pid, t_list *cmd_args)
 		last_exit_code(128 + WTERMSIG(wstatus));
 	if (last_exit_code(-1) == 126)
 	{
-		msg = ft_strjoin(cmd_args->content, ": Permission denied");
-		ft_putendl_fd(msg, 2);
-		free(msg);
+		ft_putstr_fd(cmd_args->content, 2);
+		ft_putendl_fd(": Permission denied", 2);
 	}
 	else if (last_exit_code(-1) == 127)
 	{
-		msg = ft_strjoin(cmd_args->content, ": command not found");
-		ft_putendl_fd(msg, 2);
-		free(msg);
+		ft_putstr_fd(cmd_args->content, 2);
+		ft_putendl_fd(": command not found", 2);
 	}
+	else if (last_exit_code(-1) == 130)
+		write(1, "\n", 1);
+	else if (last_exit_code(-1) == 131)
+		ft_putendl_fd("Quit", 2);
 }

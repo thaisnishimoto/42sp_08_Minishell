@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:46:54 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/12 13:07:28 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 18:58:18 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@ void	hashtable_free_content(t_env *env)
 {
 	if (env)
 	{
-		free(env->key);
-		free(env->value);
-		free(env->sign);
+		if (env->key)
+			free(env->key);
+		if (env->value)
+			free(env->value);
+		if (env->sign)
+			free(env->sign);
 		free(env);
 	}
 }

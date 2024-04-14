@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 15:02:46 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/14 19:13:29 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ t_env			*hashtable_search(char *key);
 int				hashtable_count_content(void);
 char			**hashtable_key_mtx(void);
 char			**hashtable_key_mtx_sorted(void);
+char			**hashtable_envp_mtx(void);
 
 //tokenizer and syntax utils
 int				validate_quotes(char *input);

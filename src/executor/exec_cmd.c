@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 13:05:22 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 19:09:22 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,9 @@ static char	**get_path(void)
 	int		i;
 
 	path = NULL;
-	// path_value = ft_getenv("PATH");
 	path_value = hashtable_search("PATH")->value;
 	if (path_value)
-	{
 		path = ft_split(path_value, ':');
-		free(path_value);
-	}
 	i = 0;
 	while (path && path[i])
 	{
@@ -116,20 +112,22 @@ static char	**create_cmd_arg_vector(t_list *cmd_args)
 
 void	exec_cmd(t_list *cmd_args)
 {
+	char	**envp;
 	char	**cmd_argv;
 	char	*pathname;
 
 	if (cmd_args == NULL)
 		return ;
+	envp = hashtable_envp_mtx();
 	cmd_argv = create_cmd_arg_vector(cmd_args);
 	pathname = search_executable(cmd_argv[0]);
 	if (pathname != NULL)
 	{
-		execve(pathname, cmd_argv, NULL);
+		execve(pathname, cmd_argv, envp);
 		perror("execve failed");
 		free(pathname);
 		last_exit_code(EXIT_FAILURE);
 	}
 	ft_free_matrix(cmd_argv);
-	exit (last_exit_code(-1));
+	ft_free_matrix(envp);
 }

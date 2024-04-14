@@ -55,9 +55,9 @@ static void	exec_pipeline(t_node *node)
 
 void	executor(t_node *node)
 {
-//	t_cmd	*cmd_node;
+	t_cmd	*cmd_node;
 
-//	cmd_node = (t_cmd *)node;
+	cmd_node = (t_cmd *)node;
 	if (node == NULL)
 		return ;
 	if (!handle_heredocs(node))
@@ -68,12 +68,22 @@ void	executor(t_node *node)
 		//exec_redir in parent
 		//exec buiiltin
 		//reset fds to stdin and stdout
-	//	if (ft_strcmp("env", cmd_node->cmd_args->content) == 0)
-	//	{
-	//		printf("env found\n");
-	//		env_call(cmd_node);
-	//	}
-		exec_simple_cmd(node);
+		if (!ft_strcmp("cd", cmd_node->cmd_args->content))
+			cd_call(cmd_node);
+		else if (!ft_strcmp("echo", cmd_node->cmd_args->content))
+			echo_call(cmd_node);
+		else if (!ft_strcmp("env", cmd_node->cmd_args->content))
+			env_call(cmd_node);
+		else if (!ft_strcmp("exit", cmd_node->cmd_args->content))
+			printf("exit_code = %i\n", exit_call(cmd_node));
+		else if (!ft_strcmp("export", cmd_node->cmd_args->content))
+			export_call(cmd_node);
+		else if (!ft_strcmp("pwd", cmd_node->cmd_args->content))
+			pwd_call();
+		else if (!ft_strcmp("unset", cmd_node->cmd_args->content))
+			unset_call(cmd_node);
+		else
+			exec_simple_cmd(node);
 	}
 	else if (node->type == PIPE)
 		exec_pipeline(node);

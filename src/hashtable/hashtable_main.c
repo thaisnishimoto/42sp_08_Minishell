@@ -6,12 +6,11 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:25:04 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/12 13:23:39 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/12 19:31:56 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 
 t_env	**hashtable_mx(t_env *new, char *key, int mode)
 {
@@ -78,7 +77,7 @@ t_env	*hashtable_create_node_type1(char *env)
 	t_env	*new;
 
 	if (!env)
-		return (NULL);	
+		return (NULL);
 	tkn = split_env(env);
 	new = ft_calloc(1, sizeof(t_env));
 	if (tkn[0])

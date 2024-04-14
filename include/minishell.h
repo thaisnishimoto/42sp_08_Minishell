@@ -91,7 +91,7 @@ void			handle_display_new_prompt(int signum);
 void			handle_hdoc_sigint(int signum);
 void			handle_if_signaled(char *buffer, char *expected_eof, int hdoc_fd);
 
-//environ hashtable functions
+//hashtable functions
 void			hashtable_load(char **envp);
 t_env			**hashtable_mx(t_env *new, char *key, int mode);
 void			hashtable_init(t_env *hash[]);
@@ -106,9 +106,7 @@ t_env			*hashtable_create_node_type2(char *key, char *value);
 t_env			*hashtable_search(char *key);
 int				hashtable_count_content(void);
 char			**hashtable_key_mtx(void);
-
-//builtin
-void			env_call(t_cmd *cmd_node);
+char			**hashtable_key_mtx_sorted(void);
 
 //tokenizer and syntax utils
 int				validate_quotes(char *input);
@@ -140,6 +138,15 @@ void			first_cmd_pipeline(t_node *node, int *pipe_fd);
 void			middle_cmd_pipeline(t_node *node, int *pipe_fd);
 void			last_cmd_pipeline(t_node *node, int *pipe_fd);
 int				exec_redir(t_redir *node);
+
+//builtin
+void			cd_call(t_cmd *cmd_node);
+void			echo_call(t_cmd *cmd_node);
+void			env_call(t_cmd *cmd_node);
+int				exit_call(t_cmd *cmd_node);
+void			export_call(t_cmd *cmd_node);
+void			pwd_call(void);
+void			unset_call(t_cmd *cmd_node);
 
 //exec utils
 pid_t			ft_fork(void);

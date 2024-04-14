@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 12:44:25 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/14 19:41:51 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ void	executor(t_node *node)
 		return ;
 	if (!handle_heredocs(node))
 		return ;
-	if (node->type == CMD)
+	last_exit_code(0);
+	if (node->type == CMD && cmd_node->cmd_args)
 	{
 		//check for builtin
 		//exec_redir in parent

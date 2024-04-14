@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/11 16:19:29 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/14 15:25:09 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -658,6 +658,57 @@ MU_TEST(funtion_should_run_heredoc_double_quote_eof_not_expanding_vars)
 	free(expected);
 }
 
+MU_TEST(function_should_expand_til_to_home)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 32: echo ~");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo ~' | ./minishell", 1);
+	expected = exec_command("echo ~", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_not_expand_til_concat_before_str)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 33: echo ~oi");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo ~oi' | ./minishell", 1);
+	expected = exec_command("echo ~oi", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_not_expand_til_concat_after_str)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 33: echo oi~");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo ~oi' | ./minishell", 1);
+	expected = exec_command("echo ~oi", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
 //MU_TEST(funtion_should_create_outfile_and_run_2nd_command)
 //{
 //	char    *expected = "Files ../outfile6 and ../outfile_expected6 are identical\n";
@@ -859,6 +910,9 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(function_should_run_redir_pipeline_without_cmd);
 	MU_RUN_TEST(funtion_should_run_heredoc_single_quote_eof_not_expanding_vars);
 	MU_RUN_TEST(funtion_should_run_heredoc_double_quote_eof_not_expanding_vars);
+	MU_RUN_TEST(function_should_expand_til_to_home);
+	MU_RUN_TEST(function_should_not_expand_til_concat_before_str);
+	MU_RUN_TEST(function_should_not_expand_til_concat_after_str);
 //	MU_RUN_TEST(funtion_should_run_command_ls_l_wc_l);
 //	MU_RUN_TEST(funtion_should_run_command_grep_a1_wc_w);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);

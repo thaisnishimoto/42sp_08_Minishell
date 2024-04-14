@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 13:00:08 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 13:53:18 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static char	*process_quotes(char *token_substr, int nested)
 
 char	*expand_env(char *token)
 {
-	// t_env	**hashtable;
 	t_env	*result;
 	char	*env_value;
 
@@ -70,10 +69,10 @@ char	*expand_env(char *token)
 		env_value = ft_trim_quotes(ft_strdup(&token[1]), "\"\'");
 	else if (token[1] == '?')
 		env_value = ft_itoa(last_exit_code(-1));
+	else if (ft_isdigit(token[1]))
+		env_value = ft_strdup(&token[2]);
 	else
 	{
-		// hashtable = static_environ_htable(NULL, NULL, READ);
-		// result = hashtable_search(hashtable, &token[1]);
 		result = hashtable_search(&token[1]);
 		if (result)
 			env_value = ft_strdup(result->value);

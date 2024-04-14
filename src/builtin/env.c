@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 13:30:22 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/12 13:31:06 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/12 16:22:05 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@ void	env_print(void)
 
 void	env_call(t_cmd *cmd_node)
 {	
-	t_list *first;
-	t_list *second;
+	t_list	*arg;
 
-	first = cmd_node->cmd_args;
-	second = first->next;
-	if (!second || !ft_strcmp((char *)second->content, "") || ((char *)second->content)[0] == '#')
+	arg = (t_list *)cmd_node->cmd_args->next;
+	if (!arg || !ft_strcmp((char *)arg->content, "")
+		|| ((char *)arg->content)[0] == '#')
 		env_print();
-	else if (second && ft_strcmp((char *)second->content, "") && ((char *)second->content)[0] != '#')
-		ft_printf("env: %s: No such file or directory\n", (char *)second->content);
+	else if (arg && ft_strcmp((char *)arg->content, "")
+		&& ((char *)arg->content)[0] != '#')
+		ft_printf("env: %s: No such file or directory\n",
+			(char *)arg->content);
 }

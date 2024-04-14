@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/12 13:27:11 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 12:38:24 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,15 @@ int	last_exit_code(int new_value)
 
 void	ft_handle_error(char *error_msg)
 {
-	// static_environ_htable(NULL, NULL, FREE);
 	hashtable_mx(NULL, NULL, FREE);
 	perror(error_msg);
 	exit(EXIT_FAILURE);
+}
+
+void	ft_free_exit(void)
+{
+	hashtable_mx(NULL, NULL, FREE);
+	static_ast_holder(NULL, FREE);
+	rl_clear_history();
+	exit (last_exit_code(-1));
 }

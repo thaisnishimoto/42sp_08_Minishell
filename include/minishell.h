@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/13 23:28:56 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/14 12:43:32 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ int				exec_redir(t_redir *node);
 void			cd_call(t_cmd *cmd_node);
 void			echo_call(t_cmd *cmd_node);
 void			env_call(t_cmd *cmd_node);
-int				exit_call(t_cmd *cmd_node);
+void			exit_call(t_cmd *cmd_node);
 void			export_call(t_cmd *cmd_node);
 void			pwd_call(void);
 void			unset_call(t_cmd *cmd_node);
@@ -160,5 +160,6 @@ void			free_ast(t_node *node);
 void			ft_handle_error(char *error_msg);
 t_node			*static_ast_holder(t_node *ast, int mode);
 int				last_exit_code(int new_value);
+void			ft_free_exit(void);
 
 #endif

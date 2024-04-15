@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/15 14:47:34 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 18:25:14 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void			set_signals_hdoc(pid_t pid);
 void			set_signals_exec_mode(pid_t pid);
 void			handle_display_new_prompt(int signum);
 void			handle_hdoc_sigint(int signum);
-void			handle_if_signaled(char *buffer, char *expected_eof, int hdoc_fd);
+void			handle_if_signaled(char *buffer, char *wanted_eof, int hdoc_fd);
 
 //hashtable functions
 void			hashtable_load(char **envp);
@@ -129,6 +129,7 @@ char			*ft_trim_quotes(char *str, const char *set);
 char			*ft_add_single_quote(char *token_substr);
 char			*process_quotes(char *token_substr, int nested);
 char			*expand_env(char *token);
+char			*process_til(char *token_substr);
 char			*ft_rejoin_substr(char *token_substr[]);
 
 //executor functions

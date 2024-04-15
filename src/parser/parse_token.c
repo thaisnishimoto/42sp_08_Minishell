@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 14:58:49 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 18:35:48 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ static char	*process_substr(char *token_substr, int nested)
 {
 	if (ft_strchr("\"\'", token_substr[0]))
 		token_substr = process_quotes(token_substr, nested);
-	else if (token_substr[0] == '~' && token_substr[1] == '\0')
-		token_substr = expand_env(ft_strdup("$HOME"));
 	else if (token_substr[0] == '$' && token_substr[1] != '\0')
 		token_substr = expand_env(token_substr);
+	else if (token_substr[0] == '~')
+		token_substr = process_til(token_substr);
 	return (token_substr);
 }
 

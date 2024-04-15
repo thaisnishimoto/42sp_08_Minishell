@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:14:22 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/12 17:26:45 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 22:10:31 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,19 @@ void	unset_call(t_cmd *cmd_node)
 	while (arg)
 	{
 		i = 0;
-		while (((char *)arg->content)[i])
-		{
-			if (!(ft_isalnum(((char *)arg->content)[i])
-				&& ((char *)arg->content)[i] != '_'))
-				befit = 0;
+		while (((char *)arg->content)[i]
+			&& (ft_isalnum(((char *)arg->content)[i])
+			|| ((char *)arg->content)[i] == '_'))
 			i++;
+		if (((char *)arg->content)[i])
+		{
+			ft_putstr_fd("minishell: unset: '", 2);
+			ft_putstr_fd((char *)arg->content, 2);
+			ft_putendl_fd("': not a valid identifier", 2);
+			last_exit_code(1);
 		}
-		if (befit == 1)
-			hashtable_mx(NULL, (char *)arg->content, DEL);
 		else
-			printf("bash: unset: '%s': not a valid identifier",
-				(char *)arg->content);
+			hashtable_mx(NULL, (char *)arg->content, DEL);
 		arg = arg->next;
 	}
 }

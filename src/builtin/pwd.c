@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:01:55 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/12 17:03:21 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 22:09:57 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@ void	pwd_call(void)
 
 	cwd = getcwd(NULL, 0);
 	if (cwd)
-		printf("%s\n", cwd);
+		ft_putendl_fd(cwd, 2);
 	free(cwd);
 }

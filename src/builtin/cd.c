@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 20:24:33 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/12 18:54:06 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 21:57:16 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 
 static void	cd_path(t_cmd *cmd_node)
 {
@@ -24,13 +25,21 @@ static void	cd_path(t_cmd *cmd_node)
 	if (arg)
 	{
 		if (arg->next)
-			path = arg->next->content;
+			path = (char *)arg->next->content;
 		else if (!arg->next && home)
 			path = home->value;
 		if (path && chdir(path) == -1)
-			printf("bash: cd: %s: No such file or directory\n", path);
+		{
+			ft_putstr_fd("minishell: cd: ", 2);
+			ft_putstr_fd(path, 2);
+			ft_putendl_fd(": No such file or directory", 2);
+			last_exit_code(1);
+		}
 		else if (!path)
-			printf("bash: cd: HOME not set\n");
+		{
+			ft_putendl_fd("minishell: cd: HOME not set", 2);
+			last_exit_code(1);
+		}
 	}
 }
 
@@ -44,8 +53,8 @@ void	cd_call(t_cmd *cmd_node)
 	arg = (t_list *)cmd_node->cmd_args;
 	if (arg->next && arg->next->next)
 	{
-		printf("bash: cd: %s: No such file or directory\n",
-			(char *)arg->next->content);
+		ft_putendl_fd("minishell: cd: too many arguments", 2);
+		last_exit_code(1);
 		return ;
 	}
 	else if (arg || arg->next)

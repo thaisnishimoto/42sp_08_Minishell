@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 13:30:22 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/12 16:22:05 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 21:57:53 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,10 @@ void	env_print(void)
 	i = 0;
 	while (key[i])
 	{
-		if (!ft_strcmp(key[i], "?"))
-		{
-			i++;
-			continue ;
-		}
 		value = (hashtable_search(key[i]))->value;
 		sign = (hashtable_search(key[i]))->sign;
 		if (!ft_strcmp(sign, "="))
-			printf("%s%s%s\n", key[i], sign, value);
+			ft_printf("%s%s%s\n", key[i], sign, value);
 		i++;
 	}
 	ft_mtx_free(key);
@@ -47,6 +42,10 @@ void	env_call(t_cmd *cmd_node)
 		env_print();
 	else if (arg && ft_strcmp((char *)arg->content, "")
 		&& ((char *)arg->content)[0] != '#')
-		ft_printf("env: %s: No such file or directory\n",
-			(char *)arg->content);
+	{
+		ft_putstr_fd("env: '", 2);
+		ft_putstr_fd((char *)arg->content, 2);
+		ft_putendl_fd("': No such file or directory", 2);
+		last_exit_code(127);
+	}
 }

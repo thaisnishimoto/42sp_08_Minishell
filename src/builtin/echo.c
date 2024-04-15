@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:49:06 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/13 16:45:54 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 21:57:10 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ void	echo_call(t_cmd *cmd_node)
 	nline = echo_check_option(&arg);
 	while (arg)
 	{
-		printf("%s", (char *)arg->content);
+		ft_putstr_fd((char *)arg->content, 2);
 		if (arg->next)
-			printf(" ");
+			ft_putstr_fd(" ", 2);
 		arg = arg->next;
 	}
 	if (nline)
-		printf("%s", "\n");
+		ft_putendl_fd("", 2);
 }

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:16:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/13 23:25:29 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 18:26:49 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	handle_hdoc_sigint(int signum)
 	}
 }
 
-void	handle_if_signaled(char *buffer, char *expected_eof, int hdoc_fd)
+void	handle_if_signaled(char *buffer, char *wanted_eof, int hdoc_fd)
 {
 	if (g_signum == SIGINT)
 	{
@@ -47,7 +47,7 @@ void	handle_if_signaled(char *buffer, char *expected_eof, int hdoc_fd)
 		last_exit_code(0);
 		ft_putstr_fd("minishell: warning: here-document delimited by "
 			"end-of-file (wanted '", 2);
-		ft_putstr_fd(expected_eof, 2);
+		ft_putstr_fd(wanted_eof, 2);
 		ft_putendl_fd("')", 2);
 	}
 }

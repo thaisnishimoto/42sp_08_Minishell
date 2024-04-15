@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:14:22 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/14 22:10:31 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/14 22:49:21 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	unset_call(t_cmd *cmd_node)
 			ft_putendl_fd("': not a valid identifier", 2);
 			last_exit_code(1);
 		}
-		else
+		else if (ft_strcmp((char *)arg->content, "_"))
 			hashtable_mx(NULL, (char *)arg->content, DEL);
 		arg = arg->next;
 	}

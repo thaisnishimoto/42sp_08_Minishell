@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 15:25:09 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:37:09 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -928,7 +928,9 @@ MU_TEST_SUITE(test_suite)
 //	MU_RUN_TEST(funtion_should_append_output);
 //hdoc and redir middle of pipeline
 //$? expansion in middle of pipeline
-//cat | cat | ls
+//cat | cat | ls and echo $?
+//exit 1 | exit 2
+//catz echo$? exit echo$?
 }
 
 int	main(void)

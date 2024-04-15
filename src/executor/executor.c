@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 21:58:28 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 11:25:09 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,51 +53,16 @@ static void	exec_pipeline(t_node *node)
 	free(pipe_fd_holder);
 }
 
-int	is_builtin(t_cmd *cmd_node)
-{
-	if (!ft_strcmp("cd", cmd_node->cmd_args->content))
-		return (1);
-	else if (!ft_strcmp("echo", cmd_node->cmd_args->content))
-		return (1);
-	else if (!ft_strcmp("env", cmd_node->cmd_args->content))
-		return (1);
-	else if (!ft_strcmp("exit", cmd_node->cmd_args->content))
-		return (1);
-	else if (!ft_strcmp("export", cmd_node->cmd_args->content))
-		return (1);
-	else if (!ft_strcmp("pwd", cmd_node->cmd_args->content))
-		return (1);
-	else if (!ft_strcmp("unset", cmd_node->cmd_args->content))
-		return (1);
-	return (0);
-}
-
-void	exec_builtin(t_cmd *cmd_node)
-{
-	if (!ft_strcmp("cd", cmd_node->cmd_args->content))
-		cd_call(cmd_node);
-	else if (!ft_strcmp("echo", cmd_node->cmd_args->content))
-		echo_call(cmd_node);
-	else if (!ft_strcmp("env", cmd_node->cmd_args->content))
-		env_call(cmd_node);
-	else if (!ft_strcmp("exit", cmd_node->cmd_args->content))
-		exit_call(cmd_node);
-	else if (!ft_strcmp("export", cmd_node->cmd_args->content))
-		export_call(cmd_node);
-	else if (!ft_strcmp("pwd", cmd_node->cmd_args->content))
-		pwd_call();
-	else if (!ft_strcmp("unset", cmd_node->cmd_args->content))
-		unset_call(cmd_node);
-}
-
 static void	exec_builtin_in_parent(t_cmd *cmd_node)
 {
 	int	backup[2];
+	int	is_exit;
 
 	backup[0] = dup(STDIN_FILENO);
 	backup[1] = dup(STDOUT_FILENO);
+	is_exit = 0;
 	if (exec_redir(cmd_node->redirs))
-		exec_builtin(cmd_node);
+		is_exit = exec_builtin(cmd_node);
 	if (dup2(backup[0], STDIN_FILENO) == -1)
 	{
 		perror("dup2 error");
@@ -112,6 +77,8 @@ static void	exec_builtin_in_parent(t_cmd *cmd_node)
 	}
 	close(backup[0]);
 	close(backup[1]);
+	if (is_exit)
+		ft_free_exit();
 }
 
 void	executor(t_node *node)

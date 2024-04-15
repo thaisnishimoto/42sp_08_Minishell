@@ -61,5 +61,4 @@ void	exit_call(t_cmd *cmd_node)
 	else if (arg && str_is_int(arg->content))
 		last_exit_code(ft_atoi(arg->content) % 256
 			+ 256 * (1 - (ft_atoi(arg->content) >= 0)));
-	ft_free_exit();
 }

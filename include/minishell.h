@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 21:55:56 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 11:17:05 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void			unset_call(t_cmd *cmd_node);
 
 //builtin utils
 int				is_builtin(t_cmd *cmd_node);
-void			exec_builtin(t_cmd *cmd_node);
+int				exec_builtin(t_cmd *cmd_node);
 
 //free and exit function
 void			free_ast(t_node *node);

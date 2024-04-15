@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/13 22:41:36 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:35:03 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,13 @@ void	ft_exit_child_process(int exit_code)
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
-	// rl_clear_history();
-	// static_environ_htable(NULL, NULL, FREE);
+	rl_clear_history();
 	hashtable_mx(NULL, NULL, FREE);
 	static_ast_holder(NULL, FREE);
 	exit(exit_code);
 }
 
-void	wait_for_cmd_process(pid_t pid, t_list *cmd_args)
+void	wait_for_cmd_process(pid_t pid)
 {
 	int		wstatus;
 
@@ -71,18 +70,8 @@ void	wait_for_cmd_process(pid_t pid, t_list *cmd_args)
 		last_exit_code(WEXITSTATUS(wstatus));
 	else if (WIFSIGNALED(wstatus))
 		last_exit_code(128 + WTERMSIG(wstatus));
-	if (last_exit_code(-1) == 126)
-	{
-		ft_putstr_fd(cmd_args->content, 2);
-		ft_putendl_fd(": Permission denied", 2);
-	}
-	else if (last_exit_code(-1) == 127)
-	{
-		ft_putstr_fd(cmd_args->content, 2);
-		ft_putendl_fd(": command not found", 2);
-	}
 	else if (last_exit_code(-1) == 130)
 		write(1, "\n", 1);
 	else if (last_exit_code(-1) == 131)
-		ft_putendl_fd("Quit", 2);
+		ft_putendl_fd("Quit (core dumped)", 2);
 }

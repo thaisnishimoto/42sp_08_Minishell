@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:00:52 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 22:24:48 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:11:57 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	first_cmd_pipeline(t_node *node, int *pipe_fd)
 		run_pipeline_cmd(cmd_node);
 	}
 	close(pipe_fd[1]);
-	wait_for_cmd_process(pid, cmd_node->cmd_args);
 }
 
 void	middle_cmd_pipeline(t_node *node, int *pipe_fd)
@@ -70,7 +69,6 @@ void	middle_cmd_pipeline(t_node *node, int *pipe_fd)
 	}
 	close(prev_pipe_fd);
 	close(pipe_fd[1]);
-	wait_for_cmd_process(pid, cmd_node->cmd_args);
 }
 
 void	last_cmd_pipeline(t_node *node, int *pipe_fd)
@@ -90,5 +88,22 @@ void	last_cmd_pipeline(t_node *node, int *pipe_fd)
 		run_pipeline_cmd(cmd_node);
 	}
 	close(pipe_fd[0]);
-	wait_for_cmd_process(pid, cmd_node->cmd_args);
+}
+
+int	wait_for_pipeline_cmds(void)
+{
+	pid_t	done_pid;
+	static pid_t	last_cmd_pid;
+	int		wstatus;
+
+	done_pid = wait(&wstatus);
+	if (done_pid > last_cmd_pid)
+	{
+		if (WIFEXITED(wstatus))
+			last_exit_code(WEXITSTATUS(wstatus));
+		else if (WIFSIGNALED(wstatus))
+			last_exit_code(128 + WTERMSIG(wstatus));
+	}
+	last_cmd_pid = done_pid;
+	return (done_pid);
 }

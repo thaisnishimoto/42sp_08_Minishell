@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 19:09:22 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:45:53 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,15 @@ static char	*find_pathname(char **path, char *cmd)
 	int		i;
 	char	*pathname;
 
-	if (cmd[0] == '/' || cmd[0] == '.')
+	pathname = NULL;
+	if (*cmd == '\0')
+		last_exit_code(127);
+	else if (cmd[0] == '/' || cmd[0] == '.')
 		pathname = ft_strdup(cmd);
 	else
 	{
-		i = 0;
-		while (path[i])
+		i = -1;
+		while (path[++i])
 		{
 			last_exit_code(0);
 			pathname = ft_strjoin(path[i], cmd);
@@ -54,7 +57,6 @@ static char	*find_pathname(char **path, char *cmd)
 				last_exit_code(127);
 				free(pathname);
 				pathname = NULL;
-				i++;
 			}
 			else
 				break ;
@@ -68,16 +70,18 @@ static char	*search_executable(char *cmd)
 	char	**path;
 	char	*pathname;
 
-	if (*cmd == '\0')
-	{
-		last_exit_code(127);
-		return (NULL);
-	}
 	path = get_path();
 	pathname = find_pathname(path, cmd);
-	if (pathname && access(pathname, X_OK) == -1)
+	if (last_exit_code(-1) == 127)
+	{
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": command not found", 2);
+	}
+	else if (pathname && access(pathname, X_OK) == -1)
 	{
 		last_exit_code(126);
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": Permission denied", 2);
 		free(pathname);
 		pathname = NULL;
 	}

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 19:16:28 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:03:36 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		set_signals_interactive_mode();
 		input = prompt("$ ");
-		if (!input)
-			input = strdup("exit");	
 		tokens = tokenizer(input);
 		ast = parser(tokens);
 		static_ast_holder(ast, INIT);

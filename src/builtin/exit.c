@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:37 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/14 22:01:23 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/15 16:15:09 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	exit_call(t_cmd *cmd_node)
 	t_list	*arg;
 
 	arg = (t_list *)cmd_node->cmd_args->next;
-	ft_putendl_fd("exit", 2);
 	if ((arg && !str_is_int(arg->content) && arg
 			&& ((char *)arg->content)[0] != '#')
 			|| (arg && str_is_int(arg->content)

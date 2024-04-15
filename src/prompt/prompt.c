@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:07:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/08 18:45:47 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 17:32:01 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,24 @@ static char	*ft_rm_trail_nl(char *str)
 	return (str);
 }
 
+static void	change_input_stream_to_terminal(void)
+{
+	int		tty_fd;
+
+	tty_fd = open("/dev/tty", O_RDWR);
+	if (tty_fd < 0)
+		ft_handle_error("open /dev/tty");
+	if (dup2(tty_fd, STDIN_FILENO) == -1)
+	{
+		close(tty_fd);
+		ft_handle_error("dup2");
+	}
+	close(tty_fd);
+}
+
 char	*prompt(char *symbol)
 {
 	char	*input;
-	int		tty_fd;
 
 	if (isatty(STDIN_FILENO))
 		input = readline(symbol);
@@ -35,19 +49,13 @@ char	*prompt(char *symbol)
 	{
 		input = ft_rm_trail_nl(ft_get_next_line(STDIN_FILENO));
 		if (input == NULL)
-		{
-			tty_fd = open("/dev/tty", O_RDWR);
-			if (tty_fd < 0)
-				ft_handle_error("open /dev/tty");
-			if (dup2(tty_fd, STDIN_FILENO) == -1)
-			{
-				close(tty_fd);
-				ft_handle_error("dup2");
-			}
-			close(tty_fd);
-		}
+			change_input_stream_to_terminal();
 	}
 	if (input && *input && symbol[0] == '$')
 		add_history(input);
+	if (!input)
+		input = strdup("exit");	
+	if (ft_strnstr(input, "exit", ft_strlen("exit")) && !ft_strchr(input, '|'))
+		ft_putendl_fd("exit", 2);
 	return (input);
 }

@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:14:22 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/14 22:49:21 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 13:14:13 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 void	unset_call(t_cmd *cmd_node)
 {
 	t_list	*arg;
-	int		befit;
 	int		i;
 
-	befit = 1;
+	last_exit_code(0);
 	arg = (t_list *)cmd_node->cmd_args->next;
 	while (arg)
 	{

@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 20:54:42 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/14 22:10:10 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/15 13:17:24 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	export_call(t_cmd *cmd_node)
 	t_list	*arg;
 	t_env	*temp;
 
+	last_exit_code(0);
 	arg = (t_list *)cmd_node->cmd_args->next;
 	export_print(arg);
 	while (arg && arg->content && ((char *)arg->content)[0] != '#')

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:07:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/15 17:32:01 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/15 17:51:03 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,15 @@ char	*prompt(char *symbol)
 		if (input == NULL)
 			change_input_stream_to_terminal();
 	}
-	if (input && *input && symbol[0] == '$')
-		add_history(input);
-	if (!input)
-		input = strdup("exit");	
-	if (ft_strnstr(input, "exit", ft_strlen("exit")) && !ft_strchr(input, '|'))
-		ft_putendl_fd("exit", 2);
+	if (symbol[0] == '$')
+	{
+		if (input && *input && symbol[0] == '$')
+			add_history(input);
+		if (!input)
+			input = strdup("exit");
+		if (ft_strnstr(input, "exit", ft_strlen("exit"))
+			&& !ft_strchr(input, '|'))
+			ft_putendl_fd("exit", 2);
+	}
 	return (input);
 }

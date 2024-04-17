@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 17:07:40 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:40:14 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,6 @@ int				exec_redir(t_redir *node);
 
 //exec cmd utils
 char			*validate_executable(char *pathname, char *cmd);
-int				is_directory(char *pathname, char *cmd);
 pid_t			ft_fork(void);
 int				ft_pipe(int *pipe_fd);
 void			ft_close_pipe(int *pipe_fd);

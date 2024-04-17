@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 16:59:51 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:39:54 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	exec_cmd(t_list *cmd_args)
 	path = get_path();
 	pathname = get_pathname(cmd_argv[0], path);
 	pathname = validate_executable(pathname, cmd_argv[0]);
-	if (pathname && !is_directory(pathname, cmd_argv[0]))
+	if (pathname)
 	{
 		execve(pathname, cmd_argv, envp);
 		perror("execve failed");

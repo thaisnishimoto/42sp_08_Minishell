@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 17:15:19 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:40:51 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@ static void	print_exec_error(int exit_code, char *msg, char *cmd)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putendl_fd(msg, 2);
+}
+
+static int	is_directory(char *pathname)
+{
+	struct stat	buff;
+
+	stat(pathname, &buff);
+	if (S_ISDIR(buff.st_mode))
+		return (1);
+	return (0);
 }
 
 char	*validate_executable(char *pathname, char *cmd)
@@ -37,28 +47,12 @@ char	*validate_executable(char *pathname, char *cmd)
 		print_exec_error(127, ": No such file or directory", cmd);
 	else if (pathname && access(pathname, X_OK) == -1)
 		print_exec_error(126, ": Permission denied", cmd);
+	else if (is_directory(pathname))
+		print_exec_error(126, ": Is a directory", cmd);
 	if (last_exit_code(-1) != 0)
 	{
 		free(pathname);
 		pathname = NULL;
 	}
 	return (pathname);
-}
-
-int	is_directory(char *pathname, char *cmd)
-{
-	struct stat	buff;
-
-	stat(pathname, &buff);
-	if (S_ISDIR(buff.st_mode))
-	{
-		last_exit_code(126);
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": Is a directory", 2);
-		free(pathname);
-		pathname = NULL;
-		return (1);
-	}
-	return (0);
 }

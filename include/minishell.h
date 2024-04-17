@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 00:13:06 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:07:40 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h> //open
 # include <sys/types.h> //pid_t
 # include <sys/wait.h> //wait
+# include <sys/stat.h> //stat
 # include <errno.h> //perror
 # include "../libft/libft.h"
 
@@ -143,7 +144,9 @@ void			last_cmd_pipeline(t_node *node, int *pipe_fd);
 int				wait_for_pipeline_cmds(void);
 int				exec_redir(t_redir *node);
 
-//exec utils
+//exec cmd utils
+char			*validate_executable(char *pathname, char *cmd);
+int				is_directory(char *pathname, char *cmd);
 pid_t			ft_fork(void);
 int				ft_pipe(int *pipe_fd);
 void			ft_close_pipe(int *pipe_fd);

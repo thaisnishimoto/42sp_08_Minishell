@@ -6,102 +6,11 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 13:42:15 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:59:51 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static char	**get_path(void)
-{
-	char	*path_value;
-	char	**path;
-	char	*temp;
-	int		i;
-
-	path = NULL;
-	path_value = hashtable_search("PATH")->value;
-	if (path_value)
-		path = ft_split(path_value, ':');
-	i = 0;
-	while (path && path[i])
-	{
-		temp = ft_strjoin(path[i], "/");
-		free(path[i]);
-		path[i] = ft_strdup(temp);
-		free(temp);
-		i++;
-	}
-	return (path);
-}
-
-int	validate_full_pathname(char *cmd)
-{
-	struct stat	buff;
-
-	stat(cmd, &buff);
-	if (S_ISDIR(buff.st_mode))
-	
-}
-
-static char	*find_pathname(char *cmd)
-{
-	char	**path;
-	char	*pathname;
-	int		i;
-
-	path = get_path();
-	pathname = NULL;
-	i = -1;
-	while (path[++i])
-	{
-		last_exit_code(0);
-		pathname = ft_strjoin(path[i], cmd);
-		if (access(pathname, F_OK) == -1)
-		{
-			last_exit_code(127);
-			free(pathname);
-			pathname = NULL;
-		}
-		else
-			break ;
-	}
-	if (last_exit_code(-1) == 127)
-	{
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": command not found", 2);
-	}
-	ft_free_matrix(path);
-	return (pathname);
-}
-
-static char	*search_executable(char *cmd)
-{
-	char	*pathname;
-
-	if (*cmd == '\0')
-	{
-		last_exit_code(127);
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": command not found", 2);
-	}
-	else if (cmd[0] == '/' || cmd[0] == '.')
-	{
-		pathname = ft_strdup(cmd);
-		validate_full_pathname(pathname);
-	}
-	else
-		pathname = find_pathname(path, cmd);
-	if (pathname && access(pathname, X_OK) == -1)
-	{
-		last_exit_code(126);
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": Permission denied", 2);
-		free(pathname);
-		pathname = NULL;
-	}
-	return (pathname);
-}
 
 static char	**create_cmd_arg_vector(t_list *cmd_args)
 {
@@ -128,24 +37,78 @@ static char	**create_cmd_arg_vector(t_list *cmd_args)
 	return (cmd_argv);
 }
 
+static char	**get_path(void)
+{
+	char	*path_value;
+	char	**path;
+	char	*temp;
+	int		i;
+
+	path = NULL;
+	path_value = hashtable_search("PATH")->value;
+	if (path_value)
+		path = ft_split(path_value, ':');
+	i = 0;
+	while (path && path[i])
+	{
+		temp = ft_strjoin(path[i], "/");
+		free(path[i]);
+		path[i] = ft_strdup(temp);
+		free(temp);
+		i++;
+	}
+	return (path);
+}
+
+static char	*get_pathname(char *cmd, char *path[])
+{
+	char	*pathname;
+	int		i;
+
+	pathname = NULL;
+	if (cmd[0] == '\0' || cmd[0] == '/' || cmd[0] == '.')
+		pathname = ft_strdup(cmd);
+	else
+	{
+		i = -1;
+		while (path[++i])
+		{
+			last_exit_code(0);
+			pathname = ft_strjoin(path[i], cmd);
+			if (access(pathname, F_OK) == -1)
+			{
+				free(pathname);
+				pathname = NULL;
+			}
+			else
+				break ;
+		}
+	}
+	return (pathname);
+}
+
 void	exec_cmd(t_list *cmd_args)
 {
 	char	**envp;
 	char	**cmd_argv;
 	char	*pathname;
+	char	**path;
 
 	if (cmd_args == NULL)
 		return ;
 	envp = hashtable_envp_mtx();
 	cmd_argv = create_cmd_arg_vector(cmd_args);
-	pathname = search_executable(cmd_argv[0]);
-	if (pathname != NULL)
+	path = get_path();
+	pathname = get_pathname(cmd_argv[0], path);
+	pathname = validate_executable(pathname, cmd_argv[0]);
+	if (pathname && !is_directory(pathname, cmd_argv[0]))
 	{
 		execve(pathname, cmd_argv, envp);
 		perror("execve failed");
 		free(pathname);
 		last_exit_code(EXIT_FAILURE);
 	}
-	ft_free_matrix(cmd_argv);
 	ft_free_matrix(envp);
+	ft_free_matrix(cmd_argv);
+	ft_free_matrix(path);
 }

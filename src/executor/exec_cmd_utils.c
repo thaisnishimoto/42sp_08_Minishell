@@ -5,73 +5,60 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/15 14:35:03 by tmina-ni         ###   ########.fr       */
+/*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
+/*   Updated: 2024/04/17 17:15:19 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-pid_t	ft_fork(void)
+static void	print_exec_error(int exit_code, char *msg, char *cmd)
 {
-	pid_t	pid;
+	last_exit_code(exit_code);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putendl_fd(msg, 2);
+}
 
-	pid = fork();
-	if (pid < 0)
+char	*validate_executable(char *pathname, char *cmd)
+{
+	if (!pathname || !ft_strncmp(cmd, "..", 3))
 	{
-		perror("fork error");
-		last_exit_code(EXIT_FAILURE);
+		last_exit_code(127);
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": command not found", 2);
 	}
-	return (pid);
-}
-
-int	ft_pipe(int *pipe_fd)
-{
-	int	return_value;
-
-	return_value = pipe(pipe_fd);
-	if (return_value == -1)
+	else if (!ft_strncmp(cmd, ".", 2))
 	{
-		perror("pipe error");
-		free(pipe_fd);
-		last_exit_code(EXIT_FAILURE);
+		print_exec_error(2, ": filename argment required", cmd);
+		ft_putendl_fd(".: usage: . filename [arguments]", 2);
 	}
-	return (return_value);
-}
-
-void	ft_close_pipe(int *pipe_fd)
-{
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
-	free(pipe_fd);
-}
-
-void	ft_exit_child_process(int exit_code)
-{
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
-	rl_clear_history();
-	hashtable_mx(NULL, NULL, FREE);
-	static_ast_holder(NULL, FREE);
-	exit(exit_code);
-}
-
-void	wait_for_cmd_process(pid_t pid)
-{
-	int		wstatus;
-
-	if (waitpid(pid, &wstatus, 0) == -1)
+	else if (access(pathname, F_OK) == -1)
+		print_exec_error(127, ": No such file or directory", cmd);
+	else if (pathname && access(pathname, X_OK) == -1)
+		print_exec_error(126, ": Permission denied", cmd);
+	if (last_exit_code(-1) != 0)
 	{
-		perror("waitpid error");
-		return ;
+		free(pathname);
+		pathname = NULL;
 	}
-	if (WIFEXITED(wstatus))
-		last_exit_code(WEXITSTATUS(wstatus));
-	else if (WIFSIGNALED(wstatus))
-		last_exit_code(128 + WTERMSIG(wstatus));
-	else if (last_exit_code(-1) == 130)
-		write(1, "\n", 1);
-	else if (last_exit_code(-1) == 131)
-		ft_putendl_fd("Quit (core dumped)", 2);
+	return (pathname);
+}
+
+int	is_directory(char *pathname, char *cmd)
+{
+	struct stat	buff;
+
+	stat(pathname, &buff);
+	if (S_ISDIR(buff.st_mode))
+	{
+		last_exit_code(126);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": Is a directory", 2);
+		free(pathname);
+		pathname = NULL;
+		return (1);
+	}
+	return (0);
 }

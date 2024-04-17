@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 02:03:43 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/11 15:49:21 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/16 21:55:56 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,23 @@
 
 int	validate_quotes(char *input)
 {
-	int	i;
-	int	single_quote;
-	int	double_quote;
+	char	quote;
+	int		i;
 
+	quote = 0;
 	i = 0;
-	single_quote = 0;
-	double_quote = 0;
 	while (input[i])
 	{
-		if (input[i] == '\'')
-			single_quote++;
-		else if (input[i] == '\"')
-			double_quote++;
+		if (input[i] == '\'' || input[i] == '\"')
+		{
+			if (!quote)
+				quote = input[i];
+			else if (quote == input[i])
+				quote = 0;
+		}
 		i++;
 	}
-	if (single_quote % 2 || double_quote % 2)
+	if (quote)
 	{
 		ft_putendl_fd("syntax error: unclosed quotes", 2);
 		last_exit_code(2);

@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 10:55:02 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:22:08 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ char	*expand_quoted_str(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_'
+				|| str[i + 1] == '?'))
 		{
 			env_len = substr_env_name(&str[i + 1]) + 1;
 			env_key = ft_substr(str, i, env_len);

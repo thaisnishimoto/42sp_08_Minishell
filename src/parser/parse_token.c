@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 00:20:31 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 18:07:53 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,15 @@ static char	**ft_split_concat_token(char *token)
 	return (token_substr);
 }
 
-static char	*process_substr(char *token_substr, int nested)
+static char	*process_substr(char *token_substr, int *expand)
 {
-	(void)nested;
 	if (ft_strchr("\"\'", token_substr[0]))
-		token_substr = process_quotes(token_substr);
+		token_substr = process_quotes(token_substr, expand);
 	else if (token_substr[0] == '$' && token_substr[1] != '\0')
+	{
 		token_substr = expand_env(token_substr);
+		*expand = 1;
+	}
 	else if (token_substr[0] == '~')
 		token_substr = process_til(token_substr);
 	return (token_substr);
@@ -71,7 +73,7 @@ char	*ft_rejoin_substr(char *token_substr[])
 	return (result);
 }
 
-char	*parse_token(char *token, int nested)
+char	*parse_token(char *token, int *expand)
 {
 	char	**token_substr;
 	int		i;
@@ -86,7 +88,7 @@ char	*parse_token(char *token, int nested)
 	i = 0;
 	while (token_substr[i])
 	{
-		token_substr[i] = process_substr(token_substr[i], nested);
+		token_substr[i] = process_substr(token_substr[i], expand);
 		if (token_substr[i] == NULL)
 		{
 			ft_free_matrix(token_substr);

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 17:40:14 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 19:28:35 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,10 @@ size_t			substr_quote(char *str);
 size_t			substr_operator(char *str, int slen);
 
 //parse functions
-int				parse_cmd(t_cmd **cmd_node, char *tokens[], int *i);
+int				parse_cmd(t_cmd **cmd_node, char *tokens[], int *i, int export_flag);
 int				parse_redir(t_redir **redirs_ptr, char *tokens[], int *i);
 t_node			*parse_pipe(t_node *left, t_node *right);
-char			*parse_token(char *token, int nested);
+char			*parse_token(char *token, int *expand);
 
 //parse token - utils
 int				count_token_substr(char *token);
@@ -128,7 +128,7 @@ size_t			substr_env_name(char *str);
 size_t			ft_substrlen(char *str);
 char			*ft_trim_quotes(char *str, const char *set);
 char			*ft_add_single_quote(char *token_substr);
-char			*process_quotes(char *token_substr);
+char			*process_quotes(char *token_substr, int *expand);
 char			*expand_env(char *token);
 char			*process_til(char *token_substr);
 char			*ft_rejoin_substr(char *token_substr[]);

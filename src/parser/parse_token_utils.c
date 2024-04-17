@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 17:22:08 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:49:01 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,16 @@ char	*expand_quoted_str(char *str)
 	return (str);
 }
 
-char	*process_quotes(char *token_substr)
+char	*process_quotes(char *token_substr, int *expand)
 {
 	if (token_substr[0] == '\"')
 	{
 		token_substr = ft_trim_quotes(token_substr, "\"");
 		if (ft_strchr(token_substr, '$'))
+		{
 			token_substr = expand_quoted_str(token_substr);
+			*expand = 1;
+		}
 	}
 	else if (token_substr[0] == '\'')
 		token_substr = ft_trim_quotes(token_substr, "\'");

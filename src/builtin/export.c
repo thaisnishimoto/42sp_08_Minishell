@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/06 20:54:42 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/15 13:17:24 by mchamma          ###   ########.fr       */
+/*   Created: 2024/04/16 11:00:02 by mchamma           #+#    #+#             */
+/*   Updated: 2024/04/16 11:15:12 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	export_print(t_list	*arg)
+void	export_print(t_list *arg)
 {
 	char	**key;
 	char	*value;
@@ -28,9 +28,9 @@ void	export_print(t_list	*arg)
 		value = (hashtable_search(key[i]))->value;
 		sign = (hashtable_search(key[i]))->sign;
 		if (ft_strcmp(key[i], "_") && !ft_strcmp(sign, "="))
-			ft_printf("declare -x %s%s\"%s\"\n", key[i], sign, value);
+			printf("declare -x %s%s\"%s\"\n", key[i], sign, value);
 		else if (ft_strcmp(key[i], "_") && ft_strcmp(sign, "="))
-			ft_printf("declare -x %s\n", key[i]);
+			printf("declare -x %s\n", key[i]);
 		i++;
 	}
 	ft_free_matrix(key);
@@ -57,18 +57,30 @@ void	export_adjust_value(char **str)
 	free(temp);
 }
 
-char	export_check_condition2(char *str)
+void	export_condition_exec(t_list *arg)
 {
-	int	i;
+	t_env	*temp;
+	int		i;
 
+	temp = hashtable_create_node_type1((char *)arg->content);
+	export_adjust_value(&temp->value);
 	i = 0;
-	while (str[i] && !ft_isdigit(str[0])
-		&& (ft_isalnum(str[i]) || str[i] == '_'))
-		i++;
-	return (str[i]);
+	while (temp->key[i] && !ft_isdigit(temp->key[0])
+		&& (ft_isalnum(temp->key[i]) || temp->key[i] == '_'))
+			i++;
+	if (temp->key[i])
+	{
+		ft_putstr_fd("minishell: export: '", 2);
+		ft_putstr_fd((char *)arg->content, 2);
+		ft_putendl_fd("': not a valid identifier", 2);
+		hashtable_free_node(temp);
+		last_exit_code(1);
+	}
+	else
+		hashtable_mx(temp, NULL, ADD);
 }
 
-int	export_check_condition1(t_list *arg)
+int	export_condition_not_exec(t_list *arg)
 {
 	t_env	*temp;
 	t_env	*temp2;
@@ -88,29 +100,16 @@ int	export_check_condition1(t_list *arg)
 void	export_call(t_cmd *cmd_node)
 {
 	t_list	*arg;
-	t_env	*temp;
 
 	last_exit_code(0);
 	arg = (t_list *)cmd_node->cmd_args->next;
 	export_print(arg);
 	while (arg && arg->content && ((char *)arg->content)[0] != '#')
 	{
-		if (export_check_condition1(arg))
-		{
-			arg = arg->next;
-			continue ;
-		}
-		temp = hashtable_create_node_type1((char *)arg->content);
-		export_adjust_value(&temp->value);
-		if (export_check_condition2(temp->key))
-		{
-			ft_printf("minishell: export: '%s': not a valid identifier\n",
-				(char *)arg->content);
-			hashtable_free_node(temp);
-			last_exit_code(1);
-		}
+		if (export_condition_not_exec(arg))
+			;
 		else
-			hashtable_mx(temp, NULL, ADD);
+			export_condition_exec(arg);
 		arg = arg->next;
 	}
 }

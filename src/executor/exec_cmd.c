@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/15 14:45:53 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 13:42:15 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,49 +35,64 @@ static char	**get_path(void)
 	return (path);
 }
 
-static char	*find_pathname(char **path, char *cmd)
+int	validate_full_pathname(char *cmd)
 {
-	int		i;
-	char	*pathname;
+	struct stat	buff;
 
-	pathname = NULL;
-	if (*cmd == '\0')
-		last_exit_code(127);
-	else if (cmd[0] == '/' || cmd[0] == '.')
-		pathname = ft_strdup(cmd);
-	else
-	{
-		i = -1;
-		while (path[++i])
-		{
-			last_exit_code(0);
-			pathname = ft_strjoin(path[i], cmd);
-			if (access(pathname, F_OK) == -1)
-			{
-				last_exit_code(127);
-				free(pathname);
-				pathname = NULL;
-			}
-			else
-				break ;
-		}
-	}
-	return (pathname);
+	stat(cmd, &buff);
+	if (S_ISDIR(buff.st_mode))
+	
 }
 
-static char	*search_executable(char *cmd)
+static char	*find_pathname(char *cmd)
 {
 	char	**path;
 	char	*pathname;
+	int		i;
 
 	path = get_path();
-	pathname = find_pathname(path, cmd);
+	pathname = NULL;
+	i = -1;
+	while (path[++i])
+	{
+		last_exit_code(0);
+		pathname = ft_strjoin(path[i], cmd);
+		if (access(pathname, F_OK) == -1)
+		{
+			last_exit_code(127);
+			free(pathname);
+			pathname = NULL;
+		}
+		else
+			break ;
+	}
 	if (last_exit_code(-1) == 127)
 	{
 		ft_putstr_fd(cmd, 2);
 		ft_putendl_fd(": command not found", 2);
 	}
-	else if (pathname && access(pathname, X_OK) == -1)
+	ft_free_matrix(path);
+	return (pathname);
+}
+
+static char	*search_executable(char *cmd)
+{
+	char	*pathname;
+
+	if (*cmd == '\0')
+	{
+		last_exit_code(127);
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": command not found", 2);
+	}
+	else if (cmd[0] == '/' || cmd[0] == '.')
+	{
+		pathname = ft_strdup(cmd);
+		validate_full_pathname(pathname);
+	}
+	else
+		pathname = find_pathname(path, cmd);
+	if (pathname && access(pathname, X_OK) == -1)
 	{
 		last_exit_code(126);
 		ft_putstr_fd(cmd, 2);
@@ -85,7 +100,6 @@ static char	*search_executable(char *cmd)
 		free(pathname);
 		pathname = NULL;
 	}
-	ft_free_matrix(path);
 	return (pathname);
 }
 

@@ -6,28 +6,80 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/15 18:35:14 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 10:55:02 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*process_quotes(char *token_substr, int nested)
+char	*ft_str_insert(char *str, char *insert, int pos, int skip_len)
+{
+	char	*final_str;
+	char	*aux_join;
+	char	*str_start;
+	char	*str_end;
+	int		end_len;
+
+	str_start = ft_calloc(pos + 1, sizeof(char));
+	if (str_start == NULL)
+		return (NULL);
+	ft_strlcpy(str_start, str, pos + 1);
+	aux_join = ft_strjoin(str_start, insert);
+	free(str_start);
+	if (aux_join == NULL)
+		return (NULL);
+	end_len = ft_strlen(&str[pos + skip_len]);
+	str_end = ft_calloc(end_len + 1, sizeof(char));
+	if (str_end == NULL)
+		return (NULL);
+	ft_strlcpy(str_end, &str[pos + skip_len], end_len + 1);
+	final_str = ft_strjoin(aux_join, str_end);
+	free(aux_join);
+	free(str_end);
+	free(str);
+	free(insert);
+	return (final_str);
+}
+
+char	*expand_quoted_str(char *str)
+{
+	int		i;
+	int		env_len;
+	char	*env_key;
+	char	*env_value;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			env_len = substr_env_name(&str[i + 1]) + 1;
+			env_key = ft_substr(str, i, env_len);
+			env_value = expand_env(env_key);
+			str = ft_str_insert(str, env_value, i, env_len);
+			if (str == NULL)
+			{
+				last_exit_code(EXIT_FAILURE);
+				return (NULL);
+			}
+			i += env_len;
+		}
+		else
+			i++;
+	}
+	return (str);
+}
+
+char	*process_quotes(char *token_substr)
 {
 	if (token_substr[0] == '\"')
 	{
 		token_substr = ft_trim_quotes(token_substr, "\"");
-		token_substr = parse_token(token_substr, 1);
+		if (ft_strchr(token_substr, '$'))
+			token_substr = expand_quoted_str(token_substr);
 	}
 	else if (token_substr[0] == '\'')
-	{
 		token_substr = ft_trim_quotes(token_substr, "\'");
-		if (nested)
-		{
-			token_substr = parse_token(token_substr, 1);
-			token_substr = ft_add_single_quote(token_substr);
-		}
-	}
 	return (token_substr);
 }
 

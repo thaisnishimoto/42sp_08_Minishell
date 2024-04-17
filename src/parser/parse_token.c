@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/15 18:35:48 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 00:20:31 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,9 @@ static char	**ft_split_concat_token(char *token)
 
 static char	*process_substr(char *token_substr, int nested)
 {
+	(void)nested;
 	if (ft_strchr("\"\'", token_substr[0]))
-		token_substr = process_quotes(token_substr, nested);
+		token_substr = process_quotes(token_substr);
 	else if (token_substr[0] == '$' && token_substr[1] != '\0')
 		token_substr = expand_env(token_substr);
 	else if (token_substr[0] == '~')

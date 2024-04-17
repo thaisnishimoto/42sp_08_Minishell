@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 13:33:31 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/03 15:36:21 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/17 10:49:59 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_node	*parse_pipe(t_node *left, t_node *right)
 	if (pipe_node == NULL)
 	{
 		free_ast(left);
+		free_ast(right);
 		return (NULL);
 	}
 	pipe_node->type = PIPE;

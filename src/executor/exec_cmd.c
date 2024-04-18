@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 17:39:54 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:08:58 by mchamma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ static char	**get_path(void)
 	char	*temp;
 	int		i;
 
+	path_value = NULL;
 	path = NULL;
-	path_value = hashtable_search("PATH")->value;
+	if (hashtable_search("PATH"))
+		path_value = hashtable_search("PATH")->value;
 	if (path_value)
 		path = ft_split(path_value, ':');
 	i = 0;
@@ -70,6 +72,8 @@ static char	*get_pathname(char *cmd, char *path[])
 		pathname = ft_strdup(cmd);
 	else
 	{
+		if (path == NULL)
+			return (ft_strdup(cmd));
 		i = -1;
 		while (path[++i])
 		{
@@ -110,5 +114,6 @@ void	exec_cmd(t_list *cmd_args)
 	}
 	ft_free_matrix(envp);
 	ft_free_matrix(cmd_argv);
-	ft_free_matrix(path);
+	if (path)
+		ft_free_matrix(path);
 }

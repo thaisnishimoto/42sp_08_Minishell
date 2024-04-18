@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/13 23:26:46 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/18 00:47:07 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static void	get_heredoc_content(t_redir *node, int hdoc_fd)
 
 	buffer = expand_hdoc(prompt("> "), node);
 	handle_if_signaled(buffer, node->eof, hdoc_fd);
-	while (buffer && ft_strncmp(buffer, node->eof,
-			ft_strlen(node->eof) + 1) != 0)
+	while (buffer
+		&& ft_strncmp(buffer, node->eof, ft_strlen(node->eof) + 1) != 0)
 	{
 		ft_putendl_fd(buffer, hdoc_fd);
 		free(buffer);

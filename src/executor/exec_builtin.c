@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/15 11:24:50 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/18 00:11:14 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int	is_builtin(t_cmd *cmd_node)
 {
-	if (!ft_strcmp("cd", cmd_node->cmd_args->content))
+	if (cmd_node->cmd_args == NULL)
+		return (0);
+	else if (!ft_strcmp("cd", cmd_node->cmd_args->content))
 		return (1);
 	else if (!ft_strcmp("echo", cmd_node->cmd_args->content))
 		return (1);

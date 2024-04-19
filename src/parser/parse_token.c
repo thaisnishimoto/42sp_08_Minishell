@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 08:51:59 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:59:04 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ char	**ft_split_concat_token(char *token)
 
 static char	*process_substr(char *token_substr)
 {
-	if (ft_strchr("\"", token_substr[0]))
-		token_substr = process_quotes(token_substr);
+	if (ft_strchr("\"", token_substr[0]) && ft_strchr(token_substr, '$'))
+		token_substr = expand_quoted_str(token_substr);
 	else if (token_substr[0] == '$' && token_substr[1] != '\0')
 		token_substr = expand_env(token_substr);
 	else if (token_substr[0] == '~')

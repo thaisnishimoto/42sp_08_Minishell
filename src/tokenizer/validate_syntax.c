@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 02:03:43 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 15:28:52 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 18:09:12 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,7 @@ int	validate_quotes(char *input)
 
 static int	check_pipe_syntax(char *prev_token, char *next_token)
 {
-	if (prev_token == NULL || ft_strchr(OPERATORS, prev_token[0]))
-	{
-		ft_putendl_fd("syntax error near unexpected token '|'", 2);
-		return (0);
-	}
-	if (next_token == NULL || ft_strchr(OPERATORS, next_token[0]))
+	if ((prev_token == NULL) || (next_token == NULL))
 	{
 		ft_putendl_fd("syntax error near unexpected token '|'", 2);
 		return (0);

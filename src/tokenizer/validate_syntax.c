@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 02:03:43 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/16 21:55:56 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:28:52 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,15 @@ int	validate_syntax(char **tokens)
 	while (tokens[i])
 	{
 		if (tokens[i][0] == '|')
-			return (check_pipe_syntax(prev_token, tokens[i + 1]));
+		{
+			if (!check_pipe_syntax(prev_token, tokens[i + 1]))
+				return (0);
+		}
 		else if (tokens[i][0] == '<' || tokens[i][0] == '>')
-			return (check_redir_syntax(tokens[i + 1]));
+		{
+			if (!check_redir_syntax(tokens[i + 1]))
+				return (0);
+		}
 		prev_token = tokens[i];
 		i++;
 	}

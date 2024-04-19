@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:00:52 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 18:42:34 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:13:46 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	run_pipeline_cmd(t_cmd *cmd_node)
 {
 	if (exec_redir(cmd_node->redirs))
 	{
-		processs_args(&cmd_node->cmd_args);
+		cmd_args_parse(&cmd_node->cmd_args);
 		if (is_builtin(cmd_node))
 			exec_builtin(cmd_node);
 		else

@@ -6,83 +6,11 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 17:47:47 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 18:54:58 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-char	*parse_arg_trim_quotes(char *token)
-{
-	char	**token_substr;
-	int		i;
-
-	if (token == NULL)
-		return (NULL);
-	if (token[0] == '\0')
-		return (token);
-	token_substr = ft_split_concat_token(token);
-	if (token_substr == NULL)
-		return (NULL);
-	i = 0;
-	while (token_substr[i])
-	{
-		token_substr[i] = ft_trim_quotes(token_substr[i], "\"\'");
-		if (token_substr[i] == NULL)
-		{
-			ft_free_matrix(token_substr);
-			return (NULL);
-		}
-		i++;
-	}
-	return (ft_rejoin_substr(token_substr));
-}
-
-t_list	*processs_args(t_list **cmd_args)
-{
-	char	**token_mtx;
-	char	*temp;
-	int		i;
-	t_list	*list_args;
-	t_list	*xtemp;
-	t_list	*new_arg;
-
-	if (cmd_args == NULL)
-		return (NULL);
-	xtemp = *cmd_args;
-	list_args = NULL;
-	while (xtemp)
-	{
-		if (ft_strchr(xtemp->content, '\"') || ft_strchr(xtemp->content, '\''))
-		{
-			temp = parse_arg_trim_quotes(ft_strdup(xtemp->content));
-			new_arg = ft_lstnew(temp);
-			if (new_arg == NULL)
-				return (NULL);
-			ft_lstadd_back(&list_args, new_arg);
-		}
-		else
-		{
-			token_mtx = ft_split(xtemp->content, ' ');
-			if (token_mtx == NULL)
-				return (NULL);
-			i = 0;
-			while (token_mtx[i])
-			{
-				new_arg = ft_lstnew(ft_strdup(token_mtx[i]));
-				if (new_arg == NULL)
-					return (NULL);
-				ft_lstadd_back(&list_args, new_arg);
-				i++;
-			}
-			ft_free_matrix(token_mtx);
-		}
-		xtemp = xtemp->next;
-	}
-	ft_lstclear(cmd_args, free);
-	*cmd_args = list_args;
-	return (*cmd_args);
-}
 
 static char	**create_cmd_arg_vector(t_list *cmd_args)
 {
@@ -163,6 +91,33 @@ static char	*get_pathname(char *cmd, char *path[])
 	return (pathname);
 }
 
+static char	*validate_permission(char *pathname, char *cmd)
+{
+	if (!pathname || !*pathname || !ft_strncmp(cmd, "..", 3))
+	{
+		last_exit_code(127);
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": command not found", 2);
+	}
+	else if (!ft_strncmp(cmd, ".", 2))
+	{
+		print_exec_error(2, ": filename argment required", cmd);
+		ft_putendl_fd(".: usage: . filename [arguments]", 2);
+	}
+	else if (access(pathname, F_OK) == -1)
+		print_exec_error(127, ": No such file or directory", cmd);
+	else if (pathname && access(pathname, X_OK) == -1)
+		print_exec_error(126, ": Permission denied", cmd);
+	else if (is_directory(pathname))
+		print_exec_error(126, ": Is a directory", cmd);
+	if (last_exit_code(-1) != 0)
+	{
+		free(pathname);
+		pathname = NULL;
+	}
+	return (pathname);
+}
+
 void	exec_cmd(t_list *cmd_args)
 {
 	char	**envp;
@@ -176,7 +131,7 @@ void	exec_cmd(t_list *cmd_args)
 	cmd_argv = create_cmd_arg_vector(cmd_args);
 	path = get_path();
 	pathname = get_pathname(cmd_argv[0], path);
-	pathname = validate_executable(pathname, cmd_argv[0]);
+	pathname = validate_permission(pathname, cmd_argv[0]);
 	if (pathname)
 	{
 		execve(pathname, cmd_argv, envp);

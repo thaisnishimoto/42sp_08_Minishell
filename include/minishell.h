@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 09:03:50 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:49:12 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ size_t			substr_env_name(char *str);
 size_t			ft_substrlen(char *str);
 char			*ft_trim_quotes(char *str, const char *set);
 char			*ft_add_single_quote(char *token_substr);
-//char			*process_quotes(char *token_substr);
 char			*expand_quoted_str(char *str);
 char			*expand_env(char *token);
 char			*process_til(char *token_substr);
@@ -137,25 +136,30 @@ char			*ft_rejoin_substr(char *token_substr[]);
 
 //executor functions
 void			executor(t_node *node);
+int				exec_redir(t_redir *node);
+void			exec_cmd(t_list *cmd_args);
+void			cmd_args_parse(t_list **cmd_args);
+
+//exec heredoc functions
 int				handle_heredocs(t_node *node);
 char			*expand_hdoc(char *buffer, t_redir *node);
-void			exec_cmd(t_list *cmd_args);
+
+//exec pipeline functions
 void			first_cmd_pipeline(t_node *node, int *pipe_fd);
 void			middle_cmd_pipeline(t_node *node, int *pipe_fd);
 void			last_cmd_pipeline(t_node *node, int *pipe_fd);
 int				wait_for_pipeline_cmds(void);
-int				exec_redir(t_redir *node);
-t_list			*processs_args(t_list **cmd_args);
 
 //exec cmd utils
-char			*validate_executable(char *pathname, char *cmd);
+int				is_directory(char *pathname);
+void			print_exec_error(int exit_code, char *msg, char *cmd);
 pid_t			ft_fork(void);
 int				ft_pipe(int *pipe_fd);
 void			ft_close_pipe(int *pipe_fd);
 void			ft_exit_child_process(int exit_code);
 void			wait_for_cmd_process(pid_t pid);
 
-//builtin
+//builtin functions
 void			cd_call(t_cmd *cmd_node);
 void			echo_call(t_cmd *cmd_node);
 void			env_call(t_cmd *cmd_node);

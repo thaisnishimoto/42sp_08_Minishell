@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/18 00:54:24 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:09:02 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 static int	expand_filename(t_redir *node)
 {
-	int		expand_flag;
 	char	*redir_arg;
 
 	redir_arg = ft_strdup(node->filename);
 	if (redir_arg == NULL)
 		return (0);
-	expand_flag = 0;
-	node->filename = parse_token(node->filename, &expand_flag);
-	if (expand_flag && ft_strchr(node->filename, ' '))
+	node->filename = parse_token(node->filename);
+	if (ft_strchr("\"\'", node->filename[0]))
+		node->filename = ft_trim_quotes(node->filename, "\"\'");
+	else if (ft_strchr(node->filename, ' '))
 	{
 		last_exit_code(EXIT_FAILURE);
 		ft_putstr_fd("minishell: ", 2);

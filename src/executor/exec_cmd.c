@@ -6,11 +6,80 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/18 19:08:58 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/19 08:39:24 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+char	*parse_arg_trim_quotes(char *token)
+{
+	char	**token_substr;
+	int		i;
+
+	if (token == NULL)
+		return (NULL);
+	if (token[0] == '\0')
+		return (token);
+	token_substr = ft_split_concat_token(token);
+	if (token_substr == NULL)
+		return (NULL);
+	i = 0;
+	while (token_substr[i])
+	{
+		token_substr[i] = ft_trim_quotes(token_substr[i], "\"\'");
+		if (token_substr[i] == NULL)
+		{
+			ft_free_matrix(token_substr);
+			return (NULL);
+		}
+		i++;
+	}
+	return (ft_rejoin_substr(token_substr));
+}
+
+t_list	*processs_args(t_list **cmd_args)
+{
+	char	**token_mtx;
+	char	*temp;
+	int		i;
+	t_list	*list_args;
+	t_list	*new_arg;
+
+	if (cmd_args == NULL)
+		return (NULL);
+	list_args = NULL;
+	while (*cmd_args)
+	{
+		if (ft_strchr((char *)(*cmd_args)->content, '\"') || ft_strchr((char *)(*cmd_args)->content, '\''))
+		{
+			temp = parse_arg_trim_quotes(ft_strdup((*cmd_args)->content));
+			new_arg = ft_lstnew(temp);
+			if (new_arg == NULL)
+				return (NULL);
+			ft_lstadd_back(&list_args, new_arg);
+		}
+		else
+		{
+			token_mtx = ft_split((*cmd_args)->content, ' ');
+			if (token_mtx == NULL)
+				return (NULL);
+			i = 0;
+			while (token_mtx[i])
+			{
+				new_arg = ft_lstnew(token_mtx[i]);
+				if (new_arg == NULL)
+					return (NULL);
+				ft_lstadd_back(&list_args, new_arg);
+				i++;
+			}
+		}
+		*cmd_args = (*cmd_args)->next;
+	}
+	ft_lstclear(cmd_args, free);
+	*cmd_args = list_args;
+	return (*cmd_args);
+}
 
 static char	**create_cmd_arg_vector(t_list *cmd_args)
 {

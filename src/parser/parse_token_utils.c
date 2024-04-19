@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 17:49:01 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:54:59 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,13 @@ char	*expand_quoted_str(char *str)
 	return (str);
 }
 
-char	*process_quotes(char *token_substr, int *expand)
+char	*process_quotes(char *token_substr)
 {
 	if (token_substr[0] == '\"')
 	{
-		token_substr = ft_trim_quotes(token_substr, "\"");
 		if (ft_strchr(token_substr, '$'))
-		{
 			token_substr = expand_quoted_str(token_substr);
-			*expand = 1;
-		}
 	}
-	else if (token_substr[0] == '\'')
-		token_substr = ft_trim_quotes(token_substr, "\'");
 	return (token_substr);
 }
 
@@ -92,8 +86,10 @@ char	*expand_env(char *token)
 	t_env	*result;
 	char	*env_value;
 
-	if (token[1] == '\'' || token[1] == '\"')
-		env_value = ft_trim_quotes(ft_strdup(&token[1]), "\"\'");
+	if (token[1] == '\"')
+		env_value = process_quotes(ft_strdup(&token[1]));
+	else if (token[1] == '\'')
+		env_value = ft_strdup(&token[2]);
 	else if (token[1] == '?')
 		env_value = ft_itoa(last_exit_code(-1));
 	else if (ft_isdigit(token[1]))

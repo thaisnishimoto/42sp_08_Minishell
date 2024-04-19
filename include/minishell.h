@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 19:28:35 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:34:52 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,18 +117,19 @@ size_t			substr_quote(char *str);
 size_t			substr_operator(char *str, int slen);
 
 //parse functions
-int				parse_cmd(t_cmd **cmd_node, char *tokens[], int *i, int export_flag);
+int				parse_cmd(t_cmd **cmd_node, char *tokens[], int *i);
 int				parse_redir(t_redir **redirs_ptr, char *tokens[], int *i);
 t_node			*parse_pipe(t_node *left, t_node *right);
-char			*parse_token(char *token, int *expand);
+char			*parse_token(char *token);
 
 //parse token - utils
+char			**ft_split_concat_token(char *token);
 int				count_token_substr(char *token);
 size_t			substr_env_name(char *str);
 size_t			ft_substrlen(char *str);
 char			*ft_trim_quotes(char *str, const char *set);
 char			*ft_add_single_quote(char *token_substr);
-char			*process_quotes(char *token_substr, int *expand);
+char			*process_quotes(char *token_substr);
 char			*expand_env(char *token);
 char			*process_til(char *token_substr);
 char			*ft_rejoin_substr(char *token_substr[]);
@@ -143,6 +144,7 @@ void			middle_cmd_pipeline(t_node *node, int *pipe_fd);
 void			last_cmd_pipeline(t_node *node, int *pipe_fd);
 int				wait_for_pipeline_cmds(void);
 int				exec_redir(t_redir *node);
+t_list			*processs_args(t_list **cmd_args);
 
 //exec cmd utils
 char			*validate_executable(char *pathname, char *cmd);

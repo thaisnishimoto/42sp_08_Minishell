@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/18 00:56:00 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 00:56:38 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	executor(t_node *node)
 		return ;
 	if (node->type == CMD)
 	{
+		processs_args(&((t_cmd *)node)->cmd_args);
 		if (is_builtin((t_cmd *)node))
 			exec_builtin_in_parent((t_cmd *)node);
 		else

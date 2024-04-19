@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 19:10:49 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:53:05 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,15 @@ static t_node	*build_tree(char *tokens[])
 {
 	int		i;
 	t_cmd	*cmd_node;
-	int	export_flag;
 
-	export_flag = 0;
 	if (!init_cmd_node(&cmd_node))
 		return (NULL);
-	if (ft_strcmp(tokens[0], "export") == 0)
-		export_flag = 1;
 	i = 0;
 	while (tokens[i])
 	{
 		if (!ft_strchr("<|>", tokens[i][0]))
 		{
-			if (!parse_cmd(&cmd_node, tokens, &i, export_flag))
+			if (!parse_cmd(&cmd_node, tokens, &i))
 				break ;
 		}
 		else if (tokens[i][0] == '<' || tokens[i][0] == '>')

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 10:16:19 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:12:41 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -796,6 +796,57 @@ MU_TEST(function_should_split_after_expand_in_pipeline)
 	free(expected);
 }
 
+MU_TEST(function_should_split_after_expand_in_redirect)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 39: export a=\"f1 f2\" < $a");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'export a=\"f1 f2\"\n< $a' | ./minishell", 1);
+	expected = exec_command("export a=\"f1 f2\"\nbash -c < $a", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_not_split_if_quotes_filename_in_redirect)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 40: < \"f1 f2\"");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '< \"f1 f2\"' | ./minishell", 1);
+	expected = exec_command("< \"f1 f2\"", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_not_expand_eof_on_hdoc)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 41: export a=\"eof\" cat << $a");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'export a=\"eof\"\ncat << $a\neof\n$a' | ./minishell", 1);
+	expected = exec_command("export a=\"eof\"\ncat << $a\neof\n$a", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
 //MU_TEST(funtion_should_try_run_command_without_x_permission)
 //{
 //	char    *expected = "Files ../outfile8 and ../outfile_expected8 are identical\n";
@@ -880,13 +931,10 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(function_should_expand_and_export_as_single_str_value);
 	MU_RUN_TEST(function_should_split_after_expand_and_execute);
 	MU_RUN_TEST(function_should_split_after_expand_in_pipeline);
-//	MU_RUN_TEST(funtion_should_run_command_ls_l_wc_l);
-//	MU_RUN_TEST(funtion_should_run_command_grep_a1_wc_w);
+	MU_RUN_TEST(function_should_split_after_expand_in_redirect);
+	MU_RUN_TEST(function_should_not_split_if_quotes_filename_in_redirect);
+	MU_RUN_TEST(function_should_not_expand_eof_on_hdoc);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);
-//	MU_RUN_TEST(funtion_should_run_command_cat_wc);
-//	MU_RUN_TEST(funtion_should_run_command_echo_tr);
-//	MU_RUN_TEST(funtion_should_create_outfile_and_run_2nd_command);
-//	MU_RUN_TEST(funtion_should_run_command_echo_tr_space);
 //	MU_RUN_TEST(funtion_should_try_run_command_without_x_permission);
 //	MU_RUN_TEST(funtion_should_try_run_command_with_path);
 //hdoc and redir middle of pipeline
@@ -896,9 +944,11 @@ MU_TEST_SUITE(test_suite)
 //catz echo$? exit echo$?
 //signals
 //unset PATH
-//absolute path
+//absolute path: /  /dev/null  /bin/xxxxxx .
 //"'  '  '"
 //'"  "  "'
+//export ""
+//syntax .  <|  >|
 }
 
 int	main(void)

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 11:12:41 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:41:51 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -836,11 +836,11 @@ MU_TEST(function_should_not_expand_eof_on_hdoc)
 	char	*expected;
 
 	printf("\n------------------------\n");
-	printf(" TEST 41: export a=\"eof\" cat << $a");
+	printf(" TEST 41: cat << $USER");
 	printf("\n------------------------\n");
 
-	result = exec_command("echo 'export a=\"eof\"\ncat << $a\neof\n$a' | ./minishell", 1);
-	expected = exec_command("export a=\"eof\"\ncat << $a\neof\n$a", 1);
+	result = exec_command("< ./files/test_hdoc_eof_var.txt ./minishell", 1);
+	expected = exec_command("bash -c cat << $USER\nthaisnishimoto\n$USER\n", 1);
 	printf("%s", result);
 	mu_assert_string_eq(expected, result);
 	free(result);

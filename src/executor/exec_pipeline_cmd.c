@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:00:52 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 10:18:11 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 18:42:34 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ void	last_cmd_pipeline(t_node *node, int *pipe_fd)
 
 int	wait_for_pipeline_cmds(void)
 {
-	pid_t	done_pid;
+	pid_t			done_pid;
+	int				wstatus;
 	static pid_t	last_cmd_pid;
-	int		wstatus;
 
 	done_pid = wait(&wstatus);
 	if (done_pid > last_cmd_pid)

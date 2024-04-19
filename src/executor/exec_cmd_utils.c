@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/17 17:40:51 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:20:51 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	is_directory(char *pathname)
 
 char	*validate_executable(char *pathname, char *cmd)
 {
-	if (!pathname || !ft_strncmp(cmd, "..", 3))
+	if (!pathname || !*pathname || !ft_strncmp(cmd, "..", 3))
 	{
 		last_exit_code(127);
 		ft_putstr_fd(cmd, 2);

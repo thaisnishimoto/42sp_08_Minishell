@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/15 15:37:09 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:16:19 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,7 +316,9 @@ MU_TEST(function_should_run_command_multiple_outfile_redir)
 	printf(" TEST 15: echo oi > outfile2 > outfile3");
 	printf("\n------------------------\n");
 
+	exec_command("echo Truncate! > ./files/outfile2", 0);
 	exec_command("echo 'echo oi > ./files/outfile2 >./files/outfile3' | ./minishell", 1);
+	exec_command("echo Truncate! > ./files/outfile2_expected", 0);
 	exec_command("echo oi > ./files/outfile2_expected >./files/outfile3_expected", 1);
 
 	diff_result = exec_command("diff -s ./files/outfile2 ./files/outfile2_expected", 0);
@@ -709,48 +711,91 @@ MU_TEST(function_should_not_expand_til_concat_after_str)
 	free(expected);
 }
 
-//MU_TEST(funtion_should_create_outfile_and_run_2nd_command)
-//{
-//	char    *expected = "Files ../outfile6 and ../outfile_expected6 are identical\n";
-//	char    *outfile;
-//	char    *diff_result;
-//
-//	printf("\n------------------------\n");
-//	printf(" TEST 6: invalid infile");
-//	printf("\n------------------------\n");
-//
-//	exec_command("< file_x cat | ls > ../outfile_expected6");
-//	exec_command("../pipex_bonus file_x \"cat\" \"ls\" ../outfile6");
-//
-//	diff_result = exec_command("diff -s ../outfile6 ../outfile_expected6");
-//	ft_printf("%s", diff_result);
-//	outfile = exec_command("cat ../outfile6");
-//	ft_printf("Pipex outfile: %s\n", outfile);
-//	mu_assert_string_eq(expected, diff_result);
-//	free(diff_result);
-//}
-//
-//MU_TEST(funtion_should_run_command_echo_tr_space)
-//{
-//	char    *expected = "Files ../outfile7 and ../outfile_expected7 are identical\n";
-//	char    *outfile;
-//	char    *diff_result;
-//
-//	printf("\n------------------------\n");
-//	printf(" TEST 7: echo | tr space");
-//	printf("\n------------------------\n");
-//
-//	exec_command("< infile echo \"h e l l o\" | tr -d ' ' > ../outfile_expected7");
-//	exec_command("../pipex_bonus infile \"echo \'h e l l o\'\" \"tr -d ' '\" ../outfile7");
-//
-//	diff_result = exec_command("diff -s ../outfile7 ../outfile_expected7");
-//	ft_printf("%s", diff_result);
-//	outfile = exec_command("cat ../outfile7");
-//	ft_printf("Pipex outfile: %s\n", outfile);
-//	mu_assert_string_eq(expected, diff_result);
-//	free(diff_result);
-//}
-//
+MU_TEST(function_should_expand_til_to_home_adding_path)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 34: echo ~/teste");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo ~/teste' | ./minishell", 1);
+	expected = exec_command("echo ~/teste", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_export_as_single_str_value)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 35: export w=\"x=1 y=2\"");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'export w=\"x=1 y=2\"\necho $w' | ./minishell", 1);
+	expected = exec_command("export w=\"x=1 y=2\"\necho $w", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_expand_and_export_as_single_str_value)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 36: export a=\"o $?\"");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'export a=\"o $?\"\necho $a' | ./minishell", 1);
+	expected = exec_command("export a=\"o $?\"\necho $a", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_split_after_expand_and_execute)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 37: export a=\"o hello\"");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'export a=\"o hello\"\nech$a' | ./minishell", 1);
+	expected = exec_command("export a=\"o hello\"\nech$a", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(function_should_split_after_expand_in_pipeline)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 38: export a=\"echo hello\" $a | rev");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'export a=\"echo hello\"\n$a | rev' | ./minishell", 1);
+	expected = exec_command("export a=\"echo hello\"\n$a | rev", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
 //MU_TEST(funtion_should_try_run_command_without_x_permission)
 //{
 //	char    *expected = "Files ../outfile8 and ../outfile_expected8 are identical\n";
@@ -793,89 +838,6 @@ MU_TEST(function_should_not_expand_til_concat_after_str)
 //	free(diff_result);
 //}
 //
-//MU_TEST(funtion_should_run_5_commands)
-//{
-//	char    *expected = "Files ../outfile10 and ../outfile_expected10 are identical\n";
-//	char    *outfile;
-//	char    *diff_result;
-//
-//	printf("\n------------------------\n");
-//	printf(" TEST 10 - BONUS: 5 cmds");
-//	printf("\n------------------------\n");
-//
-//	exec_command("< infile2 cat | head -n 5 | grep x | tr -d ' ' | rev > ../outfile_expected10");
-//	exec_command("../pipex_bonus infile2 \"cat\" \"head -n 5\" \"grep x\" \"tr -d ' '\" \"rev\" ../outfile10");
-//
-//	diff_result = exec_command("diff -s ../outfile10 ../outfile_expected10");
-//	ft_printf("%s", diff_result);
-//	outfile = exec_command("cat ../outfile10");
-//	ft_printf("Outfile: %s", outfile);
-//	mu_assert_string_eq(expected, diff_result);
-//	free(diff_result);
-//}
-//
-//MU_TEST(funtion_should_overwrite_output)
-//{
-//	char    *expected = "Files ../outfile10 and ../outfile_expected10 are identical\n";
-//	char    *outfile;
-//	char    *diff_result;
-//
-//	printf("\n------------------------\n");
-//	printf(" TEST 10.2 - BONUS: overwrite output");
-//	printf("\n------------------------\n");
-//
-//	exec_command("< infile2 cat | head -n 5 | grep x | tr -d ' ' | rev > ../outfile_expected10");
-//	exec_command("../pipex_bonus infile2 \"cat\" \"head -n 5\" \"grep x\" \"tr -d ' '\" \"rev\" ../outfile10");
-//
-//	diff_result = exec_command("diff -s ../outfile10 ../outfile_expected10");
-//	ft_printf("%s", diff_result);
-//	outfile = exec_command("cat ../outfile10");
-//	ft_printf("Outfile: %s", outfile);
-//	mu_assert_string_eq(expected, diff_result);
-//	free(diff_result);
-//}
-//
-//MU_TEST(funtion_should_run_here_doc)
-//{
-//	char    *expected = "Files ../outfile11 and ../outfile_expected11 are identical\n";
-//	char    *outfile;
-//	char    *diff_result;
-//
-//	printf("\n------------------------\n");
-//	printf(" TEST 11 - BONUS: here_doc input: Hello World!");
-//	printf("\n------------------------\n");
-//
-//	exec_command("cat << EOF | rev >> ../outfile_expected11\nHello World!\nEOF\n");
-//	exec_command("../pipex_bonus here_doc EOF \"cat\" \"rev\" ../outfile11");
-//
-//	diff_result = exec_command("diff -s ../outfile11 ../outfile_expected11");
-//	ft_printf("%s", diff_result);
-//	outfile = exec_command("cat ../outfile11");
-//	ft_printf("Outfile: %s", outfile);
-//	mu_assert_string_eq(expected, diff_result);
-//	free(diff_result);
-//}
-//
-//MU_TEST(funtion_should_append_output)
-//{
-//	char    *expected = "Files ../outfile11 and ../outfile_expected11 are identical\n";
-//	char    *outfile;
-//	char    *diff_result;
-//
-//	printf("\n------------------------\n");
-//	printf(" TEST 11.2 - BONUS: append HELLO! to output");
-//	printf("\n------------------------\n");
-//
-//	exec_command("cat << EOF | rev >> ../outfile_expected11\nHELLO!\nEOF\n");
-//	exec_command("../pipex_bonus here_doc EOF \"cat\" \"rev\" ../outfile11");
-//
-//	diff_result = exec_command("diff -s ../outfile11 ../outfile_expected11");
-//	ft_printf("%s", diff_result);
-//	outfile = exec_command("cat ../outfile11");
-//	ft_printf("Outfile: %s", outfile);
-//	mu_assert_string_eq(expected, diff_result);
-//	free(diff_result);
-//}
 
 MU_TEST_SUITE(test_suite)
 {
@@ -913,6 +875,11 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(function_should_expand_til_to_home);
 	MU_RUN_TEST(function_should_not_expand_til_concat_before_str);
 	MU_RUN_TEST(function_should_not_expand_til_concat_after_str);
+	MU_RUN_TEST(function_should_expand_til_to_home_adding_path);
+	MU_RUN_TEST(function_should_export_as_single_str_value);
+	MU_RUN_TEST(function_should_expand_and_export_as_single_str_value);
+	MU_RUN_TEST(function_should_split_after_expand_and_execute);
+	MU_RUN_TEST(function_should_split_after_expand_in_pipeline);
 //	MU_RUN_TEST(funtion_should_run_command_ls_l_wc_l);
 //	MU_RUN_TEST(funtion_should_run_command_grep_a1_wc_w);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);
@@ -922,15 +889,16 @@ MU_TEST_SUITE(test_suite)
 //	MU_RUN_TEST(funtion_should_run_command_echo_tr_space);
 //	MU_RUN_TEST(funtion_should_try_run_command_without_x_permission);
 //	MU_RUN_TEST(funtion_should_try_run_command_with_path);
-//	MU_RUN_TEST(funtion_should_run_5_commands);
-//	MU_RUN_TEST(funtion_should_overwrite_output);
-//	MU_RUN_TEST(funtion_should_run_here_doc);
-//	MU_RUN_TEST(funtion_should_append_output);
 //hdoc and redir middle of pipeline
 //$? expansion in middle of pipeline
 //cat | cat | ls and echo $?
 //exit 1 | exit 2
 //catz echo$? exit echo$?
+//signals
+//unset PATH
+//absolute path
+//"'  '  '"
+//'"  "  "'
 }
 
 int	main(void)

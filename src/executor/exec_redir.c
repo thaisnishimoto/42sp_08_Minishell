@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 11:09:02 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:51:08 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ static int	expand_filename(t_redir *node)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(redir_arg, 2);
 		ft_putendl_fd(": ambiguous redirect", 2);
-		free(redir_arg);
 		return (0);
 	}
+	free(redir_arg);
 	return (1);
 }
 

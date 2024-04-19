@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 11:41:51 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 18:33:46 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,9 +316,9 @@ MU_TEST(function_should_run_command_multiple_outfile_redir)
 	printf(" TEST 15: echo oi > outfile2 > outfile3");
 	printf("\n------------------------\n");
 
-	exec_command("echo Truncate! > ./files/outfile2", 0);
+	exec_command("echo Truncate failed! > ./files/outfile2", 0);
 	exec_command("echo 'echo oi > ./files/outfile2 >./files/outfile3' | ./minishell", 1);
-	exec_command("echo Truncate! > ./files/outfile2_expected", 0);
+	exec_command("echo Truncate failed! > ./files/outfile2_expected", 0);
 	exec_command("echo oi > ./files/outfile2_expected >./files/outfile3_expected", 1);
 
 	diff_result = exec_command("diff -s ./files/outfile2 ./files/outfile2_expected", 0);
@@ -483,7 +483,9 @@ MU_TEST(function_should_run_pipeline_in_out_redir)
 	printf(" TEST 24: < infile cat | grep 1 > outfile4 >> outfile5");
 	printf("\n------------------------\n");
 
+	exec_command("echo Add below: > ./files/outfile5", 0);
 	exec_command("echo '< ./files/infile cat | grep 1  > ./files/outfile4 >>./files/outfile5' | ./minishell", 1);
+	exec_command("echo Add below: > ./files/outfile5_expected", 0);
 	exec_command("< ./files/infile cat | grep 1  > ./files/outfile4_expected >>./files/outfile5_expected", 1);
 
 	diff_result = exec_command("diff -s ./files/outfile4 ./files/outfile4_expected", 0);

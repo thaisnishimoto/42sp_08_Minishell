@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 12:38:24 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:30:29 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,8 @@ void	ft_free_exit(void)
 	hashtable_mx(NULL, NULL, FREE);
 	static_ast_holder(NULL, FREE);
 	rl_clear_history();
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
 	exit (last_exit_code(-1));
 }

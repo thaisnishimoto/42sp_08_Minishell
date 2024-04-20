@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 16:15:00 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 18:54:58 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/20 11:36:25 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ void	exec_cmd(t_list *cmd_args)
 
 	if (cmd_args == NULL)
 		return ;
+	last_exit_code(0);
 	envp = hashtable_envp_mtx();
 	cmd_argv = create_cmd_arg_vector(cmd_args);
 	path = get_path();

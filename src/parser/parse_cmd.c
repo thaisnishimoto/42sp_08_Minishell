@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 13:33:31 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 08:49:55 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/20 10:13:07 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	parse_cmd(t_cmd **cmd_node, char *tokens[], int *i)
 {
 	t_list	*new_arg;
+
 	tokens[*i] = parse_token(tokens[*i]);
 	if (tokens[*i] == NULL)
 		return (0);

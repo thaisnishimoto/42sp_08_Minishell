@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 13:30:22 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/15 13:00:32 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/20 17:59:56 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	env_print(void)
 }
 
 void	env_call(t_cmd *cmd_node)
-{	
+{
 	t_list	*arg;
 
 	last_exit_code(0);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export2.c                                          :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 11:00:02 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/16 11:15:12 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/20 18:00:20 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	export_condition_exec(t_list *arg)
 	i = 0;
 	while (temp->key[i] && !ft_isdigit(temp->key[0])
 		&& (ft_isalnum(temp->key[i]) || temp->key[i] == '_'))
-			i++;
+		i++;
 	if (temp->key[i])
 	{
 		ft_putstr_fd("minishell: export: '", 2);

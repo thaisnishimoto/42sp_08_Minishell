@@ -6,11 +6,19 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 12:10:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 17:51:08 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/20 12:10:30 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static void	print_redir_file_error(int exit_code, char *redir_arg)
+{
+	last_exit_code(exit_code);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(redir_arg, 2);
+	ft_putendl_fd(": ambiguous redirect", 2);
+}
 
 static int	expand_filename(t_redir *node)
 {
@@ -20,14 +28,18 @@ static int	expand_filename(t_redir *node)
 	if (redir_arg == NULL)
 		return (0);
 	node->filename = parse_token(node->filename);
-	if (ft_strchr("\"\'", node->filename[0]))
+	if (node->filename[0] == '\0')
+	{
+		print_redir_file_error(EXIT_FAILURE, redir_arg);
+		free(redir_arg);
+		return (0);
+	}
+	else if (ft_strchr("\"\'", node->filename[0]))
 		node->filename = ft_trim_quotes(node->filename, "\"\'");
 	else if (ft_strchr(node->filename, ' '))
 	{
-		last_exit_code(EXIT_FAILURE);
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(redir_arg, 2);
-		ft_putendl_fd(": ambiguous redirect", 2);
+		print_redir_file_error(EXIT_FAILURE, redir_arg);
+		free(redir_arg);
 		return (0);
 	}
 	free(redir_arg);

@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 19:49:12 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/20 18:58:48 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void			wait_for_cmd_process(pid_t pid);
 void			cd_call(t_cmd *cmd_node);
 void			echo_call(t_cmd *cmd_node);
 void			env_call(t_cmd *cmd_node);
-void			exit_call(t_cmd *cmd_node);
+int				exit_call(t_cmd *cmd_node);
 void			export_call(t_cmd *cmd_node);
 void			pwd_call(void);
 void			unset_call(t_cmd *cmd_node);

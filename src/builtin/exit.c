@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:37 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/20 13:56:24 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/20 19:04:49 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,13 @@ int	str_is_int(char *str)
 	return (1);
 }
 
-void	exit_call(t_cmd *cmd_node)
+int	exit_call(t_cmd *cmd_node)
 {
 	t_list	*arg;
 
 	arg = (t_list *)cmd_node->cmd_args->next;
-	if ((arg && !str_is_int(arg->content) && arg
-			&& ((char *)arg->content)[0] != '#')
-			|| (arg && str_is_int(arg->content)
-			&& !check_int(arg->content)))
+	if ((arg && !str_is_int(arg->content) && ((char *)arg->content)[0] != '#')
+			|| (arg && str_is_int(arg->content) && !check_int(arg->content)))
 	{
 		last_exit_code(2);
 		ft_putstr_fd("minishell: exit: ", 2);
@@ -71,9 +69,10 @@ void	exit_call(t_cmd *cmd_node)
 	{
 		last_exit_code(EXIT_FAILURE);
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		return ;
+		return (0);
 	}
 	else if (arg && str_is_int(arg->content))
 		last_exit_code(ft_atoi(arg->content) % 256
 			+ 256 * (1 - (ft_atoi(arg->content) >= 0)));
+	return (1);
 }

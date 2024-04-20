@@ -6,11 +6,11 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 13:47:07 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/20 18:09:06 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/20 18:28:43 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	free_redir_node(t_redir *redir_node)
 {
@@ -74,7 +74,5 @@ t_node	*static_ast_holder(t_node *ast, int mode)
 		static_ast = ast;
 	else if (mode == FREE)
 		free_ast(static_ast);
-	else if (mode == PRINT)
-		print_tree(static_ast);
 	return (static_ast);
 }

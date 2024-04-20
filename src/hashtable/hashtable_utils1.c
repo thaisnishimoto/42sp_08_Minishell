@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:02:32 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/12 13:09:09 by mchamma          ###   ########.fr       */
+/*   Updated: 2024/04/20 11:10:13 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	hashtable_delete(t_env *hash[], char *key)
 			if (!prev)
 				hash[index] = current->next;
 			else
-			prev->next = current->next;
+				prev->next = current->next;
 			hashtable_free_content(current);
 			break ;
 		}

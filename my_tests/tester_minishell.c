@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/21 12:32:16 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 15:18:32 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1053,6 +1053,90 @@ MU_TEST(funtion_should_exit_with_last_exit_code_with_many_args)
 	free(expected);
 }
 
+MU_TEST(funtion_should_exit_echo_nothing_when_finding_hash)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 53: echo ###1 3");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo ###1 3' | ./minishell", 1);
+	expected = exec_command("echo ###1 3", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_expand_hash_to_empty)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 54: ls #oi");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'ls #oi' | ./minishell", 1);
+	expected = exec_command("ls #oi", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_expand_hash_to_empty_and_not_find_grep_arg)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 55: export | grep #");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'export | grep #' | ./minishell", 1);
+	expected = exec_command("export | grep #", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_not_expand_quoted_hash)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 56: ls \"#\"");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'ls \"#\"' | ./minishell", 1);
+	expected = exec_command("ls \"#\"", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_not_expand_hash_mid_str)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 56: ls oi#");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'ls oi#' | ./minishell", 1);
+	expected = exec_command("ls oi#", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
 MU_TEST_SUITE(test_suite)
 {
 	MU_RUN_TEST(function_should_run_command_echo);
@@ -1109,7 +1193,11 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(funtion_should_not_exit_when_piped_and_exit_code_of_last_builtin);
 	MU_RUN_TEST(funtion_should_exit_with_last_exit_code);
 	MU_RUN_TEST(funtion_should_exit_with_last_exit_code_with_many_args);
-	MU_RUN_TEST(funtion_should_read_nested_unclosed_quotes_as_str);
+	MU_RUN_TEST(funtion_should_exit_echo_nothing_when_finding_hash);
+	MU_RUN_TEST(funtion_should_expand_hash_to_empty);
+	MU_RUN_TEST(funtion_should_expand_hash_to_empty_and_not_find_grep_arg);
+	MU_RUN_TEST(funtion_should_not_expand_quoted_hash);
+	MU_RUN_TEST(funtion_should_not_expand_hash_mid_str);
 //hdoc and redir middle of pipeline
 //$? expansion in middle of pipeline
 //cat | cat | ls and echo $?

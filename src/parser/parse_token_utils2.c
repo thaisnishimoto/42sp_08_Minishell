@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/14 14:57:04 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 11:08:35 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ size_t	ft_substrlen(char *str)
 
 	len = 0;
 	if (str[len] == '\'' || str[len] == '\"')
-	{
 		len += substr_quote(&str[len]);
-		return (len);
-	}
 	else if (str[len] == '$')
 	{
 		len++;
@@ -44,14 +41,13 @@ size_t	ft_substrlen(char *str)
 			len += substr_quote(&str[len]);
 		else
 			len += substr_env_name(&str[len]);
-		return (len);
 	}
 	else
 	{
 		while (str[len] && !ft_strchr("\'\"$", str[len]))
 			len++;
-		return (len);
 	}
+	return (len);
 }
 
 size_t	substr_env_name(char *str)
@@ -59,8 +55,13 @@ size_t	substr_env_name(char *str)
 	size_t	len;
 
 	len = 0;
-	while (ft_isalnum(str[len]) || str[len] == '_' || str[len] == '?')
+	if (str[len] == '?')
 		len++;
+	else
+	{
+		while (ft_isalnum(str[len]) || str[len] == '_')
+			len++;
+	}
 	return (len);
 }
 

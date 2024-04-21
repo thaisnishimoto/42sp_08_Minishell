@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/21 01:13:22 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 12:32:16 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -866,48 +866,192 @@ MU_TEST(funtion_should_try_run_command_without_x_permission)
 	free(expected);
 }
 
-//MU_TEST(funtion_should_try_run_command_without_x_permission)
-//{
-//	char    *expected = "Files ../outfile8 and ../outfile_expected8 are identical\n";
-//	char    *outfile;
-//	char    *diff_result;
-//
-//	printf("\n------------------------\n");
-//	printf(" TEST 8: cmd not executable");
-//	printf("\n------------------------\n");
-//
-//	exec_command("< infile grep pipex | /dev/null > ../outfile_expected8");
-//	exec_command("../pipex_bonus infile \"grep pipex\" \"/dev/null\" ../outfile8");
-//
-//	diff_result = exec_command("diff -s ../outfile8 ../outfile_expected8");
-//	ft_printf("%s", diff_result);
-//	outfile = exec_command("cat ../outfile8");
-//	ft_printf("Pipex outfile: %s\n", outfile);
-//	mu_assert_string_eq(expected, diff_result);
-//	free(diff_result);
-//}
-//
-//MU_TEST(funtion_should_try_run_command_with_path)
-//{
-//	char    *expected = "Files ../outfile9 and ../outfile_expected9 are identical\n";
-//	char    *outfile;
-//	char    *diff_result;
-//
-//	printf("\n------------------------\n");
-//	printf(" TEST 9: 1st command with path");
-//	printf("\n------------------------\n");
-//
-//	exec_command("< infile ///////usr/bin/grep 1 | wc -l > ../outfile_expected9");
-//	exec_command("../pipex_bonus infile \"///////usr/bin/grep 1\" \"wc -l\" ../outfile9");
-//
-//	diff_result = exec_command("diff -s ../outfile9 ../outfile_expected9");
-//	ft_printf("%s", diff_result);
-//	outfile = exec_command("cat ../outfile9");
-//	ft_printf("Pipex outfile: %s\n", outfile);
-//	mu_assert_string_eq(expected, diff_result);
-//	free(diff_result);
-//}
-//
+MU_TEST(funtion_should_try_run_command_with_absolute_path_dot)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 43: cmd .");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '.' | ./minishell", 1);
+	expected = exec_command(".", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_try_run_command_with_absolute_path_slash)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 43: cmd /");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '/' | ./minishell", 1);
+	expected = exec_command("/", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_try_run_command_with_absolute_path_after_invalid_cmd)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 44: cmd catz /bin/ls");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'catz\n/bin/ls' | ./minishell", 1);
+	expected = exec_command("catz\n/bin/ls", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_try_run_command_with_absolute_path_invalid)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 45: cmd /bin/xxx");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '/bin/xxx' | ./minishell", 1);
+	expected = exec_command("/bin/xxx", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_try_run_command_with_absolute_path_extra_slash)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 46: < infile //////usr/bin/grep 1 | wc -l");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '< ./files/infile //////usr/bin/grep 1 | wc -l' | ./minishell", 1);
+	expected = exec_command("< ./files/infile //////usr/bin/grep 1 | wc -l", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_try_run_command_with_after_unset_path)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 47: unset PATH ls");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'unset PATH\nls' | ./minishell", 1);
+	expected = exec_command("unset PATH\nls", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_expand_exit_code_concat_with_other_word)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 48: echo $?HELLO");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo $?HELLO' | ./minishell", 1);
+	expected = exec_command("echo $?HELLO", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_expand_exit_code_concat_with_underline)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 49: echo $?_");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'echo $?_' | ./minishell", 1);
+	expected = exec_command("echo $?_", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_not_exit_when_piped_and_exit_code_of_last_builtin)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 50: exit 1 | exit 2");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'exit 1 | exit 2' | ./minishell", 1);
+	expected = exec_command("exit 1 | exit 2", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_exit_with_last_exit_code)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 51: catz exit #");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'catz\nexit #' | ./minishell", 1);
+	expected = exec_command("catz\nexit #", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
+MU_TEST(funtion_should_exit_with_last_exit_code_with_many_args)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 52: catz exit ###1 3");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo 'catz\nexit ###1 3' | ./minishell", 1);
+	expected = exec_command("catz\nexit ###1 3", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
 
 MU_TEST_SUITE(test_suite)
 {
@@ -954,21 +1098,27 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(function_should_not_split_if_quotes_filename_in_redirect);
 	MU_RUN_TEST(function_should_not_expand_eof_on_hdoc);
 	MU_RUN_TEST(funtion_should_try_run_command_without_x_permission);
-//	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);
-//	MU_RUN_TEST(funtion_should_try_run_command_without_x_permission);
-//	MU_RUN_TEST(funtion_should_try_run_command_with_path);
+	MU_RUN_TEST(funtion_should_try_run_command_with_absolute_path_dot);
+	MU_RUN_TEST(funtion_should_try_run_command_with_absolute_path_slash);
+	MU_RUN_TEST(funtion_should_try_run_command_with_absolute_path_after_invalid_cmd);
+	MU_RUN_TEST(funtion_should_try_run_command_with_absolute_path_invalid);
+	MU_RUN_TEST(funtion_should_try_run_command_with_absolute_path_extra_slash);
+	MU_RUN_TEST(funtion_should_try_run_command_with_after_unset_path);
+	MU_RUN_TEST(funtion_should_expand_exit_code_concat_with_other_word);
+	MU_RUN_TEST(funtion_should_expand_exit_code_concat_with_underline);
+	MU_RUN_TEST(funtion_should_not_exit_when_piped_and_exit_code_of_last_builtin);
+	MU_RUN_TEST(funtion_should_exit_with_last_exit_code);
+	MU_RUN_TEST(funtion_should_exit_with_last_exit_code_with_many_args);
+	MU_RUN_TEST(funtion_should_read_nested_unclosed_quotes_as_str);
 //hdoc and redir middle of pipeline
 //$? expansion in middle of pipeline
 //cat | cat | ls and echo $?
-//exit 1 | exit 2
-//catz echo$? exit echo$?
 //signals
-//unset PATH
-//absolute path: /  /dev/null  /bin/xxxxxx .
 //"'  '  '"
 //'"  "  "'
 //export ""
 //syntax .  <|  >|
+
 }
 
 int	main(void)

@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/20 19:47:02 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 14:32:58 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,4 +113,10 @@ char	*process_til(char *token_substr)
 	}
 	free(home_env);
 	return (token_substr);
+}
+
+char	*process_hash(char *token_substr)
+{
+	free(token_substr);
+	return (ft_strdup(""));
 }

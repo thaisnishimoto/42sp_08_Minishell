@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 11:00:02 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/20 18:00:20 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 15:31:47 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	export_print(t_list *arg)
 	char	*sign;
 	int		i;
 
-	if (arg && arg->content && ((char *)arg->content)[0] != '#')
+	if (arg && arg->content)
 		return ;
 	key = hashtable_key_mtx_sorted();
 	i = 0;
@@ -104,7 +104,7 @@ void	export_call(t_cmd *cmd_node)
 	last_exit_code(0);
 	arg = (t_list *)cmd_node->cmd_args->next;
 	export_print(arg);
-	while (arg && arg->content && ((char *)arg->content)[0] != '#')
+	while (arg && arg->content)
 	{
 		if (export_condition_not_exec(arg))
 			;

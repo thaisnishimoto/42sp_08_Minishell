@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:37 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/21 12:16:46 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 15:11:42 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,7 @@ int	exit_call(t_cmd *cmd_node)
 	t_list	*arg;
 
 	arg = (t_list *)cmd_node->cmd_args->next;
-	if (!arg || ((char *)arg->content)[0] == '#')
-		return (1);
-	else if ((arg && !str_is_int(arg->content) && ((char *)arg->content)[0] != '#')
+	if ((arg && !str_is_int(arg->content) && ((char *)arg->content)[0] != '#')
 			|| (arg && str_is_int(arg->content) && !check_int(arg->content)))
 	{
 		last_exit_code(2);

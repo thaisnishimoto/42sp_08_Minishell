@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:49:46 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/20 18:58:48 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 14:31:46 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ char			*ft_add_single_quote(char *token_substr);
 char			*expand_quoted_str(char *str);
 char			*expand_env(char *token);
 char			*process_til(char *token_substr);
+char			*process_hash(char *token_substr);
 char			*ft_rejoin_substr(char *token_substr[]);
 
 //executor functions

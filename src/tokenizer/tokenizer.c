@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:55:36 by mchamma           #+#    #+#             */
-/*   Updated: 2024/04/11 15:50:54 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 14:58:13 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ static int	ft_token_len(char *str, char delim)
 		{
 			len += substr_operator(&str[len], len);
 			break ;
+		}
+		else if (str[len] == '#')
+		{
+			while (str[len])
+				len++;
 		}
 		else
 			len++;

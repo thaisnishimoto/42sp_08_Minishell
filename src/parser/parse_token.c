@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:14:57 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 08:59:04 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 14:31:27 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static char	*process_substr(char *token_substr)
 		token_substr = expand_env(token_substr);
 	else if (token_substr[0] == '~')
 		token_substr = process_til(token_substr);
+	else if (token_substr[0] == '#')
+		token_substr = process_hash(token_substr);
 	return (token_substr);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mchamma <mchamma@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 14:45:50 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 18:56:04 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 13:00:05 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void	wait_for_cmd_process(pid_t pid)
 		last_exit_code(WEXITSTATUS(wstatus));
 	else if (WIFSIGNALED(wstatus))
 		last_exit_code(128 + WTERMSIG(wstatus));
-	else if (last_exit_code(-1) == 130)
+	if (last_exit_code(-1) == 130)
 		write(1, "\n", 1);
 	else if (last_exit_code(-1) == 131)
-		ft_putendl_fd("Quit (core dumped)", 2);
+		ft_putendl_fd("Quit", 2);
 }

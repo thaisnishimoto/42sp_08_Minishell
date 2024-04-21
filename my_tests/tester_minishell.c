@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:32 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/19 18:33:46 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 01:13:22 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -849,6 +849,23 @@ MU_TEST(function_should_not_expand_eof_on_hdoc)
 	free(expected);
 }
 
+MU_TEST(funtion_should_try_run_command_without_x_permission)
+{
+	char	*result;
+	char	*expected;
+
+	printf("\n------------------------\n");
+	printf(" TEST 42: cmd not executable");
+	printf("\n------------------------\n");
+
+	result = exec_command("echo '/dev/null' | ./minishell", 1);
+	expected = exec_command("/dev/null", 1);
+	printf("%s", result);
+	mu_assert_string_eq(expected, result);
+	free(result);
+	free(expected);
+}
+
 //MU_TEST(funtion_should_try_run_command_without_x_permission)
 //{
 //	char    *expected = "Files ../outfile8 and ../outfile_expected8 are identical\n";
@@ -936,6 +953,7 @@ MU_TEST_SUITE(test_suite)
 	MU_RUN_TEST(function_should_split_after_expand_in_redirect);
 	MU_RUN_TEST(function_should_not_split_if_quotes_filename_in_redirect);
 	MU_RUN_TEST(function_should_not_expand_eof_on_hdoc);
+	MU_RUN_TEST(funtion_should_try_run_command_without_x_permission);
 //	MU_RUN_TEST(funtion_should_run_command_cat_ls_l);
 //	MU_RUN_TEST(funtion_should_try_run_command_without_x_permission);
 //	MU_RUN_TEST(funtion_should_try_run_command_with_path);

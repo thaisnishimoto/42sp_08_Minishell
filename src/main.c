@@ -6,7 +6,7 @@
 /*   By: tmina-ni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:37:41 by tmina-ni          #+#    #+#             */
-/*   Updated: 2024/04/15 16:03:36 by tmina-ni         ###   ########.fr       */
+/*   Updated: 2024/04/21 11:09:42 by tmina-ni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	g_signum;
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	char	*input; 
+	char	*input;
 	char	**tokens;
 	t_node	*ast;
 
@@ -33,7 +33,4 @@ int	main(int argc, char *argv[], char *envp[])
 		executor(ast);
 		static_ast_holder(NULL, FREE);
 	}
-	hashtable_mx(NULL, NULL, FREE);
-	rl_clear_history();
-	return (last_exit_code(-1));
 }

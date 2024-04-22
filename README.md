@@ -19,9 +19,9 @@
 Content
 </h2>
 
-[Mandatory Part](https://github.com/thaisnishimoto/42sp_07_PushSwap#about-the-project---mandatory-part)
+[Mandatory Part](https://github.com/thaisnishimoto/42sp_08_Minishell?tab=readme-ov-file#mandatory-part)
 
-[My Tester](https://github.com/thaisnishimoto/42sp_07_PushSwap#my-tester)
+[My Tester](https://github.com/thaisnishimoto/42sp_08_Minishell?tab=readme-ov-file#my-tester)
 
 <h2>
 Mandatory Part
@@ -32,10 +32,7 @@ Mandatory Part
 * Prompt display
 * Command history (up and down arrows)
 * Syntax verification
-* Token expansions
-  *
-  * `#` - it and all subsequent characters up to, but excluding, the next <newline> if discarded as a comment
-* Execute commands (using a relative or an absolute path)
+* Command search and execution (using a relative or an absolute path)
 * Builtin commands:
   * `echo` (with option `-n`)
   * `cd` (with only a relative or absolute path)
@@ -46,13 +43,20 @@ Mandatory Part
   * `exit` (no options) 
 * Pipes `|` which redirect output from one command to input for the next
 * Redirections:
-  * `>` redirects output in truncate
+  * `>` redirects output in truncate mode
   * `>>` redirects output in append mode
   * `<` redirects input
-  * `<< DELIMITER` opens a heredoc, reads user input until seeing a line containing the `DELIMITER`, redirects the input to command input (does not update history)
-* Environment variables (i.e. `$USER` or `$VAR`) that expand to their values.
-  * `$?` expands to the exit status of the most recently executed foreground pipeline.
-  * When a heredoc delimiter is 
+  * `<< DELIMITER` opens a heredoc, reads user input until seeing a line containing the `DELIMITER`, and is a way to redirect multi-line input to a command. (it does not update command history)
+* Environment variables (i.e. `$USER` or `$VAR`) and token expansions.
+  * `$` - followed by a variable name, expands to the environment variable`s value
+  * `$?` expands to the exit status of the most recently executed command
+  * `~` expands to $HOME variable value
+  * `#` - it and all subsequent characters up to the next <newline> are discarded as a comment
+  * `Single quotes` prevent interpretation of metacharacters (i.e. echo `$USER` will literally print `$USER`).
+  * `Double quotes` prevent interpretation of metacharacters but allow variable expansion (i.e. echo `"< $USER"` will print `<` followed by the value of `$USER`).
+  * When a heredoc delimiter is a variable, it is not expanded
+  * When a heredoc delimiter is quoted, variables in the input are not expanded
+  * When expanded, a variable can be executed (i.e. export `a="echo hello"`, `$a` will execute echo and print hello)
 * Signals in interactive mode:
   * `ctrl-c` displays a new prompt line
   * `ctrl-d` exits minishell
@@ -66,98 +70,24 @@ Mandatory Part
   * `ctrl-d` closes heredoc with a warning
   * `ctrl-\` does nothing
 
-### Usage example
-
+### Usage
+Clone the repository:
 ```sh
-git clone git@github.com:thaisnishimoto/42sp_07_PushSwap.git
+git clone git@github.com:thaisnishimoto/42sp_08_Minishell.git
 ```
+Compile:
 ```sh
 make
 ```
-```
-$>./push_swap 25 -19 42 -7 0
-pb
-pb
-ra
-pa
-rra
-pa
-ra
-ra
-
-$>ARG="25 -19 42 -7 0"; ./push_swap $ARG | wc -l
-8
-```
-
-### Usage example
-
+To check for memory leaks using valgrind, suppressing the readline library leaks: 
 ```sh
-make bonus
+make leak
 ```
+Run program:
 ```
-$>./checker 3 1 2
-ra
-[ctrl + d]
-OK
-
-$>./checker 3 1 2
-sa
-[ctrl + d]
-KO
-
-$>ARG="25 -19 42 -7 0"; ./push_swap $ARG | ./checker $ARG
-OK
+./minishell
 ```
-
-<br>
-<h2>
-My Tester
-</h2>
-
-I wrote a script to run multiple tests on `push_swap`. <br>
-It has 2 arguments:
-* Amount of tests - it runs this amount of tests and shows the count of operations needed for each of them.
-* Amount of numbers - it generates this amount of random numbers for each test. 
-At the end, it checks if the sorting was done correctly (OK/KO) and displays the average of moves among all the tests run.
-
-### Usage
-
-Copy [my_test directory](https://github.com/thaisnishimoto/42sp_07_PushSwap/tree/master/my_tests) into your project's directory.
-```sh
-cp push_swap ./my_tests/push_swap
+End program:
 ```
-```sh
-cd my_tests
-```
-```sh
-cp push_swap ./my_tests/push_swap
-```
-```sh
-chmod +x checker_linux push_swap
-```
-```sh
-bash tester_push.sh [amout of tests] [amount of numbers]
-```
-
-### Example
-```
-$> bash tester_push.sh 10 100
---------------------------------------------------
-      PUSH SWAP TESTER: Sorting 100 numbers
---------------------------------------------------
-
-Test 1. [OK] (550 moves) 
-Test 2. [OK] (603 moves) 
-Test 3. [OK] (576 moves) 
-Test 4. [OK] (585 moves) 
-Test 5. [OK] (598 moves) 
-Test 6. [OK] (570 moves) 
-Test 7. [OK] (606 moves) 
-Test 8. [OK] (571 moves) 
-Test 9. [OK] (632 moves) 
-Test 10. [OK] (637 moves) 
-
-----Results----
-OK: [10/10]
-Avg moves:592
+exit
 ```

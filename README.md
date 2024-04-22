@@ -19,15 +19,16 @@
 Content
 </h2>
 
-[Mandatory Part](https://github.com/thaisnishimoto/42sp_08_Minishell?tab=readme-ov-file#mandatory-part)
+[About the project](https://github.com/thaisnishimoto/42sp_08_Minishell?tab=readme-ov-file#mandatory-part)
 
-[My Tester](https://github.com/thaisnishimoto/42sp_08_Minishell?tab=readme-ov-file#my-tester)
+[Functionality](https://github.com/thaisnishimoto/42sp_08_Minishell?tab=readme-ov-file#my-tester)
+
+[Usage](https://github.com/thaisnishimoto/42sp_08_Minishell?tab=readme-ov-file#my-tester)
 
 <h2>
-Mandatory Part
+Functionality
 </h2>
 
-### Functionality
 `Minishell` has Bash as a reference. It supports the following features: <be>
 * Prompt display
 * Command history (up and down arrows)
@@ -70,7 +71,10 @@ Mandatory Part
   * `ctrl-d` closes heredoc with a warning
   * `ctrl-\` does nothing
 
-### Usage
+<h2>
+Usage
+</h2>
+
 Clone the repository:
 ```sh
 git clone git@github.com:thaisnishimoto/42sp_08_Minishell.git

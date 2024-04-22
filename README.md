@@ -26,6 +26,10 @@ Content
 [Usage](https://github.com/thaisnishimoto/42sp_08_Minishell?tab=readme-ov-file#my-tester)
 
 <h2>
+About the Project
+</h2>
+
+<h2>
 Functionality
 </h2>
 
